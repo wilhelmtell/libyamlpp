@@ -27,24 +27,22 @@ def set_options(opt):
 def configure(conf):
   import Params
   if Params.g_options.debug:
-    conf.env['debug'] = True
     conf.define('DEBUG', 1)
     conf.env['CXXFLAGS'] += ['-g']
   else:
-    conf.env['debug'] = False
     conf.define('NDEBUG', 1)
   conf.env['CXXFLAGS'] += ['-Wall', '-ansi', '-pedantic']
   conf.sub_config('src')
   conf.check_tool('compiler_cxx')
   if Params.g_options.documentation:
-    conf.env['documentation'] = True
+    conf.define('HAVE_DOCUMENTATION', 1)
     conf.check_tool('tex')
 
   conf.write_config_header('config.h')
 
 def build(bld):
   bld_subdirs = ['src']
-  bld.env()['documentation'] and bld_subdirs.append('doc')
+  bld.env()['HAVE_DOCUMENTATION'] and bld_subdirs.append('doc')
   bld.add_subdirs(bld_subdirs)
 
 def shutdown():
