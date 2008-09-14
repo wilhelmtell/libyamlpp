@@ -31,6 +31,13 @@ def configure(conf):
   conf.check_tool('compiler_cxx')
   conf.env['CXXFLAGS'] += ' -Wall -ansi -pedantic'
 
+  # compiler is bad if it can't compile a simple 'hello world' program
+  e = conf.create_test_configurator()
+  e.mandatory = 1
+  e.code = '#include<iostream>\nint main(){std::cout<<"hello world"<<std::endl;return 0;}\n'
+  e.want_message = 1
+  e.run()
+
   # debug?
   if Params.g_options.debug:
     conf.define('DEBUG', 1)
