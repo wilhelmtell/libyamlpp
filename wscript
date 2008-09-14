@@ -5,8 +5,10 @@
 # See http://code.google.com/p/waf
 ###############################################################################
 
+import Params
+
 srcdir = '.'
-blddir = 'output'
+blddir = 'build'
 
 def init():
   pass
@@ -25,7 +27,7 @@ def set_options(opt):
   opt.tool_options('compiler_cxx')
 
 def configure(conf):
-  import Params
+  # debug?
   if Params.g_options.debug:
     conf.define('DEBUG', 1)
     conf.env['CXXFLAGS'] += ['-g']
