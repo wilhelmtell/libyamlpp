@@ -19,7 +19,7 @@ def set_options(opt):
                  default = False,
                  help = "Build for debugging or development"
                 )
-  opt.add_option("--documentation",
+  opt.add_option("--docs",
                  action = "store_true",
                  default = False,
                  help = "Generate documentation"
@@ -39,8 +39,8 @@ def configure(conf):
     conf.define('NDEBUG', 1)
 
   # documentation?
-  if Params.g_options.documentation:
-    conf.define('HAVE_DOCUMENTATION', 1)
+  if Params.g_options.docs:
+    conf.define('HAVE_DOCS', 1)
     conf.check_tool('tex')
 
   conf.write_config_header('config.h')
@@ -48,7 +48,7 @@ def configure(conf):
 
 def build(bld):
   bld_subdirs = ['src']
-  bld.env()['HAVE_DOCUMENTATION'] and bld_subdirs.append('doc')
+  bld.env()['HAVE_DOCS'] and bld_subdirs.append('doc')
   bld.add_subdirs(bld_subdirs)
 
 def shutdown():
