@@ -27,20 +27,24 @@ def set_options(opt):
   opt.tool_options('compiler_cxx')
 
 def configure(conf):
+  # check for and set up a c++ compiler
+  conf.check_tool('compiler_cxx')
+  conf.env['CXXFLAGS'] += ' -Wall -ansi -pedantic'
+
   # debug?
   if Params.g_options.debug:
     conf.define('DEBUG', 1)
-    conf.env['CXXFLAGS'] += ['-g']
+    conf.env['CXXFLAGS'] += ' -g'
   else:
     conf.define('NDEBUG', 1)
-  conf.env['CXXFLAGS'] += ['-Wall', '-ansi', '-pedantic']
-  conf.sub_config('src')
-  conf.check_tool('compiler_cxx')
+
+  # documentation?
   if Params.g_options.documentation:
     conf.define('HAVE_DOCUMENTATION', 1)
     conf.check_tool('tex')
 
   conf.write_config_header('config.h')
+  conf.sub_config('src')
 
 def build(bld):
   bld_subdirs = ['src']
