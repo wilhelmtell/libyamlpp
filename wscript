@@ -5,7 +5,7 @@
 # See http://code.google.com/p/waf
 ###############################################################################
 
-import Params
+import re, Params
 
 srcdir = '.'
 blddir = 'build'
@@ -29,7 +29,11 @@ def set_options(opt):
 def configure(conf):
   # check for and set up a c++ compiler
   conf.check_tool('compiler_cxx')
-  conf.env['CXXFLAGS'] += ' -Wall -ansi -pedantic'
+  if type(conf.env['CXXFLAGS']) is str:
+      conf.env['CXXFLAGS'] = re.split(r'\s+', conf.env['CXXFLAGS'])
+  else:
+      conf.env['CXXFLAGS'] = []
+  conf.env['CXXFLAGS'] += ['-Wall', '-ansi', '-pedantic']
 
   # compiler is bad if it can't compile a simple 'hello world' program
   e = conf.create_test_configurator()
@@ -41,7 +45,7 @@ def configure(conf):
   # debug?
   if Params.g_options.debug:
     conf.define('DEBUG', 1)
-    conf.env['CXXFLAGS'] += ' -g'
+    conf.env['CXXFLAGS'] += ['-g']
   else:
     conf.define('NDEBUG', 1)
 
