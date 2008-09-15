@@ -1,6 +1,7 @@
 \documentclass{article}
 
 \usepackage{pxfonts}
+\usepackage{url}
 
 \author{Alex Vall\'ee \and Matan Nassau}
 \title{libyaml++:  A Proposal for a COMP 446 Project}
@@ -14,4 +15,81 @@ For our COMP 446 project we chose to write a C++ library for reading and writing
 
 YAML is somewhat comparable with XML in that it can be used as a protocol for serializing structured, heirarchical documents.  XML, however, was designed to be backwards-compatible with \emph{SGML}, the \emph{Standard Generalized Markup Language}, which in turn was designed primarily to store structured documents.  YAML therefore has more freedom of design.  When compared to XML, YAML elevates its design goals to support data streams that show a balance between a flexible syntax and readability.
 
+Following is a sample YAML stream:
+
+\begin{verbatim}
+---
+- name:  Richard Stallman
+  email: rms@gnu.com
+- name:  Linus Torvalds
+  email: torvalds@linux-foundation.org
+- name:  Jeff Atwood
+  email: jatwood@codinghorror.com
+\end{verbatim}
+
+\section{Goals}
+
+\subsection{Learning Goals}
+We intend on learning the STL and templates programming. We also intend on getting to know the upcoming \emph{C++0x} standard, i.e. experimenting with \emph{TR1}.  We plan on empahsizing on test-driven development by writing thorough unit tests before starting any new features.
+
+We also intend on experimenting with an automated build tool and a \emph{distributed} version control system.  practice teamwork, agile development, we aim to experiment with templates and associated metaprogramming, design patterns, TDD,STL.
+
+
+%So what do we aim at getting implemented?
+%
+%\begin{enumerate}
+%  \item comments
+%  \item begin, end document
+%  \item sequences
+%  \item mappings
+%  \item anchors, aliases
+%  \item complex mappings
+%  \item scalars (verbatim)
+%  \item handle untagged nodes
+%\end{enumerate}
+%
+%\subsection{Things We Already Consider Implementing}
+%\begin{enumerate}
+%  \item Tags and the type system:
+%    \begin{itemize}
+%      \item There is a set of standard YAML types.  See \url{http://yaml.org/type/index.html}.
+%      \item Given a YAML stream, we can consider only types from the above standard set, and ignore (report an error for) any tag of an unknown type
+%      \item Brainstorm:  how do we generate instances of types as we read the stream?  We can use a factory method.  We'll use a map of strings:objects.  Given a string "str" to instantiate an object String, we look up the map and return a clone of the object mapped to the key "str".  The String object and all other known object will descend from a common YAML type.
+%      \item What about unkown types?  I.e., types that aren't registered in our map?  Maybe we can find a way to create virtual types in runtime;  in YAML, types are mere containers of sequences and mappings (anything else?)
+%      \end{itemize}
+%\end{enumerate}
+%
+\section{C++ Use}
+
+In this project, we expect to use a broad array of C++ techniques and features appropriate for library writing:
+
+\begin{itemize}
+  \item Templates and meta-programming
+  \item Inheritance and polymorphism
+  \item Various design patterns, such as factory method, singleton and so on.
+  \item Massive use of the STL containers and algorithms
+  \item Some TR1 elements, such as \emph{tr1::shared\_ptr}
+  \item Unit-testing framework:  \emph{Google Test}
+\end{itemize}
+
+We will also use \emph{waf} for our build system, and \emph{git} for our version control system.
+
+\section{Deliverables}
+
+The following is a rough outline of our planned iterations:
+
+\begin{enumerate}
+  \item Begin/End document marks
+  \item Comments
+  \item Simple Scalars
+  \item Sequences
+  \item Simple Mappings
+  \item Tagged nodes
+  \item Untagged nodes (type resolution on runtime)
+  \item Verbatim, Folded Scalars
+  \item Complex Mappings
+  \item Unicode support
+\end{enumerate}
+
+The above list probably includes more iterations that time permits;  nevertheless, these encompass a reasonable portion of YAML standard and lay a rough roadmap for an implementation.
 \end{document}
