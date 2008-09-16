@@ -4,5 +4,5 @@
 
 # Waf related things
 .lock-wscript
-.waf-1.4.4-*
+.waf*
 build
