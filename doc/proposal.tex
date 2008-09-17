@@ -17,7 +17,7 @@ For our COMP 446 project we chose to write a C++ library for reading and writing
 YAML is somewhat comparable with XML in that it can be used as a protocol for serializing structured, heirarchical documents.  XML, however, was designed to be backwards-compatible with \emph{SGML}, the \emph{Standard Generalized Markup Language}, which in turn was designed primarily to store structured documents.  YAML therefore has more freedom of design.  When compared to XML, YAML elevates its design goals to support data streams that show a balance between a flexible syntax and readability.
 
 \floatstyle{ruled}
-\newfloat{Figure}{b}{yamlsample}[section]
+\newfloat{Figure}{tbp}{yamlsample}[section]
 \begin{Figure}
   \begin{verbatim}
   ---
@@ -33,36 +33,25 @@ YAML is somewhat comparable with XML in that it can be used as a protocol for se
 
 \section{Goals}
 
+We consider two primary goals in this project:
+
+\begin{itemize}
+  \item Learning
+  \item Writing a useful and quality YAML library
+\end{itemize}
+
 \subsection{Learning Goals}
-We intend on learning the STL and templates programming. We also intend on getting to know the upcoming \emph{C++0x} standard, i.e. experimenting with \emph{TR1}.  We plan on empahsizing on test-driven development by writing thorough unit tests before starting any new features.
+We intend on learning the STL and templates programming. We also intend on familiaralizing ourselves with the upcoming \emph{C++0x} standard by experimenting with \emph{TR1}.  We plan on emphasizing on test-driven development by writing thorough unit tests before starting any new features.  Additionally, we will use an automated build tool and a \emph{distributed} version control system to practice project build and code management.
 
-We also intend on experimenting with an automated build tool and a \emph{distributed} version control system.  practice teamwork, agile development, we aim to experiment with templates and associated metaprogramming, design patterns, TDD,STL.
+\subsection{Software Requirements}
+The goal of this project is to write a useful, quality library for handling YAML streams.  We lay our priorities in decreasing order as follows:
 
+\begin{enumerate}
+  \item \textbf{Correct}.  We consider our code correct if each implemented feature works as described by the latest YAML standard.  Indeed, this suggests we will make sure each added feature is correct before we move on to the next feature.  We will utilize aggressive testing for this purpose.
+  \item \textbf{Useful}.  We consider our library useful if it can read a simple YAML document into an internal representation, and write an internal representation into a simple YAML document.  We consider a simple YAML document to hold strings, sequences and mappings.
+  \item \textbf{Feature-rich}.  Finally, given a set of useful features implemented correctly, we will approach a completely standard-compliant library.  Indeed, this is a very ambitious goal, and with the standard being constantly evolving --- even more so.  Nevertheless, this goal will set the iterative and constant-change nature of our project, giving us always something to look forward to.
+\end{enumerate}
 
-%So what do we aim at getting implemented?
-%
-%\begin{enumerate}
-%  \item comments
-%  \item begin, end document
-%  \item sequences
-%  \item mappings
-%  \item anchors, aliases
-%  \item complex mappings
-%  \item scalars (verbatim)
-%  \item handle untagged nodes
-%\end{enumerate}
-%
-%\subsection{Things We Already Consider Implementing}
-%\begin{enumerate}
-%  \item Tags and the type system:
-%    \begin{itemize}
-%      \item There is a set of standard YAML types.  See \url{http://yaml.org/type/index.html}.
-%      \item Given a YAML stream, we can consider only types from the above standard set, and ignore (report an error for) any tag of an unknown type
-%      \item Brainstorm:  how do we generate instances of types as we read the stream?  We can use a factory method.  We'll use a map of strings:objects.  Given a string "str" to instantiate an object String, we look up the map and return a clone of the object mapped to the key "str".  The String object and all other known object will descend from a common YAML type.
-%      \item What about unkown types?  I.e., types that aren't registered in our map?  Maybe we can find a way to create virtual types in runtime;  in YAML, types are mere containers of sequences and mappings (anything else?)
-%      \end{itemize}
-%\end{enumerate}
-%
 \section{C++ Use}
 
 In this project, we expect to use a broad array of C++ techniques and features appropriate for library writing:
