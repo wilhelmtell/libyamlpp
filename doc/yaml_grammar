@@ -1,3 +1,12 @@
 doc_begin := "---"
 
 doc_end := "..."
+
+scalar := string
+        | type scalar
+
+string := [^!].*
+
+type := "!" typename
+
+typename := "str"
