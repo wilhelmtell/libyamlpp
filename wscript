@@ -5,7 +5,11 @@
 # See http://code.google.com/p/waf
 ###############################################################################
 
-import re, Params
+import re, Params, Scripting
+
+APPNAME = "libyaml++"
+VERSION = "0.1"
+Scripting.g_gz = "gz"
 
 srcdir = '.'
 blddir = 'build'
