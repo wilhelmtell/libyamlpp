@@ -37,7 +37,7 @@ alias ::= ""
 
 scalar ::= string
         | null
-        | tag scalar
+        | tag string
 
 string ::= [^!].*
 
