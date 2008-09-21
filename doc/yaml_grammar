@@ -56,8 +56,24 @@ handle ::= [a-zA-Z_]+
 # TODO:  define grammar for standard URIs.  e.g., yaml.org,2002:
 uri ::= ""
 
-# TODO:  define grammar for a sequence
-sequence ::= ""
+sequence ::= flow_sequence
+           | block_sequence
 
-# TODO:  define grammar for a mapping
-mapping ::= ""
+flow_sequence ::= "[" node ( "," [ ]* node )* "]"
+                | "[" [ ]* "]"
+
+# TODO:  define grammar for block sequence
+block_sequence ::= ""
+
+mapping ::= flow_mapping
+          | block_mapping
+
+flow_mapping ::= "{" scalar [ ]* ":" [ ]* node ( "," [ ]* scalar [ ]* ":" [ ]* node )* "}"
+               | "{" complex_mapping [ ]* ":" [ ]* node ( "," [ ]* complex_mapping [ ]* ":" [ ]* node )* "}"
+               | "{" [ ]* "}"
+
+# TODO:  define complex mapping
+complex_mapping ::= ""
+
+# TODO:  define grammar for a block mapping
+block_mapping ::= ""
