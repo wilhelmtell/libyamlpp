@@ -1,10 +1,17 @@
-stream ::= stream_begin document* stream_end
+stream ::= stream_begin directive* document* stream_end
 
 # TODO:  how does a stream begin?  encoding information?
 stream_begin ::= ""
 
 # TODO:  how does a stream end?
 stream_end ::= ""
+
+directive ::= version_directive
+            | tag_directive
+
+version_directive ::= "%YAML" [0-9] "." [0-9]
+
+tag_directive ::= "%TAG" handle uri
 
 #TODO:  is the second alternative correct?  what i want to say is that a
         document may start with document_begin, followed by a node and then
@@ -19,18 +26,10 @@ document_begin ::= "---"
 
 document_end ::= "..."
 
-node ::= directive
-       | alias
+node ::= alias
        | scalar
        | sequence
        | mapping
-
-directive ::= version_directive
-            | tag_directive
-
-version_directive ::= "%YAML" [0-9] "." [0-9]
-
-tag_directive ::= "%TAG" handle uri
 
 # TODO:  define grammar for an alias
 alias ::= ""
