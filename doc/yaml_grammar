@@ -1,12 +1,64 @@
-doc_begin := "---"
+stream ::= stream_begin document* stream_end
 
-doc_end := "..."
+# TODO:  how does a stream begin?  encoding information?
+stream_begin ::= ""
 
-scalar := string
-        | type scalar
+# TODO:  how does a stream end?
+stream_end ::= ""
 
-string := [^!].*
+#TODO:  is the second alternative correct?  what i want to say is that a
+        document may start with document_begin, followed by a node and then
+        either a document_end or nothing at all.  i don't think i can say
+        it ends with document_end or stream_end, because a stream is defined
+        to always end with a stream_end, so document shouldn't consume the
+        final stream_end (and there should only be one stream end, right?).
+document ::= document_begin node* document_end
+           | document_begin node*
 
-type := "!" typename
+document_begin ::= "---"
 
-typename := "str"
+document_end ::= "..."
+
+node ::= directive
+       | alias
+       | scalar
+       | sequence
+       | mapping
+
+directive ::= version_directive
+            | tag_directive
+
+version_directive ::= "%YAML" [0-9] "." [0-9]
+
+tag_directive ::= "%TAG" handle uri
+
+# TODO:  define grammar for an alias
+alias ::= ""
+
+scalar ::= string
+        | null
+        | tag scalar
+
+string ::= [^!].*
+
+null ::= "null"
+
+tag ::= "!" local_tag
+     | "!!" standard_tag
+     | "!" handle "!" local_tag
+     | "tag:" uri ":" local_tag
+
+local_tag ::= [a-zA-Z_]+
+
+standard_tag ::= "str"
+
+handle ::= [a-zA-Z_]+
+
+# TODO:  define grammar for standard URIs.  e.g., yaml.org,2002:
+uri ::= ""
+
+# TODO:  define grammar for a sequence
+sequence ::= ""
+
+# TODO:  define grammar for a mapping
+mapping ::= ""
