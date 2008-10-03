@@ -82,10 +82,19 @@ flow_sequence ::= "[" ws node ws suffix_listed_nodes ws "]"
 suffix_listed_nodes ::= "," ws node ws suffix_listed_nodes
                       | lambda
 
-ws ::= space ws
-     | tab ws
-     | newline ws
+# a single whitespace character.  wsc stands for whitespace_character;  i
+# chose this short name so i can easily use this production frequently.
+wsc ::= space
+      | tab
+      | newline
+
+# whitespace of arbitrary length (or no whitespace at all). i chose this short
+# name so i can easily use this production frequently.
+aws ::= wsc aws
      | lambda
+
+# one or more whitespace characters
+ws ::= wsc aws
 
 # TODO:  define grammar for block sequence
 block_sequence ::= lambda
