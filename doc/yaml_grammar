@@ -8,13 +8,13 @@ stream ::= stream_begin directives headless_document documents
          | stream_begin directives documents stream_end
 
 # TODO:  how does a stream begin?  encoding information?
-stream_begin ::= ""
+stream_begin ::= lambda
 
 # TODO:  how does a stream end?
-stream_end ::= ""
+stream_end ::= lambda
 
 directives ::= directive directives
-             | ""
+             | lambda
 
 directive ::= version_directive
             | tag_directive
@@ -26,14 +26,8 @@ digit ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 tag_directive ::= "%TAG" handle uri
 
 documents ::= document documents
-            | ""
+            | lambda
 
-#TODO:  is the second alternative correct?  what i want to say is that a
-#       document may start with document_begin, followed by a node and then
-#       either a document_end or nothing at all.  i don't think i can say
-#       it ends with document_end or stream_end, because a stream is defined
-#       to always end with a stream_end, so document shouldn't consume the
-#       final stream_end (and there should only be one stream end, right?).
 document ::= document_begin nodes document_end
 
 headless_document ::= nodes document_end
@@ -47,7 +41,7 @@ document_begin ::= "---"
 document_end ::= "..."
 
 nodes ::= node nodes
-        | ""
+        | lambda
 
 node ::= alias
        | scalar
@@ -55,7 +49,7 @@ node ::= alias
        | mapping
 
 # TODO:  define grammar for an alias
-alias ::= ""
+alias ::= lambda
 
 scalar ::= string
         | null
@@ -77,16 +71,24 @@ standard_tag ::= "str"
 handle ::= [a-zA-Z_]+
 
 # TODO:  define grammar for standard URIs.  e.g., yaml.org,2002:
-uri ::= ""
+uri ::= lambda
 
 sequence ::= flow_sequence
            | block_sequence
+
+suffix_listed_nodes ::= "," whitespace node suffix_listed_nodes
+                      | lambda
+
+whitespace ::= space whitespace
+             | tab whitespace
+             | newline whitespace
+             | lambda
 
 flow_sequence ::= "[" node ( "," [ ]* node )* "]"
                 | "[" [ ]* "]"
 
 # TODO:  define grammar for block sequence
-block_sequence ::= ""
+block_sequence ::= lambda
 
 mapping ::= flow_mapping
           | block_mapping
@@ -96,7 +98,7 @@ flow_mapping ::= "{" scalar [ ]* ":" [ ]* node ( "," [ ]* scalar [ ]* ":" [ ]* n
                | "{" [ ]* "}"
 
 # TODO:  define complex mapping
-complex_mapping ::= ""
+complex_mapping ::= lambda
 
 # TODO:  define grammar for a block mapping
-block_mapping ::= ""
+block_mapping ::= lambda
