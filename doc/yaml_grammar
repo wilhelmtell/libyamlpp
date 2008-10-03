@@ -76,10 +76,10 @@ uri ::= lambda
 sequence ::= flow_sequence
            | block_sequence
 
-flow_sequence ::= "[" ws node ws suffix_listed_nodes ws "]"
-                | "[" ws "]"
+flow_sequence ::= "[" aws node aws suffix_listed_nodes aws "]"
+                | "[" aws "]"
 
-suffix_listed_nodes ::= "," ws node ws suffix_listed_nodes
+suffix_listed_nodes ::= "," aws node aws suffix_listed_nodes
                       | lambda
 
 # a single whitespace character.  wsc stands for whitespace_character;  i
