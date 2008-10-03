@@ -76,16 +76,16 @@ uri ::= lambda
 sequence ::= flow_sequence
            | block_sequence
 
-suffix_listed_nodes ::= "," ws node whitesapce suffix_listed_nodes
+flow_sequence ::= "[" ws node ws suffix_listed_nodes ws "]"
+                | "[" ws "]"
+
+suffix_listed_nodes ::= "," ws node ws suffix_listed_nodes
                       | lambda
 
 ws ::= space ws
      | tab ws
      | newline ws
      | lambda
-
-flow_sequence ::= "[" node ( "," [ ]* node )* "]"
-                | "[" [ ]* "]"
 
 # TODO:  define grammar for block sequence
 block_sequence ::= lambda
