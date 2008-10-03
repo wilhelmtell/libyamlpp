@@ -54,7 +54,8 @@ scalar ::= string
         | null
         | tag string
 
-string ::= [^!].*
+string ::= [^!\n][^\n]*
+         | lambda
 
 null ::= "null"
 
