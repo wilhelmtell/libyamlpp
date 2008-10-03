@@ -1,11 +1,4 @@
-stream ::= stream_begin directives headless_document documents
-           footless_document stream_end
-         | stream_begin directives headless_document footless_document
-           stream_end
-         | stream_begin directives headless_document stream_end
-         | stream_begin directives footless_document stream_end
-         | stream_begin directives headfootless_document stream_end
-         | stream_begin directives documents stream_end
+stream ::= stream_begin directives documents stream_end
 
 # TODO:  how does a stream begin?  encoding information?
 stream_begin ::= lambda
@@ -25,16 +18,22 @@ digit ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
 tag_directive ::= "%TAG" handle uri
 
-documents ::= document documents
-            | lambda
+# documents may be delimited, but don't always have to be.  for example, the
+# first document may start immediately with nodes rather than with a leading
+# start-of-document mark.
+documents ::= delimited_documents
+            | headerless_document delimited_documents footerless_document
+            | headerless_document delimited_documents
+            | delimited_documents footerless_document
 
-document ::= document_begin nodes document_end
+delimited_documents ::= delimited_document delimited_documents
+                      | lambda
 
-headless_document ::= nodes document_end
+delimited_document ::= document_begin nodes document_end
 
-headfootless_document ::= nodes
+headerless_document ::= nodes newline document_end
 
-footless_document ::= document_begin nodes
+footerless_document ::= document_begin newline nodes
 
 document_begin ::= "---"
 
