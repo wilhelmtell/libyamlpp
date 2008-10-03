@@ -102,12 +102,17 @@ block_sequence ::= lambda
 mapping ::= flow_mapping
           | block_mapping
 
-flow_mapping ::= "{" scalar [ ]* ":" [ ]* node ( "," [ ]* scalar [ ]* ":" [ ]* node )* "}"
-               | "{" complex_mapping [ ]* ":" [ ]* node ( "," [ ]* complex_mapping [ ]* ":" [ ]* node )* "}"
-               | "{" [ ]* "}"
+suffix_listed_pairs ::= "," aws key aws ":" aws suffix_listed_pairs
+                      | lambda
+
+key ::= scalar
+      | complex_mapping_key
 
 # TODO:  define complex mapping
-complex_mapping ::= lambda
+complex_mapping_key ::= lambda
+
+flow_mapping ::= "{" aws key aws ":" aws node aws suffix_listed_pairs aws "}"
+               | "{" aws "}"
 
 # TODO:  define grammar for a block mapping
 block_mapping ::= lambda
