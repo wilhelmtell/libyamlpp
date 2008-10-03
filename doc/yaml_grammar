@@ -1,15 +1,20 @@
-stream ::= stream_begin directive* headless_document document* footless_document stream_end
-         | stream ::= stream_begin directive* headless_document footless_document stream_end
-         | stream ::= stream_begin directive* headless_document stream_end
-         | stream ::= stream_begin directive* footless_document stream_end
-         | stream ::= stream_begin directive* headfootless_document stream_end
-         | stream_begin directive* document* stream_end
+stream ::= stream_begin directives headless_document documents
+           footless_document stream_end
+         | stream_begin directives headless_document footless_document
+           stream_end
+         | stream_begin directives headless_document stream_end
+         | stream_begin directives footless_document stream_end
+         | stream_begin directives headfootless_document stream_end
+         | stream_begin directives documents stream_end
 
 # TODO:  how does a stream begin?  encoding information?
 stream_begin ::= ""
 
 # TODO:  how does a stream end?
 stream_end ::= ""
+
+directives ::= directive directives
+             | ""
 
 directive ::= version_directive
             | tag_directive
@@ -18,23 +23,29 @@ version_directive ::= "%YAML" [0-9] "." [0-9]
 
 tag_directive ::= "%TAG" handle uri
 
+documents ::= document documents
+            | ""
+
 #TODO:  is the second alternative correct?  what i want to say is that a
 #       document may start with document_begin, followed by a node and then
 #       either a document_end or nothing at all.  i don't think i can say
 #       it ends with document_end or stream_end, because a stream is defined
 #       to always end with a stream_end, so document shouldn't consume the
 #       final stream_end (and there should only be one stream end, right?).
-document ::= document_begin node* document_end
+document ::= document_begin nodes document_end
 
-headless_document ::= node* document_end
+headless_document ::= nodes document_end
 
-headfootless_document ::= node*
+headfootless_document ::= nodes
 
-footless_document ::= document_begin node*
+footless_document ::= document_begin nodes
 
 document_begin ::= "---"
 
 document_end ::= "..."
+
+nodes ::= node nodes
+        | ""
 
 node ::= alias
        | scalar
