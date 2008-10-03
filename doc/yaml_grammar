@@ -19,7 +19,9 @@ directives ::= directive directives
 directive ::= version_directive
             | tag_directive
 
-version_directive ::= "%YAML" [0-9] "." [0-9]
+version_directive ::= "%YAML" digit "." digit
+
+digit ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
 tag_directive ::= "%TAG" handle uri
 
