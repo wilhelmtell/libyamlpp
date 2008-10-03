@@ -90,7 +90,7 @@ wsc ::= space
 
 # whitespace of arbitrary length (or no whitespace at all). i chose this short
 # name so i can easily use this production frequently.
-aws ::= wsc aws
+aws ::= ws
      | lambda
 
 # one or more whitespace characters
