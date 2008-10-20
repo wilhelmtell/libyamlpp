@@ -100,17 +100,16 @@ aws ::= ws
 # one or more whitespace characters
 ws ::= wsc aws
 
-# TODO:  define grammar for block sequence
-block_sequence ::= lambda
+# block sequence defines a sequence of elements of some kind, each in a line
+block_sequence ::= block_sequence_element
+                 | block_sequence_element block_sequence
+
+block_sequence_element ::= block_sequence_element_start node newline
+
+block_sequence_element_start ::= "-"
 
 mapping ::= flow_mapping
           | block_mapping
-
-suffix_listed_pairs ::= "," aws key aws ":" aws suffix_listed_pairs
-                      | lambda
-
-key ::= scalar
-      | complex_mapping_key
 
 # TODO:  define complex mapping
 complex_mapping_key ::= lambda
@@ -118,9 +117,11 @@ complex_mapping_key ::= lambda
 flow_mapping ::= "{" aws key aws ":" aws node aws suffix_listed_pairs aws "}"
                | "{" aws "}"
 
+suffix_listed_pairs ::= "," aws key aws ":" aws suffix_listed_pairs
+                      | lambda
+
+key ::= scalar
+      | complex_mapping_key
+
 # TODO:  define grammar for a block mapping
 block_mapping ::= lambda
-
-flow_sequence_start ::= "["
-
-flow_sequence_end ::= "]"
