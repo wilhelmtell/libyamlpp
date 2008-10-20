@@ -101,12 +101,12 @@ aws ::= ws
 ws ::= wsc aws
 
 # block sequence defines a sequence of elements of some kind, each in a line
-block_sequence ::= block_sequence_element
-                 | block_sequence_element block_sequence
+block_sequence ::= block_sequence_element aws
+                 | block_sequence_element aws block_sequence
 
 block_sequence_element ::= block_sequence_element_start node newline
 
-block_sequence_element_start ::= "-"
+block_sequence_element_start ::= "-" aws
 
 mapping ::= flow_mapping
           | block_mapping
