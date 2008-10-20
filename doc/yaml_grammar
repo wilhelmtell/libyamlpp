@@ -79,6 +79,10 @@ sequence ::= flow_sequence
 flow_sequence ::= flow_sequence_start aws node aws suffix_listed_nodes aws flow_sequence_end
                 | flow_sequence_start aws flow_sequence_end
 
+flow_sequence_start ::= "["
+
+flow_sequence_end ::= "]"
+
 suffix_listed_nodes ::= "," aws node aws suffix_listed_nodes
                       | lambda
 
