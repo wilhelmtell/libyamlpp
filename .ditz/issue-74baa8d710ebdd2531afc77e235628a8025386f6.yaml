@@ -1,0 +1,28 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Define formal YAML grammar
+desc: Define the formal grammar for our YAML implementation.  It doesn't need to be complete in accordance to the YAML standard, just complete for what we intend to implement.
+type: :task
+component: libyamlpp
+release: "0.1"
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :in_progress
+disposition: 
+creation_time: 2008-10-20 05:55:22.658939 Z
+references: []
+
+id: 74baa8d710ebdd2531afc77e235628a8025386f6
+log_events: 
+- - 2008-10-20 05:55:28.990769 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+- - 2008-10-20 06:27:52.701760 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - changed status from unstarted to in_progress
+  - grammar is in doc/yaml_grammar
+- - 2008-10-20 06:50:17.503299 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - assigned to release 0.1 from unassigned
+  - Grammar is due for iteration 1
+git_branch: 
+claimer: 

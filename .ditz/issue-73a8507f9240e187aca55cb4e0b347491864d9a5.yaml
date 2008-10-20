@@ -1,0 +1,24 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Transform YAML grammar to Chomsky normal form
+desc: Particularly, a production shouldn't mix terminals with non-terminals
+type: :task
+component: libyamlpp
+release: "0.1"
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-20 22:42:42.214255 Z
+references: []
+
+id: 73a8507f9240e187aca55cb4e0b347491864d9a5
+log_events: 
+- - 2008-10-20 22:43:21.945391 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - Alex should be doing this today!!!
+- - 2008-10-20 22:45:02.539972 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - assigned to release 0.1 from unassigned
+  - ""
+git_branch: 
+claimer: 
