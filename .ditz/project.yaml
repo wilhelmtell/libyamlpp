@@ -14,3 +14,12 @@ releases:
     - Matan Nassau <matan.nassau@gmail.com>
     - created
     - Iteration 1
+- !ditz.rubyforge.org,2008-03-06/release 
+  name: "1.0"
+  status: :unreleased
+  release_time: 
+  log_events: 
+  - - 2008-10-21 17:53:24.801007 Z
+    - Matan Nassau <matan.nassau@gmail.com>
+    - created
+    - Submission release

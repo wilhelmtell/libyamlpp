@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Write project submission report
+desc: This will be an incremental work;  we'll add to the report as we add features, as we add tools to our arsenal and as we gain experience throughout the project.
+type: :task
+component: libyamlpp
+release: "1.0"
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-21 17:55:25.880034 Z
+references: []
+
+id: a86be5d47599707838eb05e0a50b28d79c30be68
+log_events: 
+- - 2008-10-21 17:55:28.877769 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+git_branch: 
+claimer: 
