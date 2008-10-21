@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Define production rules for alias
+desc: If we want to implement alias, that is ... :)
+type: :feature
+component: libyamlpp
+release: 
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-21 00:14:38.380493 Z
+references: []
+
+id: 21d4fe1e9bda758f3105dfd102b908a18ff4a153
+log_events: 
+- - 2008-10-21 00:14:40.840409 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+git_branch: 
+claimer: 

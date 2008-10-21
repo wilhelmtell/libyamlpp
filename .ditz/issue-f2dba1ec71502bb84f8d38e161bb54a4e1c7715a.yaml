@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Define production rules for standard URIs
+desc: YAML uses URIs in document headers, for example.
+type: :feature
+component: libyamlpp
+release: 
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-21 00:16:00.875139 Z
+references: []
+
+id: f2dba1ec71502bb84f8d38e161bb54a4e1c7715a
+log_events: 
+- - 2008-10-21 00:16:03.114667 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+git_branch: 
+claimer: 

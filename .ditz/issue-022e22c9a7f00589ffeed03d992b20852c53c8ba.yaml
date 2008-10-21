@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Define production rules for stream_{start,end} in YAML grammar
+desc: These rules are blank at the time of writing, because I'm not sure what should a stream have other than documents.  For example, it might hold encoding information and stuff like that.  Of course, we might as well deliberately decide to leave it blank if we don't want to implement encodings other than good-old ascii and if we don't have anything else in mind that should be stated in the beginning of a stream...
+type: :task
+component: libyamlpp
+release: "0.1"
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-21 00:13:28.519841 Z
+references: []
+
+id: 022e22c9a7f00589ffeed03d992b20852c53c8ba
+log_events: 
+- - 2008-10-21 00:13:30.915940 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+git_branch: 
+claimer: 

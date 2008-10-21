@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Define complex mapping productions in YAML grammar
+desc: Complex mappings allow for various kinds of keys in mappings.
+type: :feature
+component: libyamlpp
+release: 
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-21 00:17:29.262354 Z
+references: []
+
+id: 07840bc44aac64c6b5547aea88b2ea0ef31bd86d
+log_events: 
+- - 2008-10-21 00:17:30.738534 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+git_branch: 
+claimer: 
