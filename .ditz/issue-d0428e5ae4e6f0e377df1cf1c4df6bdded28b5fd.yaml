@@ -1,0 +1,30 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Define whitespace rules in grammar
+desc: |-
+  Currently there are /some/ productions that implement /some/ whitespace rules.  It will be nice if all productions clearly state where whitespace is allowed, where it is expected and where not.  It will be even better if we define these rules in an ordered manner;  specifically, I'm thinking about having the whitespace rules only in terminal productions.  For example:
+  
+   prod_a ::= term_a
+            | term_a prod_a
+   term_a ::= arbitrary_whitespace "A" arbitrary_whitespace
+  
+  as opposed to
+  
+   prod_a ::= arbitrary_whitespace term_a arbitrary_whitespace
+            | arbitrary_whitespace term_a arbitrary_whitespace prod_a
+type: :bugfix
+component: libyamlpp
+release: "0.1"
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-21 00:31:54.905772 Z
+references: []
+
+id: d0428e5ae4e6f0e377df1cf1c4df6bdded28b5fd
+log_events: 
+- - 2008-10-21 00:31:57.000828 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+git_branch: 
+claimer: 
