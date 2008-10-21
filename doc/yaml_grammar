@@ -124,7 +124,7 @@ suffix_listed_pairs ::= "," aws key aws pair_separator aws suffix_listed_pairs
 key ::= scalar
       | complex_mapping_key
 
-# TODO:  define grammar for a block mapping
+# block mapping defines a mapping of elements of some kind, each in a line
 block_mapping ::= block_mapping_element aws
                 | block_mapping_element aws block_mapping
 
