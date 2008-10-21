@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Define indentation productions in YAML grammar
+desc: YAML relies on correct indentation in a similar manner to Python's indentation rules.  This a crucial characteristic of YAML.  We should imbue it in our grammar.
+type: :bugfix
+component: libyamlpp
+release: "0.1"
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-21 17:47:54.028558 Z
+references: []
+
+id: 0d2e14d4f6aacf2aefe6db0834e6a6c0b789149f
+log_events: 
+- - 2008-10-21 17:47:56.282667 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+git_branch: 
+claimer: 
