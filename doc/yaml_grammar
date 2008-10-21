@@ -111,17 +111,26 @@ block_sequence_element_start ::= "-" aws
 mapping ::= flow_mapping
           | block_mapping
 
-# TODO:  define complex mapping
-complex_mapping_key ::= lambda
+flow_mapping ::= flow_mapping_start key aws pair_separator aws node aws suffix_listed_pairs aws flow_mapping_end
+               | flow_mapping_start aws flow_mapping_end
 
-flow_mapping ::= "{" aws key aws ":" aws node aws suffix_listed_pairs aws "}"
-               | "{" aws "}"
+flow_mapping_start ::= "{" aws
 
-suffix_listed_pairs ::= "," aws key aws ":" aws suffix_listed_pairs
+flow_mapping_end ::= "}" aws
+
+suffix_listed_pairs ::= "," aws key aws pair_separator aws suffix_listed_pairs
                       | lambda
 
 key ::= scalar
       | complex_mapping_key
 
 # TODO:  define grammar for a block mapping
-block_mapping ::= lambda
+block_mapping ::= block_mapping_element aws
+                | block_mapping_element aws block_mapping
+
+block_mapping_element ::= key pair_separator node newline
+
+pair_separator ::= ":" aws
+
+# TODO:  define complex mapping
+complex_mapping_key ::= lambda
