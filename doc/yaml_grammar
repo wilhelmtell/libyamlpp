@@ -78,9 +78,11 @@ sequence ::= flow_sequence
 flow_sequence ::= flow_sequence_start aws node aws suffix_listed_nodes aws flow_sequence_end
                 | flow_sequence_start aws flow_sequence_end
 
-flow_sequence_start ::= "["
+flow_sequence_start ::= "[" aws
 
-flow_sequence_end ::= "]"
+# the "aws_but_no_newline newline aws" trick is just to make sure there's a
+# newline
+flow_sequence_end ::= "]" aws_but_no_newline newline aws
 
 suffix_listed_nodes ::= "," aws node aws suffix_listed_nodes
                       | lambda
@@ -110,12 +112,14 @@ block_sequence_element_start ::= "-" aws
 mapping ::= flow_mapping
           | block_mapping
 
-flow_mapping ::= flow_mapping_start key aws pair_separator aws node aws suffix_listed_pairs aws flow_mapping_end
-               | flow_mapping_start aws flow_mapping_end
+flow_mapping ::= flow_mapping_start key aws pair_separator aws node aws suffix_listed_pairs aws flow_mapping_end newline
+               | flow_mapping_start aws flow_mapping_end newline
 
 flow_mapping_start ::= "{" aws
 
-flow_mapping_end ::= "}" aws
+# the "aws_but_no_newline newline aws" trick is just to make sure there's a
+# newline
+flow_mapping_end ::= "}" aws_but_no_newline newline aws
 
 suffix_listed_pairs ::= "," aws key aws pair_separator aws suffix_listed_pairs
                       | lambda
