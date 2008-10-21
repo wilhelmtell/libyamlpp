@@ -41,16 +41,14 @@ document_begin ::= "---"
 
 document_end ::= "..."
 
-nodes ::= node nodes
-        | lambda
+nodes ::= lambda
+        | node nodes
 
-node ::= alias
-       | scalar
+node ::= scalar
        | sequence
        | mapping
-
-# TODO:  define grammar for an alias
-alias ::= lambda
+       | anchor
+       | alias
 
 scalar ::= string
         | null
@@ -136,3 +134,14 @@ pair_separator ::= ":" ws
 
 # TODO:  define complex mapping
 complex_mapping_key ::= lambda
+
+# anchors name a node so that it can later be referenced by its name (see
+# alias)
+anchor ::= anchor_symbol string node
+
+anchor_symbol ::= "&"
+
+# aliases are the names given to a node earlier by an anchor (see anchor)
+alias ::= alias_symbol string
+
+alias_symbol ::= "*"
