@@ -1,0 +1,29 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Define double-quoted scalars rules in grammar
+desc: |-
+  Scalars can be typed in as is:
+  
+  ---
+  - hello
+  
+  or they can be double-quoted, in which case escapes are allowed:
+  
+  ---
+  - "hello\a"
+type: :feature
+component: libyamlpp
+release: 
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-21 23:02:59.506548 Z
+references: []
+
+id: d6fc2e6136caa295bb2b8c9ab0f6ee8e01e5b035
+log_events: 
+- - 2008-10-21 23:03:01.154836 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+git_branch: 
+claimer: 
