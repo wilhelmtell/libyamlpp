@@ -51,11 +51,24 @@ node ::= scalar
        | alias
 
 scalar ::= string
+        | literal_style
+        | folded_style
         | null
         | tag string
 
 string ::= [^!\n][^\n]* newline
          | newline
+
+literal_style ::= literal_style_symbol literal_style_text
+
+literal_style_symbol ::= "|" aws
+
+literal_style_text ::= string
+                     | string literal_style_text
+
+# TODO:  folded style.  see section 2.3 in the standard
+folded_style ::= lambda
+
 null ::= "null"
 
 tag ::= "!" local_tag
