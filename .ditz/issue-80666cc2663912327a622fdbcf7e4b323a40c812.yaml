@@ -1,0 +1,29 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Define folded-style rules
+desc: |-
+  Folded style is similar to literal style, only newlines aren't normally significant;  they are folded into a single space.  Sometimes, tough, they are;  for example, a newline ending an empty line or a line with nothing but whitespace is significant and isn't folded.
+  
+  >
+   this is text
+   in which newlines are folded
+   into a single space
+  
+   but paragraphs are allowed,
+   and are preserved.
+type: :feature
+component: libyamlpp
+release: 
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-21 23:36:16.790664 Z
+references: []
+
+id: 80666cc2663912327a622fdbcf7e4b323a40c812
+log_events: 
+- - 2008-10-21 23:36:18.166700 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+git_branch: 
+claimer: 
