@@ -56,8 +56,11 @@ scalar ::= string
         | null
         | tag string
 
-string ::= [^!\n][^\n]* newline
-         | newline
+string ::= [^!] text
+
+# string scalars can have newlines, but newlines are never significant.  they
+# are always folded into single space characters.
+text ::= any_character_newline_included_until_end_of_scope_as_determined_by_indentation
 
 literal_style ::= literal_style_symbol literal_style_text
 
