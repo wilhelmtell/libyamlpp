@@ -55,5 +55,9 @@ log_events:
      The parser then simply handles the "INDENT" and "DEDENT" tokens as block delimiters -- exactly like curly braces are handled by a C compiler.
     
      The above example is intentionally simple. There are more things to it, such as continuation lines. They are well-defined, too, and you can read about them in the Python Language Reference if you're interested, which includes a complete formal grammar of the language.
+- - 2008-10-22 01:44:36.315721 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - commented
+  - maybe the indentation tracking shouldn't be in the grammar, but somewhere else?  the link i gave in a previous comment says the scope (indentation) tracking is done at lexical analysis, the tokenizer.
 git_branch: 
 claimer: 
