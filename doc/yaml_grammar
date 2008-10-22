@@ -26,7 +26,9 @@ digit ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
 version_component_separator ::= "."
 
-tag_directive ::= "%TAG" handle uri
+tag_directive ::= tag_directive_symbol handle uri
+
+tag_directive_symbol ::= "%TAG"
 
 # documents may be delimited, but don't always have to be.  for example, the
 # first document may start immediately with nodes rather than with a leading
@@ -81,11 +83,14 @@ literal_style_text ::= string
 folded_style ::= lambda
 
 null ::= "null"
+       | "Null"
+       | "NULL"
+       | "~"
 
 tag ::= "!" local_tag
-     | "!!" standard_tag
-     | "!" handle "!" local_tag
-     | "tag:" uri ":" local_tag
+      | "!!" standard_tag
+      | "!" handle "!" local_tag
+      | "tag:" uri ":" local_tag
 
 local_tag ::= [a-zA-Z_]+
 
