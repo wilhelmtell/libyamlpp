@@ -59,5 +59,16 @@ log_events:
   - Matan Nassau <matan.nassau@gmail.com>
   - commented
   - maybe the indentation tracking shouldn't be in the grammar, but somewhere else?  the link i gave in a previous comment says the scope (indentation) tracking is done at lexical analysis, the tokenizer.
+- - 2008-10-22 05:38:11.359488 Z
+  - Alex Vallee <enzalx@gmail.com>
+  - commented
+  - |-
+    This is probably something that ends up as a token attribute.
+    
+    Just like a programming language might produce an LITERAL_INT when it
+    sees '57773' and this token would have a value decimal 57773.
+    
+    We can then apply this to the INDENT token and give the indentation
+    level as the value of the token.
 git_branch: 
 claimer: 
