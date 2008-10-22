@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Add tags support
+desc: At the moment we have tags sort-of, kinda defined in the grammar.  But I think it's ver sketchy, and in fact completely wrong as it is.  There are some details about tags in sections 6.8.2, 6.8.2.1 and 6.8.2.2 in the standard, so refer to these when you correct the grammar.
+type: :feature
+component: libyamlpp
+release: 
+reporter: Matan Nassau <matan.nassau@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-10-22 01:07:03.029943 Z
+references: []
+
+id: af8b3f7cce0bd6a780f88618a2ac102edd715eb8
+log_events: 
+- - 2008-10-22 01:07:06.292413 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - created
+  - ""
+git_branch: 
+claimer: 
