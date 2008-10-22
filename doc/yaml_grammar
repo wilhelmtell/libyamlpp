@@ -172,7 +172,21 @@ complex_mapping_key_symbol ::= "?" ws
 
 # anchors name a node so that it can later be referenced by its name (see
 # alias)
-anchor ::= anchor_symbol string node
+anchor ::= anchor_symbol identifier node
+
+identifier ::= identifier_prefix identifier_suffix
+
+identifier_prefix ::= "_"
+                    | lowercase_letter
+                    | uppercase_letter
+
+identifier_suffix ::= lambda
+                    | identifier_suffix_character identifier_suffix
+
+identifier_suffix_character ::= "_"
+                              | lowercase_letter
+                              | uppercase_letter
+                              | digit
 
 anchor_symbol ::= "&"
 
