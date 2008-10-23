@@ -16,8 +16,7 @@ version_directive ::= version_directive_symbol version_specification
 
 version_directive_symbol ::= "%YAML"
 
-version_specification ::= integer
-                        | integer version_component_separator version_specification
+version_specification ::= integer version_component_separator integer
 
 integer ::= digit
           | digit integer
