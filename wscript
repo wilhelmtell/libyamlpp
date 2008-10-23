@@ -18,6 +18,16 @@ def init():
   pass
 
 def set_options(opt):
+  opt.add_option("--with-tests",
+                 action = "store_true",
+                 default = False,
+                 help = "Build tests"
+                )
+  opt.add_option("--verbose-testing",
+                 action = "store_true",
+                 default = False,
+                 help = "On './waf check', test verbosely"
+                )
   opt.add_option("--docs",
                  action = "store_true",
                  default = False,
@@ -46,6 +56,25 @@ def configure(conf):
   e.want_message = 1
   e.run()
 
+  if Params.g_options.with_tests:
+    conf.env['BUILD_TESTS'] = True
+    c = conf.create_header_configurator()
+    c.name = 'gtest/gtest.h'
+    c.uselib = 'GTEST_H'
+    c.path = ['/usr/include', '/usr/local/include']
+    c.mandatory = 1
+    c.message = 'The GoogleTest library headers are required if tests are to be performed.'
+    c.run()
+
+    c = conf.create_library_configurator()
+    c.name = 'gtest'
+    c.uselib = 'GTEST'
+    c.path = ['/usr/lib', '/usr/local/lib']
+    c.mandatory = 1
+    c.message = 'The GoogleTest library is required if tests are to be performed.'
+    c.run()
+    Params.pprint('CYAN', "Run './waf check' to run unit tests.")
+
   # documentation?
   if Params.g_options.docs:
     conf.define('HAVE_DOCS', 1)
@@ -60,9 +89,21 @@ def configure(conf):
 
 def build(bld):
   bld_subdirs = ['src']
-  bld.env()['HAVE_DOCS'] and bld_subdirs.append('doc')
-  bld.env()['HAVE_DEMO'] and bld_subdirs.append('src/demo')
+  if bld.env()['HAVE_DOCS']:
+    bld_subdirs.append('doc')
+  if bld.env()['HAVE_DEMO']:
+    bld_subdirs.append('src/demo')
+  if bld.env()['BUILD_TESTS']:
+    bld_subdirs.extend(['src/test', 'src/demo/test'])
   bld.add_subdirs(bld_subdirs)
 
 def shutdown():
-  pass
+  import UnitTest
+  ut = UnitTest.unit_test()
+  ut.change_to_testfile_dir = True
+  if Params.g_options.verbose_testing:
+    ut.want_to_see_test_output = True
+  else:
+    ut.want_to_see_test_output = False
+  ut.run()
+  ut.print_results()
