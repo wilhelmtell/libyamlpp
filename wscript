@@ -18,11 +18,6 @@ def init():
   pass
 
 def set_options(opt):
-  opt.add_option("--debug",
-                 action = "store_true",
-                 default = False,
-                 help = "Build for debugging or development"
-                )
   opt.add_option("--docs",
                  action = "store_true",
                  default = False,
@@ -50,13 +45,6 @@ def configure(conf):
   e.code = '#include<iostream>\nint main(){std::cout<<"hello world"<<std::endl;return 0;}\n'
   e.want_message = 1
   e.run()
-
-  # debug?
-  if Params.g_options.debug:
-    conf.define('DEBUG', 1)
-    conf.env['CXXFLAGS'] += ['-g']
-  else:
-    conf.define('NDEBUG', 1)
 
   # documentation?
   if Params.g_options.docs:
