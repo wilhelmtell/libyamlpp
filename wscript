@@ -28,6 +28,11 @@ def set_options(opt):
                  default = False,
                  help = "Generate documentation"
                 )
+  opt.add_option("--demo",
+                 action = "store_true",
+                 default = False,
+                 help = "Build the demo application"
+                )
   opt.tool_options('compiler_cxx')
 
 def configure(conf):
@@ -58,12 +63,17 @@ def configure(conf):
     conf.define('HAVE_DOCS', 1)
     conf.check_tool('tex')
 
+  # demo?
+  if Params.g_options.demo:
+    conf.define('HAVE_DEMO', 1)
+
   conf.write_config_header('config.h')
   conf.sub_config('src')
 
 def build(bld):
   bld_subdirs = ['src']
   bld.env()['HAVE_DOCS'] and bld_subdirs.append('doc')
+  bld.env()['HAVE_DEMO'] and bld_subdirs.append('src/demo')
   bld.add_subdirs(bld_subdirs)
 
 def shutdown():
