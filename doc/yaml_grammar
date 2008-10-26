@@ -194,7 +194,7 @@ alias ::= alias_symbol string
 
 alias_symbol ::= "*"
 
-# Paraphrased from the C++ standard, as described by IBM's C++ Standard Library
+# Reference:  The C++ standard, as described by IBM's C++ Standard Library
 # Reference document, page 18, "Escape Sequences"
 #
 # TODO:  I'm just being lazy, and reuse C++'s escape sequences.  Check if YAML
