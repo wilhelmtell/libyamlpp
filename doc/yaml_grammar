@@ -235,4 +235,3 @@ hex_number ::= hex_digit
 hex_digit ::= '0' | '1' | ... | '9'
             | 'a' | 'b' | ... | 'f'
             | 'A' | 'B' | ... | 'F'
-# END paraphrase IBM's C++ standard library reference document
