@@ -1,8 +1,12 @@
-build-project src ;
+# the /lib project is an alias for the src project, and /demo is for src/demo
+use-project /lib : src ;
+use-project /demo : src/demo ;
 
-# allow runnig "bjam demo" rather than "bjam src/demo"
-alias demo : src/demo ;
+# the /demo//demo-libyaml++ target is also known as the demo target
+alias demo : /demo//demo-libyaml++ ;
 
-# allow runnig "bjam yaml++" rather than "bjam src" or "bjam"
-# why would we want that?  because now we can say "bjam --clean yaml++ demo"
-alias yaml++ : src ;
+# only build the demo-libyaml++ target if explicitly asked to
+explicit demo ;
+
+# build our projects
+build-project /lib ;
