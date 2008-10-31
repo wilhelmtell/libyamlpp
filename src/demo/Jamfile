@@ -1,0 +1,3 @@
+# program demo-libyaml++ depends on all .cc files and on the yaml++ target
+# defined in the Jamfile located in the parent directory
+exe demo-libyaml++ : [ glob *.cc ] ..//yaml++ ;

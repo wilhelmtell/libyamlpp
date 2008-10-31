@@ -1,0 +1,5 @@
+# any target that depends on this project should -Iinclude this directory
+project : usage-requirements <include>. ;
+
+# to build libyaml++, compile all .cc files into a shared library
+lib yaml++ : [ glob *.cc ] : <link>shared ;

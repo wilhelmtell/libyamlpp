@@ -1,0 +1,8 @@
+build-project src ;
+
+# allow runnig "bjam demo" rather than "bjam src/demo"
+alias demo : src/demo ;
+
+# allow runnig "bjam yaml++" rather than "bjam src" or "bjam"
+# why would we want that?  because now we can say "bjam --clean yaml++ demo"
+alias yaml++ : src ;
