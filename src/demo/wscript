@@ -6,4 +6,6 @@ def configure(conf):
 def build(bld):
   obj = bld.create_obj('cpp', 'program')
   obj.find_sources_in_dirs('.')
+  obj.uselib_local = 'yaml++'
+  obj.includes = '..'
   obj.target = 'yaml++-demo'
