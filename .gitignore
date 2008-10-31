@@ -1,9 +1,7 @@
 # These two are really annoying.
 *.o
 *~
+src/bin
+src/demo/bin
 
-# Waf related things
-.lock-wscript
-.waf*
 .ditz-config
-build
