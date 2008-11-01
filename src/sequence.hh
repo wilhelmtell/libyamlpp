@@ -2,10 +2,14 @@
 #define SRC_SEQUENCE_HH_
 
 #include "node.hh"
+#include <vector>
+#include <memory>
 
 namespace yaml {
 
 class sequence : public node {
+private:
+    std::vector<std::tr1::shared_ptr<node> > elements;
 };
 
 } // namespace yaml
