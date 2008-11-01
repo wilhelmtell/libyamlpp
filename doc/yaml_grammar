@@ -14,7 +14,7 @@ directive ::= version_directive
 
 version_directive ::= version_directive_symbol version_specification
 
-version_directive_symbol ::= "%YAML"
+version_directive_symbol ::= aws "%YAML" ws
 
 version_specification ::= integer version_component_separator integer
 
@@ -27,7 +27,7 @@ version_component_separator ::= "."
 
 tag_directive ::= tag_directive_symbol handle uri
 
-tag_directive_symbol ::= "%TAG"
+tag_directive_symbol ::= aws "%TAG" ws
 
 # documents may be delimited, but don't always have to be.  for example, the
 # first document may start immediately with nodes rather than with a leading
@@ -46,9 +46,9 @@ headerless_document ::= nodes newline document_end
 
 footerless_document ::= document_begin newline nodes
 
-document_begin ::= "---"
+document_begin ::= "---" aws newline
 
-document_end ::= "..."
+document_end ::= "..." aws newline
 
 nodes ::= lambda
         | node nodes
@@ -81,19 +81,19 @@ literal_style_text ::= string
 # TODO:  folded style.  see section 2.3 in the standard
 folded_style ::= lambda
 
-null ::= "null"
-       | "Null"
-       | "NULL"
-       | "~"
+null ::= ws "null" ws
+       | ws "Null" ws
+       | ws "NULL" ws
+       | ws "~" ws
 
-tag ::= "!" local_tag
-      | "!!" standard_tag
-      | "!" handle "!" local_tag
-      | "tag:" uri ":" local_tag
+tag ::= aws "!" local_tag
+      | aws "!!" standard_tag
+      | aws "!" handle "!" ws local_tag
+      | aws "tag:" uri ":" local_tag
 
 local_tag ::= [a-zA-Z_]+
 
-standard_tag ::= "str"
+standard_tag ::= "str" ws
 
 handle ::= [a-zA-Z_]+
 
@@ -103,17 +103,15 @@ uri ::= lambda
 sequence ::= flow_sequence
            | block_sequence
 
-flow_sequence ::= flow_sequence_start aws node aws suffix_listed_nodes aws flow_sequence_end
-                | flow_sequence_start aws flow_sequence_end
+flow_sequence ::= flow_sequence_start node suffix_listed_nodes flow_sequence_end
+                | flow_sequence_start flow_sequence_end
 
-flow_sequence_start ::= "[" aws
+flow_sequence_start ::= aws "[" aws
 
-# the "aws_but_no_newline newline aws" trick is just to make sure there's a
-# newline
-flow_sequence_end ::= "]" aws_but_no_newline newline aws
+flow_sequence_end ::= aws "]" aws_with_at_least_one_newline
 
-suffix_listed_nodes ::= "," aws node aws suffix_listed_nodes
-                      | lambda
+suffix_listed_nodes ::= aws "," aws node suffix_listed_nodes
+                      | aws
 
 # a single whitespace character.  wsc stands for whitespace_character;  i
 # chose this short name so i can easily use this production frequently.
@@ -140,17 +138,15 @@ block_sequence_element_start ::= "-" aws
 mapping ::= flow_mapping
           | block_mapping
 
-flow_mapping ::= flow_mapping_start key aws pair_separator aws node aws suffix_listed_pairs aws flow_mapping_end newline
-               | flow_mapping_start aws flow_mapping_end newline
+flow_mapping ::= flow_mapping_start key pair_separator node suffix_listed_pairs flow_mapping_end newline
+               | flow_mapping_start flow_mapping_end newline
 
-flow_mapping_start ::= "{" aws
+flow_mapping_start ::= aws "{" aws
 
-# the "aws_but_no_newline newline aws" trick is just to make sure there's a
-# newline
-flow_mapping_end ::= "}" aws_but_no_newline newline aws
+flow_mapping_end ::= aws "}" aws_with_at_least_one_newline
 
-suffix_listed_pairs ::= "," aws key aws pair_separator aws suffix_listed_pairs
-                      | lambda
+suffix_listed_pairs ::= aws "," aws key aws pair_separator suffix_listed_pairs
+                      | aws
 
 key ::= scalar
       | complex_mapping_key
@@ -161,13 +157,13 @@ block_mapping ::= block_mapping_element aws
 
 block_mapping_element ::= key pair_separator node newline
 
-pair_separator ::= ":" ws
+pair_separator ::= aws ":" ws
 
 # a complex mapping key is a key of arbitrary type.  this as opposed to regular
 # keys, which must be scalars.
 complex_mapping_key ::= complex_mapping_key_symbol node
 
-complex_mapping_key_symbol ::= "?" ws
+complex_mapping_key_symbol ::= aws "?" ws
 
 # anchors name a node so that it can later be referenced by its name (see
 # alias)
@@ -187,12 +183,12 @@ identifier_suffix_character ::= "_"
                               | uppercase_letter
                               | digit
 
-anchor_symbol ::= "&"
+anchor_symbol ::= ws "&"
 
 # aliases are the names given to a node earlier by an anchor (see anchor)
 alias ::= alias_symbol string
 
-alias_symbol ::= "*"
+alias_symbol ::= ws "*"
 
 # Reference:  The C++ standard, as described by IBM's C++ Standard Library
 # Reference document, page 18, "Escape Sequences"

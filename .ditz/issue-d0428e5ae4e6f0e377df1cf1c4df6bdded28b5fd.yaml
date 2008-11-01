@@ -15,8 +15,8 @@ type: :bugfix
 component: libyamlpp
 release: "0.1"
 reporter: Matan Nassau <matan.nassau@gmail.com>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2008-10-21 00:31:54.905772 Z
 references: []
 
@@ -25,6 +25,18 @@ log_events:
 - - 2008-10-21 00:31:57.000828 Z
   - Matan Nassau <matan.nassau@gmail.com>
   - created
+  - ""
+- - 2008-11-01 04:36:17.484367 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - changed status from unstarted to in_progress
+  - ""
+- - 2008-11-01 05:05:23.753044 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - changed status from in_progress to paused
+  - ""
+- - 2008-11-01 05:08:43.660108 Z
+  - Matan Nassau <matan.nassau@gmail.com>
+  - closed with disposition fixed
   - ""
 git_branch: 
 claimer: 
