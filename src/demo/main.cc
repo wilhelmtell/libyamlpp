@@ -3,22 +3,23 @@
 using namespace std;
 
 int line_number = 1;
+char peek = ' ';
 
 void ws() {
     while( true ) {
-        if( ! cin ) return;
-        if( cin.peek() == '\n' )
+        if( peek == '\n' )
             ++line_number;
-        else if( cin.peek() != ' ' && cin.peek() != '\t' )
+        else if( peek != ' ' && peek != '\t' )
             return;
-        cin.get();
+        peek = cin.get();
+        if( ! cin ) return;
     }
 }
 
 int main(int argc, char* argv[])
 {
     ws();
-    char ch = cin.peek();
+    char ch = peek;
     cout << ch << line_number << endl;
     return 0;
 }
