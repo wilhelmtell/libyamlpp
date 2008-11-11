@@ -1,6 +1,7 @@
 # These two are really annoying.
 *.o
 *~
+.*.swp
 src/bin
 src/demo/bin
 
