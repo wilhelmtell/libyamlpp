@@ -1,6 +1,6 @@
 # the /lib project is an alias for the src project, and /demo is for src/demo
 use-project /lib : src ;
-use-project /demo : src/demo ;
+use-project /demo : demo ;
 
 # the /demo//demo-libyaml++ target is also known as the demo target
 alias demo : /demo//demo-libyaml++ ;
