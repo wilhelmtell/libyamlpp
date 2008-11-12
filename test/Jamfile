@@ -1,0 +1,7 @@
+import testing ;
+
+unit-test check
+  : [ glob *.cc ] /lib//yaml++
+  : <include>/usr/include/unittest++
+    <linkflags>-lUnitTest++
+  ;
