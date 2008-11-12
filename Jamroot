@@ -5,6 +5,8 @@ use-project /demo : demo ;
 # the /demo//demo-libyaml++ target is also known as the demo target
 alias demo : /demo//demo-libyaml++ ;
 
+alias yaml++ : /lib//yaml++ ;
+
 # only build the demo-libyaml++ target if explicitly asked to
 explicit demo ;
 
