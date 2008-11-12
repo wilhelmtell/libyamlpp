@@ -1,4 +1,4 @@
-                                  INTRODUCTION
+0  INTRODUCTION
 
 libyaml++ is a C++ library for reading and writing YAML streams.  YAML stands
 for YAML Ain't a Markup Language.  It is a portable data-serialization
@@ -12,3 +12,75 @@ which in turn was designed primarily to store structured documents.  YAML
 therefore has more freedom of design.  When compared to XML, YAML elevates
 its design goals to support data streams that show a balance between a
 flexible syntax and readability.
+
+
+1  DIRECTORY TREE STRUCTURE
+
+This distribution consists of three components.  The first and most important
+component is the library's source code, and it is placed under the src/
+subdirectory.  The second component is the demo application, which demonstrates
+the library's capabilities and use and is located, obviously enough, in the
+demo/ subdirectory.  The last component is the testing code, which tests the
+source code of the library and is located in the test/ subdirectory.
+
+
+2  BUILDING
+
+The The easiest way to build libyaml++ is using the automated build system
+Boost.Build.  An alternative way is to build the library manually.  We will
+cover in this section both approaches.
+
+
+2.1  SETTING-UP BOOST.BUILD AND BUILDING USING BOOST.BUILD
+
+
+2.1.1  SETTING-UP BOOST.BUILD
+
+Get Boost.Build from http://www.boost.org/doc/tools/build/index.html and
+following the instructions at
+http://www.boost.org/doc/tools/build/doc/html/bbv2/installation.html.
+Installing Boost.Build is a fairly straightforward procedure that consists
+mainly of three steps:
+
+ 1. Copy the extracted Boost.Build distribution into a directory reachable by
+    your operating-system's PATH.
+
+ 2. Configure Boost.Build by choosing your compiler of choice in the
+    site-config.jam file in Boost.Build's root directory.  It should be a
+    matter of uncommenting a line such as
+
+    using gcc ;
+
+ 3. Copy the bjam binary into a directory reachable by your operating-system's
+    PATH.
+
+Further details are given in the link above.
+
+
+2.1.2  BUILDING USING BOOST.BUILD
+
+To build libyaml++, from the libyaml++ distribution's root directory run the
+command:
+
+ libyamlpp$ bjam release
+
+This will build libyaml++ and place the resultant binary in a directory
+structure under src/bin/release/.  The exact heirarchy structure will depend on
+your system.  Our system, for example, will place the resultant binary in
+src/bin/release/gcc/libyaml++.so.  Your environment may be, for example, in
+src/bin/release/msvc/libyaml++.so.
+
+To build the demo application, run the following command from the project
+distribution's root directory:
+
+ libyamlpp$ bjam demo release
+
+Again, the exact location of the resultant binary will depend on your system
+but will be somewhere under demo/bin/release/.  In our case it is in
+demo/bin/release/gcc/libyaml++-demo.
+
+To build the test suites, run
+
+ libyamlpp$ bjam check
+
+This will also run the tests once they are built.
