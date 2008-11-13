@@ -18,7 +18,12 @@ public:
         STRING,                       TAG,
         TAG_DIRECTIVE,                URI,
         VERSION_DIRECTIVE
-    } tag;
+    };
+
+    token();
+    token(lexical_tag tag);
+
+    lexical_tag tag;
 };
 
 #endif // SRC_TOKEN_HH_
