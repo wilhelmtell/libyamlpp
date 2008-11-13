@@ -4,7 +4,7 @@
 class token {
     enum token_type {
         ALIAS,                        ANCHOR,
-        BLOCK_SEQUENCE_ELEMENT_START, COMPLEX_MAPPING_KEY,
+        BLOCK_SEQUENCE_ELEMENT_BEGIN, COMPLEX_MAPPING_KEY,
         DOCUMENT_BEGIN,               DOCUMENT_END,
         ESCAPE_SEQUENCE,              FLOW_MAPPING_END,
         FLOW_MAPPING_START,           FLOW_SEQUENCE_END,
