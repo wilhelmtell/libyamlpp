@@ -1,0 +1,7 @@
+rule dvi ( name : sources + )
+{
+    ECHO dvi $(name) ... ;
+    SHELL "latex --jobname $(name) $(sources)" ;
+}
+
+dvi proposal : proposal.tex ;
