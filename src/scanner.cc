@@ -47,5 +47,10 @@ token scanner::scan()
         if( is.eof() ) return token(token::EOS);
     }
 
+    if( peek == '[' ) {
+        sip();
+        previous = token(token::FLOW_SEQUENCE_BEGIN);
+    }
+
     return previous;
 }
