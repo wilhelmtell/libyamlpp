@@ -7,6 +7,7 @@ using namespace std;
 
 scanner::scanner() : is(cin), line_number(1), peek(' ')
 {
+    sip();
 }
 
 // Fill peek with the next character from the input stream
