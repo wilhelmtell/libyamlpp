@@ -1,7 +1,7 @@
 import testing ;
 
 unit-test check
-  : [ glob *.cc ] /lib//yaml++
+  : [ glob *.cc ] /lib//libyaml++
   : <include>/usr/include/unittest++
     <linkflags>-lUnitTest++
   ;
