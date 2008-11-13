@@ -1,6 +1,6 @@
 #include "token.hh"
 
-token::token() : tag(NONE)
+token::token() : tag(token::EOS)
 {
 }
 

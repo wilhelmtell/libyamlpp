@@ -4,7 +4,6 @@
 class token {
 public:
     enum lexical_tag {
-        NONE = 0,
         ALIAS,                        ANCHOR,
         BLOCK_SEQUENCE_ELEMENT_BEGIN, COMPLEX_MAPPING_KEY,
         DOCUMENT_BEGIN,               DOCUMENT_END,
@@ -17,7 +16,7 @@ public:
         PAIR_SEPARATOR,               STANDARD_TAG,
         STRING,                       TAG,
         TAG_DIRECTIVE,                URI,
-        VERSION_DIRECTIVE
+        VERSION_DIRECTIVE,            EOS
     };
 
     token();
