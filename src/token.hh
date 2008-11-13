@@ -2,7 +2,9 @@
 #define SRC_TOKEN_HH_
 
 class token {
-    enum token_type {
+public:
+    enum lexical_tag {
+        NONE = 0,
         ALIAS,                        ANCHOR,
         BLOCK_SEQUENCE_ELEMENT_BEGIN, COMPLEX_MAPPING_KEY,
         DOCUMENT_BEGIN,               DOCUMENT_END,
