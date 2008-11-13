@@ -2,7 +2,6 @@
 *.o
 *~
 .*.swp
-src/bin
-src/demo/bin
+bin/
 
 .ditz-config
