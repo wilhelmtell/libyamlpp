@@ -9,6 +9,7 @@
 class scanner {
 public:
     scanner();
+    scanner(std::istream& is);
     token scan();
     void sip();
 

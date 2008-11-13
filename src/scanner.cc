@@ -10,6 +10,11 @@ scanner::scanner() : is(cin), line_number(1), peek(' ')
     sip();
 }
 
+scanner::scanner(istream& is) : is(is), line_number(1), peek(' ')
+{
+    sip();
+}
+
 // Fill peek with the next character from the input stream
 void scanner::sip()
 {
