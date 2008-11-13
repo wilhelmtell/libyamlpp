@@ -2,4 +2,4 @@
 project : usage-requirements <include>. ;
 
 # to build libyaml++, compile all .cc files into a shared library
-lib yaml++ : [ glob *.cc ] : <link>shared ;
+lib libyaml++ : [ glob *.cc ] : <link>shared ;
