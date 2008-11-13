@@ -37,10 +37,10 @@ token scanner::scan()
             ++line_number;
         else if( ! isspace(peek) )
             break;
-        peek = is.get();
-        if( ! is ) break;
+        sip();
+        if( ! is ) return token(); // TODO:  indicate to caller that no-token can be returned
     }
 
     char ch = peek;
-    return token();
+    return previous;
 }
