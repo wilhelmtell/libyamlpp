@@ -11,7 +11,7 @@ class token {
         FLOW_SEQUENCE_START,          FOLDED_STYLE,
         HANDLE,                       IDENTIFIER,
         INTEGER,                      LITERAL_STYLE,
-        LOCAL_TAG,                    NULL,
+        LOCAL_TAG,                    NIL,
         PAIR_SEPARATOR,               STANDARD_TAG,
         STRING,                       TAG,
         TAG_DIRECTIVE,                URI,
