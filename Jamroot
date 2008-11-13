@@ -13,7 +13,5 @@ explicit demo ;
 alias check : test//check ;
 explicit check ;
 
-alias yaml++ : /lib//yaml++ ;
-
 # build our projects
 build-project /lib ;
