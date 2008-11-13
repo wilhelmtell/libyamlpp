@@ -51,6 +51,18 @@ token scanner::scan()
         sip();
         previous = token(token::FLOW_SEQUENCE_BEGIN);
     }
+    else if( peek == ']' ) {
+        sip();
+        previous = token(token::FLOW_SEQUENCE_END);
+    }
+    else if( peek == '{' ) {
+        sip();
+        previous = token(token::FLOW_MAPPING_BEGIN);
+    }
+    else if( peek == '}' ) {
+        sip();
+        previous = token(token::FLOW_MAPPING_END);
+    }
 
     return previous;
 }
