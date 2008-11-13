@@ -103,10 +103,10 @@ uri ::= lambda
 sequence ::= flow_sequence
            | block_sequence
 
-flow_sequence ::= flow_sequence_start node suffix_listed_nodes flow_sequence_end
-                | flow_sequence_start flow_sequence_end
+flow_sequence ::= flow_sequence_begin node suffix_listed_nodes flow_sequence_end
+                | flow_sequence_begin flow_sequence_end
 
-flow_sequence_start ::= aws "[" aws
+flow_sequence_begin ::= aws "[" aws
 
 flow_sequence_end ::= aws "]" aws_with_at_least_one_newline
 
@@ -131,17 +131,17 @@ ws ::= wsc aws
 block_sequence ::= block_sequence_element aws
                  | block_sequence_element aws block_sequence
 
-block_sequence_element ::= block_sequence_element_start node newline
+block_sequence_element ::= block_sequence_element_begin node newline
 
-block_sequence_element_start ::= "-" aws
+block_sequence_element_begin ::= "-" aws
 
 mapping ::= flow_mapping
           | block_mapping
 
-flow_mapping ::= flow_mapping_start key pair_separator node suffix_listed_pairs flow_mapping_end newline
-               | flow_mapping_start flow_mapping_end newline
+flow_mapping ::= flow_mapping_begin key pair_separator node suffix_listed_pairs flow_mapping_end newline
+               | flow_mapping_begin flow_mapping_end newline
 
-flow_mapping_start ::= aws "{" aws
+flow_mapping_begin ::= aws "{" aws
 
 flow_mapping_end ::= aws "}" aws_with_at_least_one_newline
 
