@@ -8,5 +8,10 @@ alias demo : /demo//demo-libyaml++ ;
 # only build the demo-libyaml++ target if explicitly asked to
 explicit demo ;
 
+alias check : test//check ;
+explicit check ;
+
+alias yaml++ : /lib//yaml++ ;
+
 # build our projects
 build-project /lib ;
