@@ -39,9 +39,8 @@ token scanner::scan()
         else if( ! isspace(peek) )
             break;
         sip();
-        if( ! is ) return token(); // TODO:  indicate to caller that no-token can be returned
+        if( is.eof() ) return token(token::EOS);
     }
 
-    char ch = peek;
     return previous;
 }
