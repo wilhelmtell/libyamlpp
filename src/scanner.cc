@@ -31,7 +31,7 @@ void scanner::sip()
         }
     peek = buf.front();
     buf.pop();
-    assert(buf.size() <= BUFFER_SIZE);
+    assert(buf.size() <= BUFFER_SIZE - 1);
 }
 
 token scanner::scan()
