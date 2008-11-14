@@ -44,25 +44,23 @@ token scanner::scan()
         else if( ! isspace(peek) )
             break;
         sip();
-        if( is.eof() ) return token(token::EOS);
+        if( is.eof() ) return previous = token(token::EOS);
     }
 
     if( peek == '[' ) {
         sip();
-        previous = token(token::FLOW_SEQUENCE_BEGIN);
+        return previous = token(token::FLOW_SEQUENCE_BEGIN);
     }
-    else if( peek == ']' ) {
+    if( peek == ']' ) {
         sip();
-        previous = token(token::FLOW_SEQUENCE_END);
+        return previous = token(token::FLOW_SEQUENCE_END);
     }
-    else if( peek == '{' ) {
+    if( peek == '{' ) {
         sip();
-        previous = token(token::FLOW_MAPPING_BEGIN);
+        return previous = token(token::FLOW_MAPPING_BEGIN);
     }
-    else if( peek == '}' ) {
+    if( peek == '}' ) {
         sip();
-        previous = token(token::FLOW_MAPPING_END);
+        return previous = token(token::FLOW_MAPPING_END);
     }
-
-    return previous;
 }
