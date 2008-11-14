@@ -14,10 +14,12 @@ public:
     void sip();
 
 private:
+    typedef std::queue<char> input_buffer;
+
     std::istream &is;
     int line_number;
     char peek;
-    std::queue<char> buf;
+    input_buffer buf;
     token previous;
     std::stack<int> indentation_level;
 };

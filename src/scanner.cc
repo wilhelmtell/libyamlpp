@@ -20,9 +20,9 @@ scanner::scanner(istream& is) : is(is), line_number(1), peek(' ')
 void scanner::sip()
 {
     // maintain a buffer so we do io less often
-    const queue<char>::size_type BUFFER_SIZE = 4096;
+    const input_buffer::size_type BUFFER_SIZE = 4096;
     if( buf.empty() )
-        for( queue<char>::size_type i = 0; i < BUFFER_SIZE; ++i ) {
+        for( input_buffer::size_type i = 0; i < BUFFER_SIZE; ++i ) {
             char ch = is.get();
             if( ! is ) {
                 buf.push(-1);
