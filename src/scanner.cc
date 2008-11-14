@@ -26,13 +26,13 @@ void scanner::sip()
         for( input_buffer::size_type i = 0; i < BUFFER_SIZE; ++i ) {
             char ch = is.get();
             if( ! is ) {
-                buf.push(' ');
+                buf.push_back(' ');
                 break;
             }
-            buf.push(ch);
+            buf.push_back(ch);
         }
     peek = buf.front();
-    buf.pop();
+    buf.pop_front();
     assert(buf.size() <= BUFFER_SIZE - 1);
 }
 
@@ -90,7 +90,7 @@ token scanner::scan()
             }
             // done parsing number.  now, is it really a number?
             if( number == "-" ) { // NaN.  restore input.
-                buf.push(peek);
+                buf.push_front(peek);
                 peek = '-';
             }
             else // TODO:  wrap number value in token

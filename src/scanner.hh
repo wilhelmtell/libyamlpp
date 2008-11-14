@@ -2,7 +2,7 @@
 #define SRC_SCANNER_HH_
 
 #include "token.hh"
-#include <queue>
+#include <deque>
 #include <stack>
 #include <iosfwd>
 
@@ -14,7 +14,7 @@ public:
     void sip();
 
 private:
-    typedef std::queue<char> input_buffer;
+    typedef std::deque<char> input_buffer;
 
     std::istream &is;
     int line_number;
