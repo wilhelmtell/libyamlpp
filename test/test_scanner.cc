@@ -52,3 +52,13 @@ TEST(ScanMappingEnd)
     token t(s.scan());
     CHECK_EQUAL(token::FLOW_MAPPING_END, t.tag);
 }
+
+TEST(ScanMappingBeginEnd)
+{
+    istringstream ss("{  }");
+    scanner s(ss);
+    token t1(s.scan());
+    token t2(s.scan());
+    CHECK_EQUAL(token::FLOW_MAPPING_BEGIN, t1.tag);
+    CHECK_EQUAL(token::FLOW_MAPPING_END, t2.tag);
+}

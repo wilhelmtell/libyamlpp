@@ -26,7 +26,7 @@ void scanner::sip()
         for( input_buffer::size_type i = 0; i < BUFFER_SIZE; ++i ) {
             char ch = is.get();
             if( ! is ) {
-                buf.push(-1);
+                buf.push(' ');
                 break;
             }
             buf.push(ch);
@@ -48,7 +48,7 @@ token scanner::scan()
         else if( ! isspace(peek) )
             break;
         sip();
-        if( is.eof() ) return previous = token(token::EOS);
+        if( buf.empty() && is.eof() ) return previous = token(token::EOS);
     }
 
     if( peek == '[' ) {
