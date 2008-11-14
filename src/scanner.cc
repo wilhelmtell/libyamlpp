@@ -1,4 +1,5 @@
 #include "scanner.hh"
+#include <string>
 #include <cctype>
 #include <iostream>
 #include <cassert>
@@ -34,6 +35,8 @@ void scanner::sip()
     assert(buf.size() <= BUFFER_SIZE - 1);
 }
 
+// TODO:  can we apply some design patter to break this huge function into
+// something manageable and malable?  how about a chain of responsibility?
 token scanner::scan()
 {
     // skip whitespace
@@ -62,5 +65,43 @@ token scanner::scan()
     if( peek == '}' ) {
         sip();
         return previous = token(token::FLOW_MAPPING_END);
+    }
+    if( peek == ':' ) {
+        sip();
+        return previous = token(token::PAIR_SEPARATOR);
+    }
+    if( peek == ',' ) {
+        sip();
+        return previous = token(token::SEQUENCE_SEPARATOR);
+    }
+    if( peek == '-' || isdigit(peek) ) { // a number
+        string number(1, peek); // TODO:  can use istringstream to get int
+        sip();
+        while( isdigit(peek) ) {
+            number += peek;
+            sip();
+        }
+        if( peek == '.' ) {
+            number += peek;
+            while( isdigit(peek) ) {
+                number += peek;
+                sip();
+            }
+            // done parsing number.  now, is it really a number?
+            if( number == "-" ) { // NaN.  restore input.
+                buf.push(peek);
+                peek = '-';
+            }
+            else
+                return previous = token(token::FLOAT);
+        }
+        else
+            return previous = token(token::INTEGER);
+    }
+    else if( peek == '\'' ) { // quoted string
+        sip();
+        while( peek != '\'' ) // consume string until closing quote
+            sip();
+        sip(); // closing quote
     }
 }
