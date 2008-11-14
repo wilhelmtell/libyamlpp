@@ -2,6 +2,7 @@
 #include <string>
 #include <cctype>
 #include <iostream>
+#include <stdexcept>
 #include <cassert>
 
 using namespace std;
@@ -98,7 +99,7 @@ token scanner::scan()
         else // TODO:  wrap number value in token
             return previous = token(token::INTEGER);
     }
-    else if( peek == '\'' ) { // quoted string
+    if( peek == '\'' ) { // quoted string
         string the_string;
         sip();
         while( peek != '\'' ) { // consume string until closing quote
@@ -108,5 +109,8 @@ token scanner::scan()
         sip(); // closing quote
         return previous = token(token::STRING);
     }
-    throw "not a valid token";  // TODO:  there must be a better way
+    if( !is )
+        return previous = token(token::EOS);
+
+    throw runtime_error(string("not a valid token: ") + peek);  // TODO:  there must be a better way
 }

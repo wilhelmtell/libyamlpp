@@ -5,6 +5,22 @@
 
 using namespace std;
 
+TEST(ScanEmptyString)
+{
+    istringstream ss("");
+    scanner s(ss);
+    token t(s.scan());
+    CHECK_EQUAL(token::EOS, t.tag);
+}
+
+TEST(ScanWhitespace)
+{
+    istringstream ss("  ");
+    scanner s(ss);
+    token t(s.scan());
+    CHECK_EQUAL(token::EOS, t.tag);
+}
+
 TEST(ScanSequenceBegin)
 {
     istringstream ss("[");
