@@ -13,7 +13,7 @@ TEST(ScanSequenceBegin)
     CHECK_EQUAL(token::FLOW_SEQUENCE_BEGIN, t.tag);
 }
 
-TEST(ScanSequenceBegin)
+TEST(ScanSequenceEnd)
 {
     istringstream ss("]");
     scanner s(ss);
@@ -21,7 +21,7 @@ TEST(ScanSequenceBegin)
     CHECK_EQUAL(token::FLOW_SEQUENCE_END, t.tag);
 }
 
-TEST(ScanSequenceBegin)
+TEST(ScanMappingBegin)
 {
     istringstream ss("{");
     scanner s(ss);
@@ -29,7 +29,7 @@ TEST(ScanSequenceBegin)
     CHECK_EQUAL(token::FLOW_MAPPING_BEGIN, t.tag);
 }
 
-TEST(ScanSequenceBegin)
+TEST(ScanMappingEnd)
 {
     istringstream ss("}");
     scanner s(ss);
