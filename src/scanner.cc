@@ -92,16 +92,21 @@ token scanner::scan()
                 buf.push(peek);
                 peek = '-';
             }
-            else
+            else // TODO:  wrap number value in token
                 return previous = token(token::FLOAT);
         }
-        else
+        else // TODO:  wrap number value in token
             return previous = token(token::INTEGER);
     }
     else if( peek == '\'' ) { // quoted string
+        string the_string;
         sip();
-        while( peek != '\'' ) // consume string until closing quote
+        while( peek != '\'' ) { // consume string until closing quote
+            the_string += peek;
             sip();
+        }
         sip(); // closing quote
+        return previous = token(token::STRING);
     }
+    throw "not a valid token";  // TODO:  there must be a better way
 }
