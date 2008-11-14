@@ -1,6 +1,8 @@
 #ifndef SRC_TOKEN_HH_
 #define SRC_TOKEN_HH_
 
+// TODO:  maybe parameterize token, so that some tokens have values?  for
+// example, token<token::INTEGER> will hold the integer value.
 class token {
 public:
     enum lexical_tag {
@@ -12,6 +14,7 @@ public:
         DOCUMENT_END,
         EOS,
         ESCAPE_SEQUENCE,
+        FLOAT,
         FLOW_MAPPING_BEGIN,
         FLOW_MAPPING_END,
         FLOW_SEQUENCE_BEGIN,
@@ -24,6 +27,7 @@ public:
         LOCAL_TAG,
         NIL,
         PAIR_SEPARATOR,
+        SEQUENCE_SEPARATOR,
         STANDARD_TAG,
         STRING,
         TAG,
