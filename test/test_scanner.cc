@@ -1,64 +1,64 @@
-#include <UnitTest++.h>
+#include <gtest.h>
 #include <sstream>
 #include "../src/scanner.hh"
 #include "../src/token.hh"
 
 using namespace std;
 
-TEST(ScanEmptyString)
+TEST(Scanner, ScanEmptyString)
 {
     istringstream ss("");
     scanner s(ss);
     token t(s.scan());
-    CHECK_EQUAL(token::EOS, t.tag);
+    EXPECT_EQ(token::EOS, t.tag);
 }
 
-TEST(ScanWhitespace)
+TEST(Scanner, ScanWhitespace)
 {
     istringstream ss("  ");
     scanner s(ss);
     token t(s.scan());
-    CHECK_EQUAL(token::EOS, t.tag);
+    EXPECT_EQ(token::EOS, t.tag);
 }
 
-TEST(ScanSequenceBegin)
+TEST(Scanner, ScanSequenceBegin)
 {
     istringstream ss("[");
     scanner s(ss);
     token t(s.scan());
-    CHECK_EQUAL(token::FLOW_SEQUENCE_BEGIN, t.tag);
+    EXPECT_EQ(token::FLOW_SEQUENCE_BEGIN, t.tag);
 }
 
-TEST(ScanSequenceEnd)
+TEST(Scanner, ScanSequenceEnd)
 {
     istringstream ss("]");
     scanner s(ss);
     token t(s.scan());
-    CHECK_EQUAL(token::FLOW_SEQUENCE_END, t.tag);
+    EXPECT_EQ(token::FLOW_SEQUENCE_END, t.tag);
 }
 
-TEST(ScanMappingBegin)
+TEST(Scanner, ScanMappingBegin)
 {
     istringstream ss("{");
     scanner s(ss);
     token t(s.scan());
-    CHECK_EQUAL(token::FLOW_MAPPING_BEGIN, t.tag);
+    EXPECT_EQ(token::FLOW_MAPPING_BEGIN, t.tag);
 }
 
-TEST(ScanMappingEnd)
+TEST(Scanner, ScanMappingEnd)
 {
     istringstream ss("}");
     scanner s(ss);
     token t(s.scan());
-    CHECK_EQUAL(token::FLOW_MAPPING_END, t.tag);
+    EXPECT_EQ(token::FLOW_MAPPING_END, t.tag);
 }
 
-TEST(ScanMappingBeginEnd)
+TEST(Scanner, ScanMappingBeginEnd)
 {
     istringstream ss("{  }");
     scanner s(ss);
     token t1(s.scan());
     token t2(s.scan());
-    CHECK_EQUAL(token::FLOW_MAPPING_BEGIN, t1.tag);
-    CHECK_EQUAL(token::FLOW_MAPPING_END, t2.tag);
+    EXPECT_EQ(token::FLOW_MAPPING_BEGIN, t1.tag);
+    EXPECT_EQ(token::FLOW_MAPPING_END, t2.tag);
 }
