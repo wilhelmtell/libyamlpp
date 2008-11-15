@@ -1,5 +1,21 @@
 #!/bin/bash
 
+BIN=$(basename $0)
+BIN_NAME=$(echo $BIN |sed 's/\.[^.]*$//')
+if [ $# -eq 0 ]; then
+  cat <<EOF
+$BIN_NAME translates UnitTest++ code into GoogleTest code.
+$BIN_NAME also handles some UnitTest++ constructs in Boost.Jam files.
+
+Just try and see.  No (significant) harm will be done.
+
+Usage:  $BIN <filename>*
+
+Output is directed to stdout.
+EOF
+  exit -1
+fi
+
 for FILENAME in "$@"; do
   SUITE="$(echo -n "$FILENAME" |xargs basename |sed -r 's/(^\s*|\.[^\.]*$)//g;
                                                  s/[-. ~\/]/_/g;
