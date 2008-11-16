@@ -75,29 +75,13 @@ token scanner::scan()
         sip();
         return previous = token(token::SEQUENCE_SEPARATOR);
     }
-    if( peek == '-' || isdigit(peek) ) { // a number
-        string number(1, peek); // TODO:  can use istringstream to get int
-        sip();
-        while( isdigit(peek) ) {
-            number += peek;
+    if( isdigit(peek) ) { // a natural number
+        string number;
+        do {
+            number += peek; // mm.  do you smell that?
             sip();
-        }
-        if( peek == '.' ) {
-            number += peek;
-            while( isdigit(peek) ) {
-                number += peek;
-                sip();
-            }
-            // done parsing number.  now, is it really a number?
-            if( number == "-" ) { // NaN.  restore input.
-                buf.push_front(peek);
-                peek = '-';
-            }
-            else // TODO:  wrap number value in token
-                return previous = token(token::FLOAT);
-        }
-        else // TODO:  wrap number value in token
-            return previous = token(token::INTEGER);
+        } while( isdigit(peek) );
+        return previous = token(token::INTEGER);
     }
     if( peek == '\'' ) { // quoted string
         string the_string;
