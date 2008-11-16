@@ -7,7 +7,7 @@ def build(bld):
     obj.prompt = 0
   else:
     obj.prompt = 1
-  obj.source = 'proposal.tex'
+  obj.source = 'proposal.tex, report.tex'
 
   # use latex to create documentation in dvi and ps (via dvi2ps)
   obj = bld.create_obj('tex', type='latex')
