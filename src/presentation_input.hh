@@ -10,6 +10,7 @@ public:
     ~presentation_input();
 
     void sip();
+    char peek() const;
     void putback(char ch);
 
 private:

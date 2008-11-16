@@ -53,3 +53,8 @@ void presentation_input::putback(char ch)
     pimpl->buf.push_front(pimpl->peek);
     pimpl->peek = ch;
 }
+
+char presentation_input::peek() const
+{
+    return pimpl->peek;
+}
