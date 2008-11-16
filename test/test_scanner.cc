@@ -72,6 +72,26 @@ TEST(Scanner, ScanMappingBeginEnd)
                 equal(expected, expected+expected_count, actual.begin()));
 }
 
+TEST(Scanner, ScanMappingSequenceBeginEnd)
+{
+    istringstream ss("{ 	[ ]}");
+    scanner s(ss);
+    token expected[] = {
+        token(token::FLOW_MAPPING_BEGIN),
+        token(token::FLOW_SEQUENCE_BEGIN),
+        token(token::FLOW_SEQUENCE_END),
+        token(token::FLOW_MAPPING_END),
+        token(token::EOS)
+    };
+    vector<token> actual;
+    for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
+        actual.push_back(t);
+    actual.push_back(token::EOS);
+    size_t expected_count = sizeof(expected) / sizeof(token);
+    EXPECT_TRUE(expected_count == actual.size() &&
+                equal(expected, expected+expected_count, actual.begin()));
+}
+
 TEST(Scanner, ScanDigit)
 {
     istringstream ss("0");
