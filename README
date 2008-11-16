@@ -1,4 +1,4 @@
-0  MAKING A LONG STORY SHORT
+0  QUICKSTART
 
 libyaml++ is a C++ library for reading and writing YAML streams.  To build, you
 need Boost.BuildV2:
