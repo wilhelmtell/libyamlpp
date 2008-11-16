@@ -1,4 +1,4 @@
-#include <gtest.h>
+#include <gtest/gtest.h>
 #include <sstream>
 #include "../src/scanner.hh"
 #include "../src/token.hh"
