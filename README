@@ -145,7 +145,7 @@ environment variables to your shell's startup file, such as ~/.bashrc:
 Once GoogleTest is set up you may run the tests.  From the commandline and from
 within the project's root directory, run:
 
- bjam check
+ libyamlpp$ bjam check
 
 
 4  USING LIBYAML++
