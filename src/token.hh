@@ -42,4 +42,7 @@ public:
     lexical_tag tag;
 };
 
+bool operator==(const token& t1, const token& t2);
+bool operator!=(const token& t1, const token& t2);
+
 #endif // SRC_TOKEN_HH_
