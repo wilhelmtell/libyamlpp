@@ -18,15 +18,17 @@ struct presentation_input::impl {
 
 presentation_input::presentation_input() : pimpl(new impl())
 {
+    sip();
+}
+
+presentation_input::presentation_input(istream& is) : pimpl(new impl(is))
+{
+    sip();
 }
 
 presentation_input::~presentation_input()
 {
     delete pimpl;
-}
-
-presentation_input::presentation_input(istream& is) : pimpl(new impl(is))
-{
 }
 
 // Fill peek with the next character from the input stream
