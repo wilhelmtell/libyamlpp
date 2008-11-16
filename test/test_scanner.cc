@@ -62,3 +62,19 @@ TEST(Scanner, ScanMappingBeginEnd)
     EXPECT_EQ(token::FLOW_MAPPING_BEGIN, t1.tag);
     EXPECT_EQ(token::FLOW_MAPPING_END, t2.tag);
 }
+
+TEST(Scanner, ScanDigit)
+{
+    istringstream ss("0");
+    scanner s(ss);
+    token t(s.scan());
+    EXPECT_EQ(token::INTEGER, t.tag);
+}
+
+TEST(Scanner, ScanInteger)
+{
+    istringstream ss("18");
+    scanner s(ss);
+    token t(s.scan());
+    EXPECT_EQ(token::INTEGER, t.tag);
+}
