@@ -1,4 +1,18 @@
-0  INTRODUCTION
+0  MAKING A LONG STORY SHORT
+
+libyaml++ is a C++ library for reading and writing YAML streams.  To build, you
+need Boost.BuildV2:
+
+ ~$ tar xzf libyamlpp.tar.gz
+ ~$ cd libyamlpp
+ libyamlpp$ bjam        # short for bjam libyaml++
+ libyamlpp$ bjam demo   # only if you really feel the urge
+ libyamlpp$ bjam check  # requires gtest.  only if you really feel the urge
+
+Next, see USING LIBYAML++ for sample code.
+
+
+1  INTRODUCTION
 
 libyaml++ is a C++ library for reading and writing YAML streams.  YAML stands
 for YAML Ain't a Markup Language.  It is a portable data-serialization
@@ -14,7 +28,7 @@ its design goals to support data streams that show a balance between a
 flexible syntax and readability.
 
 
-1  DIRECTORY TREE STRUCTURE
+2  DIRECTORY TREE STRUCTURE
 
 This distribution consists of three components.  The first and most important
 component is the library's source code, and it is placed under the src/
@@ -24,17 +38,22 @@ demo/ subdirectory.  The last component is the testing code, which tests the
 source code of the library and is located in the test/ subdirectory.
 
 
-2  BUILDING
+3  BUILDING
 
 The The easiest way to build libyaml++ is using the automated build system
 Boost.Build.  An alternative way is to build the library manually.  We will
 cover in this section both approaches.
 
 
-2.1  SETTING-UP BOOST.BUILD AND BUILDING USING BOOST.BUILD
+3.1  USING BOOST.BUILD
+
+Boost.Build doesn't usually come by default in an operating-system's install.
+So first, make sure you have Boost.Build, and Boost.Jam on which Boost.Build
+depends, installed.  Once that is set up, running the build is a matter of a
+single command.
 
 
-2.1.1  SETTING-UP BOOST.BUILD
+3.1.1  SETTING-UP BOOST.BUILD
 
 Get Boost.Build from http://www.boost.org/doc/tools/build/index.html and
 following the instructions at
@@ -57,7 +76,7 @@ mainly of three steps:
 Further details are given in the link above.
 
 
-2.1.2  BUILDING USING BOOST.BUILD
+3.1.2  BUILDING USING BOOST.BUILD
 
 To build libyaml++, from the libyaml++ distribution's root directory run the
 command:
@@ -84,3 +103,78 @@ To build the test suites, run
  libyamlpp$ bjam check
 
 This will also run the tests once they are built.
+
+
+3.2  TESTING
+
+The source code comes with a set of tests that attempt to find bugs or issues
+with the library.  These tests rely on the Google Test framework, so you must
+have that set up to run them.
+
+
+3.2.1  SETTING-UP GOOGLETEST
+
+Get GoogleTest from http://code.google.com/p/googletest/.  We used GoogleTest
+v1.1.0 successfully.  Extract the distribution package in a directory of your
+choice, and build it.  To install GoogleTest in your home directory on a Unix
+machine the following commands will do:
+
+ ~$ tar jxf gtest-1.1.0.tar.bz2
+ ~$ cd gtest-1.1.0
+ gtest-1.1.0$ ./configure --prefix=$HOME/usr
+ gtest-1.1.0$ make
+ gtest-1.1.0$ make install
+
+Next, you must make sure that
+
+ a. the C++ preprocessor can find the gtest headers
+ b. the linker can find the gtest library when linking the libyaml++ tests
+ c. the runtime evironment can find the shared library when the tests are run
+
+To accomodate for this on a Unix platform using gcc for the build and assuming
+the above commands were used for installing GoogleTest, add the following three
+environment variables to your shell's startup file, such as ~/.bashrc:
+
+ export CPLUS_INCLUDE_PATH=$HOME/usr/include:$CPLUS_INCLUDE_PATH
+ export LIBRARY_PATH=$HOME/usr/lib:$LIBRARY_PATH
+ export LD_LIBRARY_PATH=$HOME/usr/lib:$LD_LIBRARY_PATH
+
+
+3.2.2  RUNNING THE TESTS
+
+Once GoogleTest is set up you may run the tests.  From the commandline and from
+within the project's root directory, run:
+
+ bjam check
+
+
+4  USING LIBYAML++
+
+To use libyaml++, you need either a C++ compiler or to know how to write one.
+We recommed the former.  Put the binaries somewhere reachable by your compiler
+and linker's search paths.
+
+ #include <fstream>
+ #include <algorithm>
+ #include <tr1/memory>
+ #include <yaml++.h>
+
+ using namespace std;
+ using namespace std::tr1;
+
+ void play_with_node(shared_ptr<node> nd) { }
+
+ shared_ptr<node> return_some_node() { }
+
+ int main(int argc, char* argv)
+ {
+     ifstream the_file("/home/me/teh_file.yaml");
+     shard_ptr<yml::node> data = yml::load(the_file); // loads an istream
+     for_each(data.begin(), data.end(), play_with_node);
+
+     // do stuff with data
+
+     shared_ptr<node> my_data;
+     generate_n(back_inserter(my_data), 42, return_some_node);
+     cout << yml::dump(more_data);  // dumps a string
+ }
