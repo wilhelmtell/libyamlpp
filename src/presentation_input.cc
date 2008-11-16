@@ -47,3 +47,9 @@ void presentation_input::sip()
     pimpl->buf.pop_front();
     assert(pimpl->buf.size() <= BUFFER_SIZE - 1);
 }
+
+void presentation_input::putback(char ch)
+{
+    pimpl->buf.push_front(pimpl->peek);
+    pimpl->peek = ch;
+}

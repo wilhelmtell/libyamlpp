@@ -10,6 +10,7 @@ public:
     ~presentation_input();
 
     void sip();
+    void putback(char ch);
 
 private:
     struct impl;
