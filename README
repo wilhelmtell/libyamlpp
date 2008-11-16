@@ -59,11 +59,10 @@ Get Boost.Build from http://www.boost.org/doc/tools/build/index.html and
 following the instructions at
 http://www.boost.org/doc/tools/build/doc/html/bbv2/installation.html.
 Installing Boost.Build is a fairly straightforward procedure that consists
-mainly of three steps:
+mainly of four steps:
 
  1. Copy the extracted Boost.Build distribution into a directory reachable by
     your operating-system's PATH.
-
  2. Configure Boost.Build by choosing your compiler of choice in the
     site-config.jam file in Boost.Build's root directory.  It should be a
     matter of uncommenting a line such as
@@ -72,6 +71,7 @@ mainly of three steps:
 
  3. Copy the bjam binary into a directory reachable by your operating-system's
     PATH.
+ 4. export BOOST_BUILD_PATH=/path/to/boost-build
 
 Further details are given in the link above.
 
