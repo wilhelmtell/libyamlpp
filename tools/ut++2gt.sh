@@ -1,4 +1,9 @@
 #!/bin/bash
+###############################################################################
+# Convert UnitTest++ code to GoogleTest code
+#
+# Convert API code as well as Jamfiles.
+###############################################################################
 
 BIN=$(basename $0)
 BIN_NAME=$(echo $BIN |sed 's/\.[^.]*$//')
