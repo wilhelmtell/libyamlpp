@@ -2,6 +2,6 @@ import testing ;
 
 unit-test check
   : [ glob *.cc ] /lib//libyaml++
-  : <include>/usr/include/unittest++
-    <linkflags>-lUnitTest++
+  : <include>/usr/include/gtest
+    <linkflags>-lgtest
   ;
