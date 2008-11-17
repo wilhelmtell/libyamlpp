@@ -107,3 +107,27 @@ TEST(Scanner, ScanInteger)
     token t(s.scan());
     EXPECT_EQ(token::INTEGER, t.tag);
 }
+
+TEST(Scanner, ScanPairSeparator)
+{
+    istringstream ss(":");
+    scanner s(ss);
+    token t(s.scan());
+    EXPECT_EQ(token::PAIR_SEPARATOR, t.tag);
+}
+
+TEST(Scanner, ScanSequenceSeperator)
+{
+    istringstream ss(",");
+    scanner s(ss);
+    token t(s.scan());
+    EXPECT_EQ(token::SEQUENCE_SEPARATOR, t.tag);
+}
+
+TEST(Scanner, ScanQuotedString)
+{
+    istringstream ss("'Grokking the grammar'");
+    scanner s(ss);
+    token t(s.scan());
+    EXPECT_EQ(token::STRING, t.tag);
+}
