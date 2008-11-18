@@ -9,6 +9,10 @@ token_scanner::token_scanner(token_scanner* successor_scanner) :
 {
 }
 
+/// Set the previously scanned token.  The previously scanned token is used to
+/// determine the context while lexing a token in concrete scanners.
+///
+/// \param previously_scanned_token The previously-scanned-token to store.
 void token_scanner::previous(const token& previously_scanned_token)
 {
     this->previously_scanned_token = previously_scanned_token;
