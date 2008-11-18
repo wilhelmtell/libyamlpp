@@ -26,7 +26,7 @@ void scanner::sip()
         for( input_buffer::size_type i = 0; i < BUFFER_SIZE; ++i ) {
             char ch = is.get();
             if( ! is ) {
-                buf.push_back(' ');
+                buf.push_back(-1);
                 break;
             }
             buf.push_back(ch);
@@ -34,6 +34,12 @@ void scanner::sip()
     peek = buf.front();
     buf.pop_front();
     assert(buf.size() <= BUFFER_SIZE - 1);
+}
+
+void scanner::putback(char new_peek)
+{
+    buf.push_front(peek);
+    peek = new_peek;
 }
 
 // TODO:  can we apply some design patter to break this huge function into
@@ -48,7 +54,6 @@ token scanner::scan()
         else if( ! isspace(peek) )
             break;
         sip();
-        if( buf.empty() && is.eof() ) return previous = token(token::EOS);
     }
 
     if( peek == '[' ) {
@@ -92,6 +97,33 @@ token scanner::scan()
         }
         sip(); // closing quote
         return previous = token(token::STRING);
+    }
+    if( isprint(peek) && peek != '\n' ) { // strings come unquoted as well
+        string the_string;
+        do {
+            the_string += peek;
+            sip();
+            if( peek == ':' ) { // pair separator ahead?  must match /:(?=\s)/
+                sip();
+                if( isspace(peek) ) { // pair separator ahead
+                    putback(':');
+                    return token(token::STRING);
+                }
+                else putback(':'); // false alarm, still lexing a string
+            }
+            // FIXME:  in YAML, this: "hello, world" is in fact a string
+            //         the following would consider the comma as a sequence sep
+            if( peek == ',' ) { // seq separator ahead?  must match /,(?=\s)/
+                sip();
+                if( isspace(peek) ) { // sequence element separator ahead
+                    putback(',');
+                    return token(token::STRING);
+                }
+                else putback(','); // false alarm, still lexing a string
+            }
+        } while( isprint(peek) && peek != '\n' );
+        if( the_string.empty() ) putback('\n');
+        else return token::STRING;
     }
     if( !is )
         return previous = token(token::EOS);
