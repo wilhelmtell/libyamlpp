@@ -54,7 +54,6 @@ token scanner::scan()
         else if( ! isspace(peek) )
             break;
         sip();
-        if( buf.empty() && is.eof() ) return previous = token(token::EOS);
     }
 
     if( peek == '[' ) {
