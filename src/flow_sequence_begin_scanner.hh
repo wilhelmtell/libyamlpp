@@ -8,7 +8,8 @@
 
 class flow_sequence_begin_scanner : public token_scanner {
 public:
-    flow_sequence_begin_scanner(presentation_input* input);
+    flow_sequence_begin_scanner(presentation_input* input,
+                                token_scanner* successor_scanner);
     bool recognize();
 
 private:
