@@ -4,13 +4,15 @@
 #include "token.hh"
 #include <tr1/memory>
 
+class presentation_input;
+
 class token_scanner {
 public:
     token_scanner();
     token_scanner(token_scanner* successor_scanner);
-    bool scan();
+    bool scan(presentation_input* input);
     virtual ~token_scanner() { }
-    virtual bool recognize() = 0;
+    virtual bool recognize(presentation_input* input) = 0;
 
 protected:
     void previous(const token& previous_token);

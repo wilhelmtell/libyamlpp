@@ -52,11 +52,11 @@ void token_scanner::successor(token_scanner* successor_scanner)
 ///
 /// \return true a token was scanned, false if not concrete scanner could
 /// recognize the upcoming characters as a token.
-bool token_scanner::scan()
+bool token_scanner::scan(presentation_input* input)
 {
-    if( recognize() )
+    if( recognize(input) )
         return true;
     else if( successor() )
-        return successor()->scan(); // non-virtual;  recurse on another object
+        return successor()->scan(input); // non-virtual;  recurse on another object
     return false;
 }
