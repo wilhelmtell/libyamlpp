@@ -2,17 +2,24 @@
 #define SRC_TOKEN_SCANNER_HH_
 
 #include "token.hh"
+#include <tr1/memory>
 
 class token_scanner {
 public:
+    token_scanner();
+    token_scanner(token_scanner* successor_scanner);
+    bool scan();
     virtual ~token_scanner() { }
     virtual bool recognize() = 0;
 
 protected:
     void previous(const token& previous_token);
+    token_scanner* successor() const;
+    void successor(token_scanner* successor_scanner);
 
 private:
     token previously_scanned_token;
+    std::tr1::shared_ptr<token_scanner> successor_scanner;
 };
 
 #endif // SRC_TOKEN_SCANNER_HH_
