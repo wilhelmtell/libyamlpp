@@ -14,7 +14,7 @@ public:
         // DOCUMENT_END,
         EOS,
         // ESCAPE_SEQUENCE,
-        FLOAT,
+        // FLOAT,
         FLOW_MAPPING_BEGIN,
         FLOW_MAPPING_END,
         FLOW_SEQUENCE_BEGIN,
