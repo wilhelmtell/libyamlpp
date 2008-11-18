@@ -26,7 +26,7 @@ void scanner::sip()
         for( input_buffer::size_type i = 0; i < BUFFER_SIZE; ++i ) {
             char ch = is.get();
             if( ! is ) {
-                buf.push_back(' ');
+                buf.push_back(-1);
                 break;
             }
             buf.push_back(ch);
