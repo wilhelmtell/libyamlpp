@@ -36,6 +36,12 @@ void scanner::sip()
     assert(buf.size() <= BUFFER_SIZE - 1);
 }
 
+void scanner::putback(char new_peek)
+{
+    buf.push_front(peek);
+    peek = new_peek;
+}
+
 // TODO:  can we apply some design patter to break this huge function into
 // something manageable and malable?  how about a chain of responsibility?
 token scanner::scan()

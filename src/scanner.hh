@@ -12,6 +12,7 @@ public:
     scanner(std::istream& is);
     token scan();
     void sip();
+    void putback(char new_peek);
 
 private:
     typedef std::deque<char> input_buffer;
