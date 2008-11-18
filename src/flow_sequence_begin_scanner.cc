@@ -3,8 +3,8 @@
 
 typedef flow_sequence_begin_scanner fsbs;
 
-fsbs::flow_sequence_begin_scanner(token_scanner* successor_scanner) :
-    token_scanner(successor_scanner)
+fsbs::flow_sequence_begin_scanner(token_scanner* successor) :
+    token_scanner(successor)
 {
 }
 
