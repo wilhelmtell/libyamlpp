@@ -17,6 +17,14 @@ void token_scanner::previous(const token& previously_scanned_token)
 {
     this->previously_scanned_token = previously_scanned_token;
 }
+/// Set the previously scanned token.  The previously scanned token is used to
+/// determine the context while lexing a token in concrete scanners.
+///
+/// \param previously_scanned_token The previously-scanned-token to store.
+token token_scanner::previous() const
+{
+    return previously_scanned_token;
+}
 
 /// Get this scanner's successor in the scanners chain.
 ///
