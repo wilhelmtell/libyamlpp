@@ -98,6 +98,33 @@ token scanner::scan()
         sip(); // closing quote
         return previous = token(token::STRING);
     }
+    if( isprint(peek) && peek != '\n' ) { // strings come unquoted as well
+        string the_string;
+        do {
+            the_string += peek;
+            sip();
+            if( peek == ':' ) { // pair separator ahead?  must match /:(?=\s)/
+                sip();
+                if( isspace(peek) ) { // pair separator ahead
+                    putback(':');
+                    return token(token::STRING);
+                }
+                else putback(':'); // false alarm, still lexing a string
+            }
+            // FIXME:  in YAML, this: "hello, world" is in fact a string
+            //         the following would consider the comma as a sequence sep
+            if( peek == ',' ) { // seq separator ahead?  must match /,(?=\s)/
+                sip();
+                if( isspace(peek) ) { // sequence element separator ahead
+                    putback(',');
+                    return token(token::STRING);
+                }
+                else putback(','); // false alarm, still lexing a string
+            }
+        } while( isprint(peek) && peek != '\n' );
+        if( the_string.empty() ) putback('\n');
+        else return token::STRING;
+    }
     if( !is )
         return previous = token(token::EOS);
 
