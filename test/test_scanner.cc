@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <sstream>
-#include <vector>
+#include <list>
 #include "../src/scanner.hh"
 #include "../src/token.hh"
 
@@ -58,38 +58,40 @@ TEST(Scanner, ScanMappingBeginEnd)
 {
     istringstream ss("{  }");
     scanner s(ss);
-    token expected[] = {
+    token expected_tokens[] = {
         token(token::FLOW_MAPPING_BEGIN),
         token(token::FLOW_MAPPING_END),
         token(token::EOS)
     };
-    vector<token> actual;
+    list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
-        actual.push_back(t);
-    actual.push_back(token::EOS);
-    size_t expected_count = sizeof(expected) / sizeof(token);
-    EXPECT_TRUE(expected_count == actual.size() &&
-                equal(expected, expected+expected_count, actual.begin()));
+        scanned_input.push_back(t);
+    scanned_input.push_back(token::EOS);
+    size_t expected_scan_count = sizeof(expected_tokens) / sizeof(token);
+    EXPECT_EQ(expected_scan_count, scanned_input.size());
+    EXPECT_TRUE(equal(expected_tokens, expected_tokens+expected_scan_count,
+                      scanned_input.begin()));
 }
 
 TEST(Scanner, ScanMappingSequenceBeginEnd)
 {
     istringstream ss("{ 	[ ]}");
     scanner s(ss);
-    token expected[] = {
+    token expected_tokens[] = {
         token(token::FLOW_MAPPING_BEGIN),
         token(token::FLOW_SEQUENCE_BEGIN),
         token(token::FLOW_SEQUENCE_END),
         token(token::FLOW_MAPPING_END),
         token(token::EOS)
     };
-    vector<token> actual;
+    list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
-        actual.push_back(t);
-    actual.push_back(token::EOS);
-    size_t expected_count = sizeof(expected) / sizeof(token);
-    EXPECT_TRUE(expected_count == actual.size() &&
-                equal(expected, expected+expected_count, actual.begin()));
+        scanned_input.push_back(t);
+    scanned_input.push_back(token::EOS);
+    size_t expected_scan_count = sizeof(expected_tokens) / sizeof(token);
+    EXPECT_EQ(expected_scan_count, scanned_input.size());
+    EXPECT_TRUE(equal(expected_tokens, expected_tokens+expected_scan_count,
+                      scanned_input.begin()));
 }
 
 TEST(Scanner, ScanDigit)
