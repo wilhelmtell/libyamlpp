@@ -12,9 +12,9 @@ public:
     token_scanner(token_scanner* successor_scanner);
     bool scan(presentation_input* input);
     virtual ~token_scanner() { }
-    virtual bool recognize(presentation_input* input) = 0;
 
 protected:
+    virtual bool recognize(presentation_input* input) = 0;
     void previous(const token& previous_token);
     token_scanner* successor() const;
     void successor(token_scanner* successor_scanner);
