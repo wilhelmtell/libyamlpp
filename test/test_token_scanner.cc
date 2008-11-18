@@ -18,6 +18,6 @@ TEST(TokenScanner, ScanStream)
     // we have only one subclass of token_scanner right now.
     token_scanner* scanners[] = {s1, s2};
     token_scanner** p = find_if(scanners, scanners+2,
-                                mem_fun(&token_scanner::scanned));
+                                mem_fun(&token_scanner::recognize));
     EXPECT_EQ(*(scanners), *p);
 }

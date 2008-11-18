@@ -9,7 +9,7 @@
 class flow_sequence_begin_scanner : public token_scanner {
 public:
     flow_sequence_begin_scanner(presentation_input* input);
-    bool scanned();
+    bool recognize();
 
 private:
     std::tr1::shared_ptr<presentation_input> input;

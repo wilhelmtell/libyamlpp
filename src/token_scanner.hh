@@ -6,7 +6,7 @@
 class token_scanner {
 public:
     virtual ~token_scanner() { }
-    virtual bool scanned() = 0;
+    virtual bool recognize() = 0;
 
 protected:
     void previous(const token& previous_token);

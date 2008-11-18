@@ -6,7 +6,7 @@ fsbs::flow_sequence_begin_scanner(presentation_input* input) : input(input)
 {
 }
 
-bool flow_sequence_begin_scanner::scanned()
+bool flow_sequence_begin_scanner::recognize()
 {
     if( input->peek() == '[' ) {
         input->sip();
