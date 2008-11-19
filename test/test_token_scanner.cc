@@ -9,10 +9,45 @@
 
 using namespace std;
 
-struct token_scanner_test {
+struct token_scanner_test : testing::Test {
+    token_scanner_test();
+    ~token_scanner_test();
+
+    void reset_input_string_to(const string& input_string);
     unsigned int chain_length() const;
+
+    istringstream ss;
+    presentation_input* input;
     token_scanner* scanner;
 };
+
+token_scanner_test::token_scanner_test() :
+    input(new presentation_input(ss)),
+    scanner(new flow_sequence_begin_scanner(
+            new flow_sequence_end_scanner(
+            new flow_mapping_begin_scanner(
+            new flow_mapping_end_scanner(
+            0)))))
+{
+}
+
+token_scanner_test::~token_scanner_test()
+{
+    delete input;
+    delete scanner;
+}
+
+void token_scanner_test::reset_input_string_to(const string& input_string)
+{
+    ss.str(input_string);
+    ss.clear(); // in re-initialization it is possible that e.g. ss.eof()
+
+    // FIXME:  i shouldn't need to do the following.  but for some reason if i
+    // don't refresh the input pointer then updating the stream has no effect
+    // (or doesn't have the effect i want)
+    delete input;
+    input = new presentation_input(ss);
+}
 
 unsigned int token_scanner_test::chain_length() const
 {
@@ -26,78 +61,37 @@ unsigned int token_scanner_test::chain_length() const
     return length;
 }
 
-TEST(TokenScanner, ChainLength)
+TEST_F(token_scanner_test, ChainLength)
 {
-    stringstream ss("[");
-    presentation_input* input = new presentation_input(ss);
-    token_scanner* scanner = new flow_sequence_begin_scanner(
-                             new flow_sequence_end_scanner(
-                             new flow_mapping_begin_scanner(
-                             new flow_mapping_end_scanner(
-                             0))));
-    token_scanner_test tst;
-    tst.scanner = scanner;
-    EXPECT_EQ(4, tst.chain_length());
-    delete input;
-    delete scanner;
+    EXPECT_EQ(4, chain_length());
 }
 
-TEST(TokenScanner, CanScanFirstToken)
+TEST_F(token_scanner_test, CanScanFirstToken)
 {
-    stringstream ss("[");
-    presentation_input* input = new presentation_input(ss);
-    token_scanner* scanner = new flow_sequence_begin_scanner(
-                             new flow_sequence_end_scanner(
-                             new flow_mapping_begin_scanner(
-                             new flow_mapping_end_scanner(
-                             0))));
+    reset_input_string_to("[");
+
     // scanner->scan() throws if it can't find an appropriate token scanner
     EXPECT_NO_THROW(scanner->scan(input));
-    delete input;
-    delete scanner;
 }
 
-TEST(TokenScanner, CanScanNthToken)
+TEST_F(token_scanner_test, CanScanNthToken)
 {
-    stringstream ss("{");
-    presentation_input* input = new presentation_input(ss);
-    token_scanner* scanner = new flow_sequence_begin_scanner(
-                             new flow_sequence_end_scanner(
-                             new flow_mapping_begin_scanner(
-                             new flow_mapping_end_scanner(
-                             0))));
+    reset_input_string_to("{");
+
     // scanner->scan() throws if it can't find an appropriate token scanner
     EXPECT_NO_THROW(scanner->scan(input));
-    delete input;
-    delete scanner;
 }
 
-TEST(TokenScanner, ScanSequenceBegin)
+TEST_F(token_scanner_test, ScanSequenceBegin)
 {
-    stringstream ss("[");
-    presentation_input* input = new presentation_input(ss);
-    token_scanner* scanner = new flow_sequence_begin_scanner(
-                             new flow_sequence_end_scanner(
-                             new flow_mapping_begin_scanner(
-                             new flow_mapping_end_scanner(
-                             0))));
+    reset_input_string_to("[");
     token result = scanner->scan(input);
     EXPECT_EQ(token::FLOW_SEQUENCE_BEGIN, result.tag);
-    delete input;
-    delete scanner;
 }
 
-TEST(TokenScanner, ScanSequenceEnd)
+TEST_F(token_scanner_test, ScanSequenceEnd)
 {
-    stringstream ss("]");
-    presentation_input* input = new presentation_input(ss);
-    token_scanner* scanner = new flow_sequence_begin_scanner(
-                             new flow_sequence_end_scanner(
-                             new flow_mapping_begin_scanner(
-                             new flow_mapping_end_scanner(
-                             0))));
+    reset_input_string_to("]");
     token result = scanner->scan(input);
     EXPECT_EQ(token::FLOW_SEQUENCE_END, result.tag);
-    delete input;
-    delete scanner;
 }
