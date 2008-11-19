@@ -58,27 +58,27 @@ token scanner::scan()
 
     if( peek == '[' ) {
         sip();
-        return previous = token(token::FLOW_SEQUENCE_BEGIN);
+        return previous = token::FLOW_SEQUENCE_BEGIN;
     }
     if( peek == ']' ) {
         sip();
-        return previous = token(token::FLOW_SEQUENCE_END);
+        return previous = token::FLOW_SEQUENCE_END;
     }
     if( peek == '{' ) {
         sip();
-        return previous = token(token::FLOW_MAPPING_BEGIN);
+        return previous = token::FLOW_MAPPING_BEGIN;
     }
     if( peek == '}' ) {
         sip();
-        return previous = token(token::FLOW_MAPPING_END);
+        return previous = token::FLOW_MAPPING_END;
     }
     if( peek == ':' ) {
         sip();
-        return previous = token(token::PAIR_SEPARATOR);
+        return previous = token::PAIR_SEPARATOR;
     }
     if( peek == ',' ) {
         sip();
-        return previous = token(token::SEQUENCE_SEPARATOR);
+        return previous = token::SEQUENCE_SEPARATOR;
     }
     if( isdigit(peek) ) { // a natural number
         string number;
@@ -86,7 +86,7 @@ token scanner::scan()
             number += peek; // mm.  do you smell that?
             sip();
         } while( isdigit(peek) );
-        return previous = token(token::INTEGER);
+        return previous = token::INTEGER;
     }
     if( peek == '\'' ) { // quoted string
         string the_string;
@@ -96,7 +96,7 @@ token scanner::scan()
             sip();
         }
         sip(); // closing quote
-        return previous = token(token::STRING);
+        return previous = token::STRING;
     }
     if( isprint(peek) && peek != '\n' ) { // strings come unquoted as well
         string the_string;
@@ -126,7 +126,7 @@ token scanner::scan()
         else return token::STRING;
     }
     if( !is )
-        return previous = token(token::EOS);
+        return previous = token::EOS;
 
     throw runtime_error(string("not a valid token: ") + peek);  // TODO:  there must be a better way
 }
