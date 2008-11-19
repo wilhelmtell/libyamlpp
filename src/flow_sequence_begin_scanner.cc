@@ -8,12 +8,13 @@ fsbs::flow_sequence_begin_scanner(token_scanner* successor) :
 {
 }
 
-bool flow_sequence_begin_scanner::recognize(presentation_input* input)
+token fsbs::scan(presentation_input* input)
 {
     if( input->peek() == '[' ) {
         input->sip();
-        previous(token(token::FLOW_SEQUENCE_BEGIN));
-        return true;
+        token result(token::FLOW_SEQUENCE_BEGIN);
+        previous(result);
+        return result;
     }
-    return false;
+    return token_scanner::scan(input);
 }

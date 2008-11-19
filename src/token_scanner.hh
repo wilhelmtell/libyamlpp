@@ -8,14 +8,15 @@ class presentation_input;
 
 class token_scanner {
 public:
-    token_scanner();
     token_scanner(token_scanner* successor_scanner);
-    bool scan(presentation_input* input);
     virtual ~token_scanner() { }
+
+    virtual token scan(presentation_input* input);
     token previous() const;
 
+    friend class token_scanner_test;
+
 protected:
-    virtual bool recognize(presentation_input* input) = 0;
     void previous(const token& previous_token);
     token_scanner* successor() const;
     void successor(token_scanner* successor_scanner);

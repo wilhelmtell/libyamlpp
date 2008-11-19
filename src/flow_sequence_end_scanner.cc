@@ -8,12 +8,13 @@ fses::flow_sequence_end_scanner(token_scanner* successor) :
 {
 }
 
-bool fses::recognize(presentation_input* input)
+token fses::scan(presentation_input* input)
 {
     if( input->peek() == ']' ) {
         input->sip();
-        previous(token(token::FLOW_SEQUENCE_END));
-        return true;
+        token result(token::FLOW_SEQUENCE_END);
+        previous(result);
+        return result;
     }
-    return false;
+    return token_scanner::scan(input);
 }

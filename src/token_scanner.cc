@@ -1,8 +1,7 @@
 #include "token_scanner.hh"
+#include <stdexcept>
 
-token_scanner::token_scanner()
-{
-}
+using namespace std;
 
 token_scanner::token_scanner(token_scanner* successor_scanner) :
     successor_scanner(successor_scanner)
@@ -60,11 +59,9 @@ void token_scanner::successor(token_scanner* successor_scanner)
 ///
 /// \return true a token was scanned, false if not concrete scanner could
 /// recognize the upcoming characters as a token.
-bool token_scanner::scan(presentation_input* input)
+token token_scanner::scan(presentation_input* input)
 {
-    if( recognize(input) )
-        return true;
-    else if( successor() )
-        return successor()->scan(input); // non-virtual;  recurse on another object
-    return false;
+    if( successor() )
+        return successor()->scan(input);
+    throw logic_error("Unrecognized input or syntax error");
 }
