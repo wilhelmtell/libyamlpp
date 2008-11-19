@@ -63,5 +63,5 @@ token token_scanner::scan(presentation_input* input)
 {
     if( successor() )
         return successor()->scan(input);
-    throw logic_error("Unrecognized input or syntax error");
+    throw runtime_error("Unrecognized input or syntax error");
 }
