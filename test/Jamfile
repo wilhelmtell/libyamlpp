@@ -1,6 +1,8 @@
 import testing ;
 
-unit-test check
-  : [ glob *.cc ] /lib//libyaml++
+run [ glob *.cc ] /lib//libyaml++
+  : --gtest_color=yes --gtest_print_time
+  :
   : <linkflags>-lgtest
+  : unit-tests
   ;

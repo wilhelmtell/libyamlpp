@@ -8,7 +8,7 @@ explicit demo ; # demo is an extra.  only build if explicitly asked to.
 alias libyaml++ : /lib//libyaml++ ; # pretty for users to type "bjam libyaml++"
 alias liby : libyaml++ ; # quite a popular thing to build; make my life easier
 
-alias check : test//check ;
+alias check : test//unit-tests ;
 explicit check ;
 
 # build our projects
