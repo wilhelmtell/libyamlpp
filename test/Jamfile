@@ -1,7 +1,7 @@
 import testing ;
 
 run [ glob *.cc ] /lib//libyaml++
-  : --gtest_color=yes --gtest_print_time
+  : --gtest_print_time
   :
   : <linkflags>-lgtest
   : unit-tests
