@@ -41,7 +41,7 @@ succ() {
 
 # running "./build.sh wipeclean", with no other arguments, will wipe clean the
 # distribution and mess this script might have done in the past.
-if [ $# -eq 1 -a $1 = "wipeclean" ]; then
+if [ "$#" -eq 1 -a "$1" = "wipeclean" ]; then
   cleanup_mess
   echo -e -n "Wiping clean ...  " |tee -a $LOG
   rm -rf /tmp/boost-build-2.0-m12.tar.bz2
