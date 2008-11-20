@@ -7,18 +7,21 @@
 #            connection is required as well.
 ###############################################################################
 
-# WARNING:  The installation directory MUST be a dedicated directory!  It will
-#           be WIPED OUT at the end of an unseccessful build!
+# WARNING:  The installation directory MUST be a dedicated directory!  It may
+#           be WIPED OUT at the end of this script!
 INSTALL_DIR=/tmp/libyamlpp_helpers
-LOG=$(pwd)/build.log
+LOG=$(pwd)/build.log && cat /dev/null >$LOG
 ORIGINAL_DIR=$(pwd)
+LIBYAMLPP_DIR="$ORIGINAL_DIR/$(dirname $0)"
 
 trap cleanup_mess 1 2 3 4 5 6 14 15
 
 cleanup_mess() {
-  echo -e -n "Cleaning Up ...  " | tee -a $LOG
+  echo -e -n "Cleaning up ...  " | tee -a $LOG
   cd $ORIGINAL_DIR
   rm -rf $INSTALL_DIR
+
+  # in case tarballs were not moved successfully
   rm -rf $ORIGINAL_DIR/gtest-1.1.0
   rm -rf $ORIGINAL_DIR/boost-build
   succ
@@ -36,8 +39,28 @@ succ() {
   echo -e "OK" >>$LOG
 }
 
+# running "./build.sh wipeclean", with no other arguments, will wipe clean the
+# distribution and mess this script might have done in the past.
+if [ $# -eq 1 -a $1 = "wipeclean" ]; then
+  cleanup_mess
+  echo -e -n "Wiping clean ...  " |tee -a $LOG
+  rm -rf /tmp/boost-build-2.0-m12.tar.bz2
+  rm -rf /tmp/gtest-1.1.0.tar.bz2
+  cd $LIBYAMLPP_DIR
+  find . -name bin -type d |xargs rm -rf
+  cd $ORIGINAL_DIR
+  succ
+  echo -e "\n\033[0;32mDone.\033[0m" |tee -a $LOG
+  echo -e "\nDone." >>$LOG
+  cat <<EOF |tee -a $LOG
+
+The only file left hanging other than the original distribution is the log file
+$LOG.
+EOF
+  exit 0
+fi
+
 mkdir -p "$INSTALL_DIR"
-cat /dev/null >$LOG
 
 # boost.build
 which bjam >/dev/null 2>&1
