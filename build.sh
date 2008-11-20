@@ -16,9 +16,8 @@ if [ \! -d boost-build ]; then
   ./build.sh >/dev/null 2>&1
   cd - >/dev/null 2>&1
 fi
-echo "Configuring Boost.Build ..."
-grep -q '^using gcc ;' boost-build/user-config.jam
 
+echo "Configuring Boost.Build ..."
 for TOOL in gcc doxygen ; do
   grep -q "^using $TOOL ;" boost-build/user-config.jam
   if [ $? -ne 0 ]; then
