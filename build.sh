@@ -46,11 +46,11 @@ if [ "$#" -eq 1 -a "$1" = "wipeclean" ]; then
   echo -e -n "Wiping clean ...  "
   rm -rf /tmp/boost-build-2.0-m12.tar.bz2
   rm -rf /tmp/gtest-1.1.0.tar.bz2
-  rm -f $LOG
   cd $LIBYAMLPP_DIR
   find . -name bin -type d |xargs rm -rf
   cd $ORIGINAL_DIR
   succ
+  rm -f $LOG
   echo -e "\n\033[0;32mDone.\033[0m"
   exit 0
 fi
