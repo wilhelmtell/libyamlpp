@@ -1,13 +1,11 @@
 0  QUICKSTART
 
-libyaml++ is a C++ library for reading and writing YAML streams.  To build, you
-need Boost.BuildV2:
+libyaml++ is a C++ library for reading and writing YAML streams.  To build,
+run from your Linux command shell:
 
  ~$ tar xzf libyamlpp.tar.gz
  ~$ cd libyamlpp
- libyamlpp$ bjam        # short for bjam libyaml++
- libyamlpp$ bjam demo   # only if you really feel the urge
- libyamlpp$ bjam check  # requires gtest.  only if you really feel the urge
+ libyamlpp$ ./build.sh
 
 Next, see USING LIBYAML++ for sample code.
 
