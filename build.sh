@@ -9,7 +9,7 @@
 
 # WARNING:  The installation directory MUST be a dedicated directory!  It will
 #           be WIPED OUT at the end of an unseccessful build!
-INSTALL_DIR=$(mktemp -t -d libyamlpp.XXXXXXXXXX)
+INSTALL_DIR=/tmp/libyamlpp_helpers
 LOG=$(pwd)/build.log
 ORIGINAL_DIR=$(pwd)
 
@@ -35,20 +35,6 @@ succ() {
   echo -e "\033[0;32mOK\033[0m"
   echo -e "OK" >>$LOG
 }
-
-cat <<EOF
-###############################################################################
-#                                INITIAL BUILD                                #
-#                                                                             #
-# Please be patient.  This will take a while.  If you wish to build again     #
-# later you should run "./bjam" from the project's root directory instead, as #
-# it will be much faster, easier on system resources and not abusive on the   #
-# Boost.Build and GoogleTest websites.  This initial build procedure will set #
-# up bjam for this purpose.                                                   #
-###############################################################################
-
-
-EOF
 
 mkdir -p "$INSTALL_DIR"
 cat /dev/null >$LOG
@@ -87,8 +73,6 @@ echo -e -n "Determinig path to bjam executable ...  " |tee -a $LOG
 export BJAM=$(which bjam 2>/dev/null)
 [ -z "$BJAM" ] && export BJAM=$(find $INSTALL_DIR/boost-build -name bjam)
 [ -n "$BJAM" ] && succ || fail
-rm -f $ORIGINAL_DIR/bjam
-ln -s $BJAM $ORIGINAL_DIR/bjam
 
 # gtest
 if [ \! -r $INSTALL_DIR/include/gtest/gtest.h ]; then
@@ -119,14 +103,7 @@ if [ \! -r $INSTALL_DIR/include/gtest/gtest.h ]; then
 fi
 
 # libyaml++
-echo -n "Building libyaml++ ...  " |tee -a $LOG
-"$BJAM" libyaml++ check demo >>$LOG 2>&1 && succ || fail
+echo -n "Building libyaml++ targets $@ ...  " |tee -a $LOG
+"$BJAM" $@ >>$LOG 2>&1 && succ || fail
 echo -e "\n\033[0;32mDone.\033[0m" |tee -a $LOG
 echo -e "\nDone." >>$LOG
-cat <<EOF
-
-NOTE:  Run "./bjam" if you wish to build libyaml++ again.  But before you do
-that, make sure you export BOOST_BUILD_PATH so that bjam can find Boost.Build:
-
- export BOOST_BUILD_PATH=$INSTALL_DIR/boost-build
-EOF
