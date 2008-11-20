@@ -40,12 +40,42 @@ source code of the library and is located in the test/ subdirectory.
 
 3  BUILDING
 
-The The easiest way to build libyaml++ is using the automated build system
-Boost.Build.  An alternative way is to build the library manually.  We will
-cover in this section both approaches.
+The The easiest way to build libyaml++ is using the build.sh script in the
+distribution's root directory.  It will set up your system for building
+libyaml++ as well as its unit-tests.  The build.sh script assumes you are using
+Linux tough.  An alternative way is to build the library manually.  If you
+intened to hack on the code we recommend you set yourself up properly:  install
+Boost.BuildV2 and GoogleTest in a convenient directory in your system and use
+bjam for the build.
+
+We will cover in this section all approaches mentioned above.
 
 
-3.1  USING BOOST.BUILD
+3.1  BUILDING USING BUILD.SH
+
+From the command prompt of your Linux box run:
+
+ ~$ cd libyamlpp
+ libyamlpp$ ./build.sh
+
+The build.sh script can take any target as a command-line parameter, so you may
+for example run
+
+ libyamlpp$ ./build.sh demo check
+
+to build the demo and check targets, for the demonstration application and
+unit-tests, repectively.  The build.sh script can also take a special
+command-line argument, wipeclean, which will wipe clean any files and
+directories it may have created:
+
+ libyamlpp$ ./build.sh wipeclean
+
+The above command will leave nothing but the original libyaml++ distribution
+has.  Make sure you pass no other command-line argument when running the above
+command.
+
+
+3.2  USING BOOST.BUILD
 
 Boost.Build doesn't usually come by default in an operating-system's install.
 So first, make sure you have Boost.Build, and Boost.Jam on which Boost.Build
@@ -53,7 +83,7 @@ depends, installed.  Once that is set up, running the build is a matter of a
 single command.
 
 
-3.1.1  SETTING-UP BOOST.BUILD
+3.2.1  SETTING-UP BOOST.BUILD
 
 Get Boost.Build from http://www.boost.org/doc/tools/build/index.html and
 following the instructions at
@@ -76,7 +106,7 @@ mainly of four steps:
 Further details are given in the link above.
 
 
-3.1.2  BUILDING USING BOOST.BUILD
+3.2.2  BUILDING USING BOOST.BUILD
 
 To build libyaml++, from the libyaml++ distribution's root directory run the
 command:
@@ -105,14 +135,14 @@ To build the test suites, run
 This will also run the tests once they are built.
 
 
-3.2  TESTING
+3.3  TESTING
 
 The source code comes with a set of tests that attempt to find bugs or issues
 with the library.  These tests rely on the Google Test framework, so you must
 have that set up to run them.
 
 
-3.2.1  SETTING-UP GOOGLETEST
+3.3.1  SETTING-UP GOOGLETEST
 
 Get GoogleTest from http://code.google.com/p/googletest/.  We used GoogleTest
 v1.1.0 successfully.  Extract the distribution package in a directory of your
@@ -140,7 +170,7 @@ environment variables to your shell's startup file, such as ~/.bashrc:
  export LD_LIBRARY_PATH=$HOME/usr/lib:$LD_LIBRARY_PATH
 
 
-3.2.2  RUNNING THE TESTS
+3.3.2  RUNNING THE TESTS
 
 Once GoogleTest is set up you may run the tests.  From the commandline and from
 within the project's root directory, run:
@@ -178,3 +208,62 @@ and linker's search paths.
      generate_n(back_inserter(my_data), 42, return_some_node);
      cout << yml::dump(more_data);  // dumps a string
  }
+
+
+
+
+
+
+2.2  SETTING-UP BOOST.BUILD AND BUILDING USING BOOST.BUILD
+
+
+2.2.1  SETTING-UP BOOST.BUILD
+
+Get Boost.Build from http://www.boost.org/doc/tools/build/index.html and
+following the instructions at
+http://www.boost.org/doc/tools/build/doc/html/bbv2/installation.html.
+Installing Boost.Build is a fairly straightforward procedure that consists
+mainly of three steps:
+
+ 1. Copy the extracted Boost.Build distribution into a directory reachable by
+    your operating-system's PATH.
+
+ 2. Configure Boost.Build by choosing your compiler of choice in the
+    site-config.jam file in Boost.Build's root directory.  It should be a
+    matter of uncommenting a line such as
+
+    using gcc ;
+
+ 3. Copy the bjam binary into a directory reachable by your operating-system's
+    PATH.
+
+Further details are given in the link above.
+
+
+2.2.2  BUILDING USING BOOST.BUILD
+
+To build libyaml++, from the libyaml++ distribution's root directory run the
+command:
+
+ libyamlpp$ bjam release
+
+This will build libyaml++ and place the resultant binary in a directory
+structure under src/bin/release/.  The exact heirarchy structure will depend on
+your system.  Our system, for example, will place the resultant binary in
+src/bin/release/gcc/libyaml++.so.  Your environment may be, for example, in
+src/bin/release/msvc/libyaml++.so.
+
+To build the demo application, run the following command from the project
+distribution's root directory:
+
+ libyamlpp$ bjam demo release
+
+Again, the exact location of the resultant binary will depend on your system
+but will be somewhere under demo/bin/release/.  In our case it is in
+demo/bin/release/gcc/libyaml++-demo.
+
+To build the test suites, run
+
+ libyamlpp$ bjam check
+
+This will also run the tests once they are built.
