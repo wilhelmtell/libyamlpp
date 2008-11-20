@@ -76,16 +76,22 @@ command.
 3.2  USING BOOST.BUILD
 
 Boost.Build doesn't usually come by default in an operating-system's install.
-So first, make sure you have Boost.Build, and Boost.Jam on which Boost.Build
+So first, make sure you have Boost.BuildV2, and Boost.Jam on which Boost.Build
 depends, installed.  Once that is set up, running the build is a matter of a
 single command.
 
 
 3.2.1  SETTING-UP BOOST.BUILD
 
-Get Boost.Build from http://www.boost.org/doc/tools/build/index.html and
-following the instructions at
-http://www.boost.org/doc/tools/build/doc/html/bbv2/installation.html.
+If you run a Debian-based Linux distribution, this may simply be a matter of
+
+ #$ sudo apt-get install boost-build
+
+Other Linux distributions have their own package management system, so read the
+appropriate manual pages.  If that fails or if you don't have a package
+management system, get Boost.Build from
+http://www.boost.org/doc/tools/build/index.html and following the instructions
+at http://www.boost.org/doc/tools/build/doc/html/bbv2/installation.html.
 Installing Boost.Build is a fairly straightforward procedure that consists
 mainly of four steps:
 
