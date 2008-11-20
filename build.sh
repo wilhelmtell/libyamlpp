@@ -50,7 +50,7 @@ if [ "$#" -eq 1 -a "$1" = "wipeclean" ]; then
   find . -name bin -type d |xargs rm -rf
   cd $ORIGINAL_DIR
   succ
-  echo -e "\n\033[0;32mDone.\033[0m" |tee -a $LOG
+  echo -e "\n\033[0;32mDone.\033[0m"
   echo -e "\nDone." >>$LOG
   cat <<EOF |tee -a $LOG
 
@@ -128,5 +128,5 @@ fi
 # libyaml++
 echo -n "Building libyaml++ targets $@ ...  " |tee -a $LOG
 "$BJAM" $@ >>$LOG 2>&1 && succ || fail
-echo -e "\n\033[0;32mDone.\033[0m" |tee -a $LOG
+echo -e "\n\033[0;32mDone.\033[0m"
 echo -e "\nDone." >>$LOG
