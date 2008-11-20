@@ -76,7 +76,6 @@ if [ $? -ne 0 -a \! -d $INSTALL_DIR/boost-build ]; then
   echo -n "Building Boost.Jam ...  " |tee -a $LOG
   ./build.sh >>$LOG 2>&1 && succ || fail
   cd - >/dev/null 2>&1
-  export BOOST_BUILD_PATH="$INSTALL_DIR/boost-build"
 
   for TOOL in gcc doxygen ; do
     grep -q "^using $TOOL ;" $INSTALL_DIR/boost-build/user-config.jam
@@ -91,6 +90,7 @@ echo -e -n "Determinig path to bjam executable ...  " |tee -a $LOG
 export BJAM=$(which bjam 2>/dev/null)
 [ -z "$BJAM" ] && export BJAM=$(find $INSTALL_DIR/boost-build -name bjam)
 [ -n "$BJAM" ] && succ || fail
+export BOOST_BUILD_PATH="$INSTALL_DIR/boost-build"
 
 # gtest
 if [ \! -r $INSTALL_DIR/include/gtest/gtest.h ]; then
