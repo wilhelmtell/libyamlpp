@@ -43,20 +43,15 @@ succ() {
 # distribution and mess this script might have done in the past.
 if [ "$#" -eq 1 -a "$1" = "wipeclean" ]; then
   cleanup_mess
-  echo -e -n "Wiping clean ...  " |tee -a $LOG
+  echo -e -n "Wiping clean ...  "
   rm -rf /tmp/boost-build-2.0-m12.tar.bz2
   rm -rf /tmp/gtest-1.1.0.tar.bz2
+  rm -f $LOG
   cd $LIBYAMLPP_DIR
   find . -name bin -type d |xargs rm -rf
   cd $ORIGINAL_DIR
   succ
   echo -e "\n\033[0;32mDone.\033[0m"
-  echo -e "\nDone." >>$LOG
-  cat <<EOF |tee -a $LOG
-
-The only file left hanging other than the original distribution is the log file
-$LOG.
-EOF
   exit 0
 fi
 
