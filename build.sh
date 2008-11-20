@@ -91,7 +91,7 @@ rm -f $ORIGINAL_DIR/bjam
 ln -s $BJAM $ORIGINAL_DIR/bjam
 
 # gtest
-if [ \! -d gtest-1.1.0 ]; then
+if [ \! -r $INSTALL_DIR/include/gtest/gtest.h ]; then
   if [ \! -r /tmp/gtest-1.1.0.tar.bz2 ]; then
     echo -n "Downloading GoogleTest into /tmp ...  " |tee -a $LOG
     cd /tmp
@@ -112,6 +112,7 @@ if [ \! -d gtest-1.1.0 ]; then
   echo -n "Installing GoogleTest in $INSTALL_DIR ...  " |tee -a $LOG
   make install >>$LOG 2>&1 && succ || fail
   cd - >/dev/null 2>&1
+  rm -rf gtest-1.1.0
   export LD_LIBRARY_PATH=$INSTALL_DIR/lib
   export LIBRARY_PATH=$INSTALL_DIR/lib
   export CPLUS_INCLUDE_DIR=$INSTALL_DIR/include
