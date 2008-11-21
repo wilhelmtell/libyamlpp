@@ -23,6 +23,7 @@ private:
     input_buffer buf;
     token previous;
     std::stack<int> indentation_level;
+    int sequence_depth;
 };
 
 #endif // SRC_SCANNER_HH_
