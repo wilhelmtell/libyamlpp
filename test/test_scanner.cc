@@ -252,6 +252,37 @@ TEST(Scanner, ScanMappingPairs)
     EXPECT_EQ(expected_tokens[5].tag, (++i)->tag);
 }
 
+TEST(Scanner, ScanNestedSequence)
+{
+    istringstream ss("[a, [b]]");
+    scanner s(ss);
+    token expected_tokens[] = {
+        token(token::FLOW_SEQUENCE_BEGIN),
+        token(token::STRING),
+        token(token::SEQUENCE_SEPARATOR),
+        token(token::FLOW_SEQUENCE_BEGIN),
+        token(token::STRING),
+        token(token::FLOW_SEQUENCE_END),
+        token(token::FLOW_SEQUENCE_END),
+        token(token::EOS)
+    };
+    list<token> scanned_input;
+    for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
+        scanned_input.push_back(t);
+    scanned_input.push_back(token::EOS);
+    size_t expected_scan_count = sizeof(expected_tokens) / sizeof(token);
+    EXPECT_EQ(expected_scan_count, scanned_input.size());
+    list<token>::const_iterator i(scanned_input.begin());
+    EXPECT_EQ(expected_tokens[0].tag, i->tag);
+    EXPECT_EQ(expected_tokens[1].tag, (++i)->tag);
+    EXPECT_EQ(expected_tokens[2].tag, (++i)->tag);
+    EXPECT_EQ(expected_tokens[3].tag, (++i)->tag);
+    EXPECT_EQ(expected_tokens[4].tag, (++i)->tag);
+    EXPECT_EQ(expected_tokens[5].tag, (++i)->tag);
+    EXPECT_EQ(expected_tokens[6].tag, (++i)->tag);
+    EXPECT_EQ(expected_tokens[7].tag, (++i)->tag);
+}
+
 TEST(Scanner, ScanStringWithComma)
 {
     istringstream ss("no,space");

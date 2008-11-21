@@ -129,7 +129,17 @@ token scanner::scan()
                 }
                 else putback(','); // false alarm, still lexing a string
             }
+            if( peek == '[' &&
+                (sequence_depth > 0 || mapping_depth > 0) &&
+                (previous.tag == token::SEQUENCE_SEPARATOR ||
+                previous.tag == token::PAIR_SEPARATOR) )
+                return token(token::STRING);
             if( peek == ']' && sequence_depth > 0 )
+                return token(token::STRING);
+            if( peek == '{' &&
+                (sequence_depth > 0 || mapping_depth > 0) &&
+                (previous.tag == token::SEQUENCE_SEPARATOR ||
+                previous.tag == token::PAIR_SEPARATOR) )
                 return token(token::STRING);
             if( peek == '}' && mapping_depth > 0 )
                 return token(token::STRING);
