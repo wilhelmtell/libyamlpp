@@ -8,13 +8,13 @@
 using namespace std;
 
 scanner::scanner() :
-    is(cin), line_number(1), peek(' '), sequence_depth(0)
+    is(cin), line_number(1), peek(' '), sequence_depth(0), mapping_depth(0)
 {
     sip();
 }
 
 scanner::scanner(istream& is) :
-    is(is), line_number(1), peek(' '), sequence_depth(0)
+    is(is), line_number(1), peek(' '), sequence_depth(0), mapping_depth(0)
 {
     sip();
 }
@@ -70,22 +70,23 @@ token scanner::scan()
     }
     if( peek == '{' ) {
         sip();
+        ++mapping_depth;
         return previous = token::FLOW_MAPPING_BEGIN;
     }
     if( peek == '}' ) {
         sip();
+        if( mapping_depth > 0 ) --mapping_depth;
         return previous = token::FLOW_MAPPING_END;
     }
     if( peek == ':' ) {
         sip();
-        return previous = token::PAIR_SEPARATOR;
+        if( isspace(peek) ) return previous = token::PAIR_SEPARATOR;
+        else putback(':');
     }
     if( peek == ',' ) { // ", " is a sequence element separator
         sip();
-        if( isspace(peek) )
-            return previous = token::SEQUENCE_SEPARATOR;
-        else
-            putback(',');
+        if( isspace(peek) ) return previous = token::SEQUENCE_SEPARATOR;
+        else putback(',');
     }
     if( isdigit(peek) ) { // a natural number
         string number;
@@ -128,7 +129,19 @@ token scanner::scan()
                 }
                 else putback(','); // false alarm, still lexing a string
             }
+            if( peek == '[' &&
+                (sequence_depth > 0 || mapping_depth > 0) &&
+                (previous.tag == token::SEQUENCE_SEPARATOR ||
+                previous.tag == token::PAIR_SEPARATOR) )
+                return token(token::STRING);
             if( peek == ']' && sequence_depth > 0 )
+                return token(token::STRING);
+            if( peek == '{' &&
+                (sequence_depth > 0 || mapping_depth > 0) &&
+                (previous.tag == token::SEQUENCE_SEPARATOR ||
+                previous.tag == token::PAIR_SEPARATOR) )
+                return token(token::STRING);
+            if( peek == '}' && mapping_depth > 0 )
                 return token(token::STRING);
         } while( isprint(peek) && peek != '\n' );
         if( the_string.empty() ) putback('\n');
