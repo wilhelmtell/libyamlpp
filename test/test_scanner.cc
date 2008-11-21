@@ -112,7 +112,7 @@ TEST(Scanner, ScanInteger)
 
 TEST(Scanner, ScanPairSeparator)
 {
-    istringstream ss(":");
+    istringstream ss(": ");
     scanner s(ss);
     token t(s.scan());
     EXPECT_EQ(token::PAIR_SEPARATOR, t.tag);
@@ -120,7 +120,7 @@ TEST(Scanner, ScanPairSeparator)
 
 TEST(Scanner, ScanSequenceSeperator)
 {
-    istringstream ss(",");
+    istringstream ss(", ");
     scanner s(ss);
     token t(s.scan());
     EXPECT_EQ(token::SEQUENCE_SEPARATOR, t.tag);
@@ -180,13 +180,11 @@ TEST(Scanner, ScanStringWithColon)
                       scanned_input.begin()));
 }
 
-TEST(Scanner, ScanElements)
+TEST(Scanner, ScanStringWithCommaAndSpace)
 {
     istringstream ss("hello, world");
     scanner s(ss);
     token expected_tokens[] = {
-        token(token::STRING),
-        token(token::SEQUENCE_SEPARATOR),
         token(token::STRING),
         token(token::EOS)
     };
@@ -198,6 +196,33 @@ TEST(Scanner, ScanElements)
     EXPECT_EQ(expected_scan_count, scanned_input.size());
     EXPECT_TRUE(equal(expected_tokens, expected_tokens+expected_scan_count,
                       scanned_input.begin()));
+}
+
+TEST(Scanner, ScanSequenceElements)
+{
+    istringstream ss("[hello, world]");
+    scanner s(ss);
+    token expected_tokens[] = {
+        token(token::FLOW_SEQUENCE_BEGIN),
+        token(token::STRING),
+        token(token::SEQUENCE_SEPARATOR),
+        token(token::STRING),
+        token(token::FLOW_SEQUENCE_END),
+        token(token::EOS)
+    };
+    list<token> scanned_input;
+    for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
+        scanned_input.push_back(t);
+    scanned_input.push_back(token::EOS);
+    size_t expected_scan_count = sizeof(expected_tokens) / sizeof(token);
+    EXPECT_EQ(expected_scan_count, scanned_input.size());
+    list<token>::const_iterator i(scanned_input.begin());
+    EXPECT_EQ(expected_tokens[0].tag, i->tag);
+    EXPECT_EQ(expected_tokens[1].tag, (++i)->tag);
+    EXPECT_EQ(expected_tokens[2].tag, (++i)->tag);
+    EXPECT_EQ(expected_tokens[3].tag, (++i)->tag);
+    EXPECT_EQ(expected_tokens[4].tag, (++i)->tag);
+    EXPECT_EQ(expected_tokens[5].tag, (++i)->tag);
 }
 
 TEST(Scanner, ScanStringWithComma)
