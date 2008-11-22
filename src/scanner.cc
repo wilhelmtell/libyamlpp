@@ -58,6 +58,18 @@ token scanner::scan()
         sip();
     }
 
+    if( peek == '-' ) { // DOCUMENT_BEGIN
+        string document_begin;
+        const int LENGTH_OF_DOCUMENT_BEGIN = 3; // "---"
+        for( int i = 0; i < LENGTH_OF_DOCUMENT_BEGIN; ++i ) {
+            document_begin += peek;
+            sip();
+        }
+        if( document_begin == "---" && isspace(peek) )
+            return previous = token::DOCUMENT_BEGIN;
+        else for( int i = LENGTH_OF_DOCUMENT_BEGIN; i > 0; --i )
+            putback(document_begin[i - 1]);
+    }
     if( peek == '[' ) {
         sip();
         ++sequence_depth;

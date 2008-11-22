@@ -13,7 +13,7 @@ public:
         // ANCHOR,
         BLOCK_SEQUENCE_ELEMENT_BEGIN,
         // COMPLEX_MAPPING_KEY,
-        // DOCUMENT_BEGIN,
+        DOCUMENT_BEGIN,
         // DOCUMENT_END,
         EOS,
         // ESCAPE_SEQUENCE,

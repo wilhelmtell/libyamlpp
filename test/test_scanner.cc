@@ -461,3 +461,26 @@ TEST_F(test_scan_string_with_comma, scan_eos)
 {
     EXPECT_EQ(token::EOS, scanned_tokens[1].tag);
 }
+
+struct test_scan_document_begin : public test_scanner {
+    test_scan_document_begin() : test_scanner("--- ") { }
+};
+
+TEST_F(test_scan_document_begin, scan_document_begin)
+{
+    EXPECT_EQ(token::DOCUMENT_BEGIN, scanned_tokens[0].tag);
+}
+
+struct test_scan_three_dashes_string : public test_scanner {
+    test_scan_three_dashes_string() : test_scanner("---") { }
+};
+
+TEST_F(test_scan_three_dashes_string, scan_three_dashes_string)
+{
+    EXPECT_EQ(token::STRING, scanned_tokens[0].tag);
+}
+
+TEST_F(test_scan_three_dashes_string, scan_three_dashes_string_value)
+{
+    EXPECT_EQ("---", scanned_tokens[0].value);
+}
