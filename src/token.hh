@@ -1,6 +1,8 @@
 #ifndef SRC_TOKEN_HH_
 #define SRC_TOKEN_HH_
 
+#include <string>
+
 // TODO:  maybe parameterize token, so that some tokens have values?  for
 // example, token<token::INTEGER> will hold the integer value.
 class token {
@@ -39,8 +41,10 @@ public:
 
     token();
     token(lexical_tag tag);
+    token(lexical_tag tag, const std::string& value);
 
     lexical_tag tag;
+    std::string value;
 };
 
 bool operator==(const token& t1, const token& t2);

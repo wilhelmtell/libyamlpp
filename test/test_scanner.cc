@@ -171,6 +171,11 @@ TEST_F(test_scan_quoted_string, scan_quoted_string)
     EXPECT_EQ(token::STRING, scanned_tokens[0].tag);
 }
 
+TEST_F(test_scan_quoted_string, scan_quoted_string_value)
+{
+    EXPECT_EQ("Grokking the grammar", scanned_tokens[0].value);
+}
+
 struct test_scan_unquoted_string : public test_scanner {
     test_scan_unquoted_string() : test_scanner("email address") { }
 };
@@ -178,6 +183,11 @@ struct test_scan_unquoted_string : public test_scanner {
 TEST_F(test_scan_unquoted_string, scan_unquoted_string)
 {
     EXPECT_EQ(token::STRING, scanned_tokens[0].tag);
+}
+
+TEST_F(test_scan_unquoted_string, scan_unquoted_string_value)
+{
+    EXPECT_EQ("email address", scanned_tokens[0].value);
 }
 
 struct test_scan_pair : public test_scanner {
@@ -221,6 +231,11 @@ TEST_F(test_scan_string_with_colon, scan_string_with_colon)
 TEST_F(test_scan_string_with_colon, scan_string)
 {
     EXPECT_EQ(token::STRING, scanned_tokens[0].tag);
+}
+
+TEST_F(test_scan_string_with_colon, scan_string_value)
+{
+    EXPECT_EQ("email:ee@mail.box", scanned_tokens[0].value);
 }
 
 TEST_F(test_scan_string_with_colon, scan_eos)

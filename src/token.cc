@@ -1,10 +1,16 @@
 #include "token.hh"
 
+using namespace std;
+
 token::token() : tag(token::EOS)
 {
 }
 
 token::token(lexical_tag tag) : tag(tag)
+{
+}
+
+token::token(lexical_tag tag, const string& value) : tag(tag), value(value)
 {
 }
 
