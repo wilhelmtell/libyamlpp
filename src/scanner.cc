@@ -80,12 +80,18 @@ token scanner::scan()
     }
     if( peek == ':' ) {
         sip();
-        if( isspace(peek) ) return previous = token::PAIR_SEPARATOR;
+        if( isspace(peek) ) {
+            sip();
+            return previous = token::PAIR_SEPARATOR;
+        }
         else putback(':');
     }
     if( peek == ',' ) { // ", " is a sequence element separator
         sip();
-        if( isspace(peek) ) return previous = token::SEQUENCE_SEPARATOR;
+        if( isspace(peek) ) {
+            sip();
+            return previous = token::SEQUENCE_SEPARATOR;
+        }
         else putback(',');
     }
     if( isdigit(peek) ) { // a natural number
