@@ -59,9 +59,9 @@ TEST(Scanner, ScanMappingBeginEnd)
     istringstream ss("{  }");
     scanner s(ss);
     token expected_tokens[] = {
-        token(token::FLOW_MAPPING_BEGIN),
-        token(token::FLOW_MAPPING_END),
-        token(token::EOS)
+        token::FLOW_MAPPING_BEGIN,
+        token::FLOW_MAPPING_END,
+        token::EOS
     };
     list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
@@ -78,11 +78,11 @@ TEST(Scanner, ScanMappingSequenceBeginEnd)
     istringstream ss("{ 	[ ]}");
     scanner s(ss);
     token expected_tokens[] = {
-        token(token::FLOW_MAPPING_BEGIN),
-        token(token::FLOW_SEQUENCE_BEGIN),
-        token(token::FLOW_SEQUENCE_END),
-        token(token::FLOW_MAPPING_END),
-        token(token::EOS)
+        token::FLOW_MAPPING_BEGIN,
+        token::FLOW_SEQUENCE_BEGIN,
+        token::FLOW_SEQUENCE_END,
+        token::FLOW_MAPPING_END,
+        token::EOS
     };
     list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
@@ -147,10 +147,10 @@ TEST(Scanner, ScanPair)
     istringstream ss("email: ee@mail.box");
     scanner s(ss);
     token expected_tokens[] = {
-        token(token::STRING),
-        token(token::PAIR_SEPARATOR),
-        token(token::STRING),
-        token(token::EOS)
+        token::STRING,
+        token::PAIR_SEPARATOR,
+        token::STRING,
+        token::EOS
     };
     list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
@@ -167,8 +167,8 @@ TEST(Scanner, ScanStringWithColon)
     istringstream ss("email:ee@mail.box");
     scanner s(ss);
     token expected_tokens[] = {
-        token(token::STRING),
-        token(token::EOS)
+        token::STRING,
+        token::EOS
     };
     list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
@@ -185,8 +185,8 @@ TEST(Scanner, ScanStringWithCommaAndSpace)
     istringstream ss("hello, world");
     scanner s(ss);
     token expected_tokens[] = {
-        token(token::STRING),
-        token(token::EOS)
+        token::STRING,
+        token::EOS
     };
     list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
@@ -203,12 +203,12 @@ TEST(Scanner, ScanSequenceElements)
     istringstream ss("[hello, world]");
     scanner s(ss);
     token expected_tokens[] = {
-        token(token::FLOW_SEQUENCE_BEGIN),
-        token(token::STRING),
-        token(token::SEQUENCE_SEPARATOR),
-        token(token::STRING),
-        token(token::FLOW_SEQUENCE_END),
-        token(token::EOS)
+        token::FLOW_SEQUENCE_BEGIN,
+        token::STRING,
+        token::SEQUENCE_SEPARATOR,
+        token::STRING,
+        token::FLOW_SEQUENCE_END,
+        token::EOS
     };
     list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
@@ -230,12 +230,12 @@ TEST(Scanner, ScanMappingPairs)
     istringstream ss("{ np: hard }");
     scanner s(ss);
     token expected_tokens[] = {
-        token(token::FLOW_MAPPING_BEGIN),
-        token(token::STRING),
-        token(token::PAIR_SEPARATOR),
-        token(token::STRING),
-        token(token::FLOW_MAPPING_END),
-        token(token::EOS)
+        token::FLOW_MAPPING_BEGIN,
+        token::STRING,
+        token::PAIR_SEPARATOR,
+        token::STRING,
+        token::FLOW_MAPPING_END,
+        token::EOS
     };
     list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
@@ -257,14 +257,14 @@ TEST(Scanner, ScanNestedSequence)
     istringstream ss("[a, [b]]");
     scanner s(ss);
     token expected_tokens[] = {
-        token(token::FLOW_SEQUENCE_BEGIN),
-        token(token::STRING),
-        token(token::SEQUENCE_SEPARATOR),
-        token(token::FLOW_SEQUENCE_BEGIN),
-        token(token::STRING),
-        token(token::FLOW_SEQUENCE_END),
-        token(token::FLOW_SEQUENCE_END),
-        token(token::EOS)
+        token::FLOW_SEQUENCE_BEGIN,
+        token::STRING,
+        token::SEQUENCE_SEPARATOR,
+        token::FLOW_SEQUENCE_BEGIN,
+        token::STRING,
+        token::FLOW_SEQUENCE_END,
+        token::FLOW_SEQUENCE_END,
+        token::EOS
     };
     list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
@@ -313,8 +313,8 @@ TEST(Scanner, ScanStringWithComma)
     istringstream ss("no,space");
     scanner s(ss);
     token expected_tokens[] = {
-        token(token::STRING),
-        token(token::EOS)
+        token::STRING,
+        token::EOS
     };
     list<token> scanned_input;
     for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
