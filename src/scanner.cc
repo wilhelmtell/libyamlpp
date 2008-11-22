@@ -80,12 +80,18 @@ token scanner::scan()
     }
     if( peek == ':' ) {
         sip();
-        if( isspace(peek) ) return previous = token::PAIR_SEPARATOR;
+        if( isspace(peek) ) {
+            sip();
+            return previous = token::PAIR_SEPARATOR;
+        }
         else putback(':');
     }
     if( peek == ',' ) { // ", " is a sequence element separator
         sip();
-        if( isspace(peek) ) return previous = token::SEQUENCE_SEPARATOR;
+        if( isspace(peek) ) {
+            sip();
+            return previous = token::SEQUENCE_SEPARATOR;
+        }
         else putback(',');
     }
     if( isdigit(peek) ) { // a natural number
@@ -115,7 +121,7 @@ token scanner::scan()
                 sip();
                 if( isspace(peek) ) { // pair separator ahead
                     putback(':');
-                    return token(token::STRING);
+                    return token::STRING;
                 }
                 else putback(':'); // false alarm, still lexing a string
             }
@@ -123,9 +129,10 @@ token scanner::scan()
             //         the following would consider the comma as a sequence sep
             if( peek == ',' ) { // seq separator ahead?  must match /,(?=\s)/
                 sip();
-                if( isspace(peek) && sequence_depth > 0 ) {
+                if( isspace(peek) &&
+                    (sequence_depth > 0 || mapping_depth > 0) ) {
                     putback(',');
-                    return token(token::STRING);
+                    return token::STRING;
                 }
                 else putback(','); // false alarm, still lexing a string
             }
@@ -133,16 +140,16 @@ token scanner::scan()
                 (sequence_depth > 0 || mapping_depth > 0) &&
                 (previous.tag == token::SEQUENCE_SEPARATOR ||
                 previous.tag == token::PAIR_SEPARATOR) )
-                return token(token::STRING);
+                return token::STRING;
             if( peek == ']' && sequence_depth > 0 )
-                return token(token::STRING);
+                return token::STRING;
             if( peek == '{' &&
                 (sequence_depth > 0 || mapping_depth > 0) &&
                 (previous.tag == token::SEQUENCE_SEPARATOR ||
                 previous.tag == token::PAIR_SEPARATOR) )
-                return token(token::STRING);
+                return token::STRING;
             if( peek == '}' && mapping_depth > 0 )
-                return token(token::STRING);
+                return token::STRING;
         } while( isprint(peek) && peek != '\n' );
         if( the_string.empty() ) putback('\n');
         else return token::STRING;

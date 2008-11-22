@@ -6,6 +6,7 @@
 class token {
 public:
     enum lexical_tag {
+        UNDEFINED = -1,
         // ALIAS,
         // ANCHOR,
         // BLOCK_SEQUENCE_ELEMENT_BEGIN,
