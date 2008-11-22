@@ -273,14 +273,39 @@ TEST(Scanner, ScanNestedSequence)
     size_t expected_scan_count = sizeof(expected_tokens) / sizeof(token);
     EXPECT_EQ(expected_scan_count, scanned_input.size());
     list<token>::const_iterator i(scanned_input.begin());
-    EXPECT_EQ(expected_tokens[0].tag, i->tag);
-    EXPECT_EQ(expected_tokens[1].tag, (++i)->tag);
-    EXPECT_EQ(expected_tokens[2].tag, (++i)->tag);
-    EXPECT_EQ(expected_tokens[3].tag, (++i)->tag);
-    EXPECT_EQ(expected_tokens[4].tag, (++i)->tag);
-    EXPECT_EQ(expected_tokens[5].tag, (++i)->tag);
-    EXPECT_EQ(expected_tokens[6].tag, (++i)->tag);
-    EXPECT_EQ(expected_tokens[7].tag, (++i)->tag);
+    for( size_t index = 0; index < expected_scan_count; ++index ) {
+        EXPECT_EQ(expected_tokens[index].tag, i->tag);
+        ++i;
+    }
+}
+
+TEST(Scanner, ScanNestedSequence2)
+{
+    istringstream ss("{name: Richard Stallman, email: rms@gnu.org}");
+    scanner s(ss);
+    token expected_tokens[] = {
+        token::FLOW_MAPPING_BEGIN,
+        token::STRING,
+        token::PAIR_SEPARATOR,
+        token::STRING,
+        token::SEQUENCE_SEPARATOR,
+        token::STRING,
+        token::PAIR_SEPARATOR,
+        token::STRING,
+        token::FLOW_MAPPING_END,
+        token::EOS
+    };
+    list<token> scanned_input;
+    for( token t = s.scan(); t.tag != token::EOS; t = s.scan() )
+        scanned_input.push_back(t);
+    scanned_input.push_back(token::EOS);
+    size_t expected_scan_count = sizeof(expected_tokens) / sizeof(token);
+    EXPECT_EQ(expected_scan_count, scanned_input.size());
+    list<token>::const_iterator i(scanned_input.begin());
+    for( size_t index = 0; index < expected_scan_count; ++index ) {
+        EXPECT_EQ(expected_tokens[index].tag, i->tag);
+        ++i;
+    }
 }
 
 TEST(Scanner, ScanStringWithComma)

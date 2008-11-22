@@ -129,7 +129,7 @@ token scanner::scan()
             //         the following would consider the comma as a sequence sep
             if( peek == ',' ) { // seq separator ahead?  must match /,(?=\s)/
                 sip();
-                if( isspace(peek) && sequence_depth > 0 ) {
+                if( isspace(peek) && sequence_depth > 0 || mapping_depth > 0 ) {
                     putback(',');
                     return token(token::STRING);
                 }
