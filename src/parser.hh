@@ -20,6 +20,7 @@ private:
     void parse_sequence_nodes();
     void parse_mapping_nodes();
     void parse_pair();
+    void parse_eos();
 
     scanner s;
     token peek;
