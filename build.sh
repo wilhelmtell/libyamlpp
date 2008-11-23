@@ -33,7 +33,7 @@ succ() {
 # directory.
 echo -n "Determining install directory of helper tools ...  "
 if [ -r $BUILD_SH_CONF ]; then
-  INSTALL_DIR="$(grep -i '^\s*install_dir' "$BUILD_SH_CONF" |cut -d= -f2)"
+  INSTALL_DIR="$(grep -i '^\s*install_dir\s*=' "$BUILD_SH_CONF" |cut -d= -f2)"
   INSTALL_DIR="$(echo "$INSTALL_DIR" |sed 's/^\s*\|\s*$//g')"
 else
   INSTALL_DIR=$(mktemp -t -d libyamlpp.XXXXXXXXXX)
