@@ -28,8 +28,8 @@ void parser::parse()
 void parser::parse_document()
 {
     if( peek == token::EOS ) return;  // end-of-stream.  we're done.
-    else if( peek == token::DOCUMENT_BEGIN ) sip();
-    else if( peek == token::FLOW_SEQUENCE_BEGIN ) parse_sequence();
+    if( peek == token::DOCUMENT_BEGIN ) sip();
+    if( peek == token::FLOW_SEQUENCE_BEGIN ) parse_sequence();
     else if( peek == token::FLOW_MAPPING_BEGIN ) parse_mapping();
     else if( peek == token::STRING ) parse_string();
     else throw runtime_error("Syntax error."); // TODO:  be more descriptive.  (line number etc.)
