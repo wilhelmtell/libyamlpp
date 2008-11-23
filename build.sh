@@ -88,9 +88,11 @@ fi
 
 echo -e -n "Determinig path to bjam executable ...  " |tee -a $LOG
 export BJAM=$(which bjam 2>/dev/null)
-[ -z "$BJAM" ] && export BJAM=$(find $INSTALL_DIR/boost-build -name bjam)
+if [ -z "$BJAM" ]; then
+  export BJAM=$(find $INSTALL_DIR/boost-build -name bjam)
+  export BOOST_BUILD_PATH="$INSTALL_DIR/boost-build"
+fi
 [ -n "$BJAM" ] && succ || fail
-export BOOST_BUILD_PATH="$INSTALL_DIR/boost-build"
 
 # gtest
 if [ \! -r $INSTALL_DIR/include/gtest/gtest.h ]; then
