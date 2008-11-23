@@ -7,12 +7,43 @@
 #            connection is required as well.
 ###############################################################################
 
-# WARNING:  The installation directory MUST be a dedicated directory!  It may
-#           be WIPED OUT at the end of this script!
-INSTALL_DIR=/tmp/libyamlpp_helpers
-LOG=$(pwd)/build.log && cat /dev/null >$LOG
 ORIGINAL_DIR=$(pwd)
 LIBYAMLPP_DIR="$ORIGINAL_DIR/$(dirname $0)"
+BUILD_SH_CONF=$LIBYAMLPP_DIR/.build
+LOG=$(pwd)/build.log && cat /dev/null >$LOG
+
+fail() {
+  echo -e "\033[0;31mFAIL\033[0m"
+  echo -e "FAIL" >>$LOG
+  cleanup_mess
+  exit 1;
+}
+
+succ() {
+  if [ "$#" -gt 0 ]; then
+    echo -e "\033[0;32m$1\033[0m"
+    echo -e "$1" >>$LOG
+  else
+    echo -e "\033[0;32mOK\033[0m"
+    echo -e "OK" >>$LOG
+  fi
+}
+
+# installation directory may be wiped out later, so it must be a dedicated
+# directory.
+echo -n "Determining install directory of helper tools ...  "
+if [ -r $BUILD_SH_CONF ]; then
+  INSTALL_DIR="$(grep -i '^\s*install_dir' "$BUILD_SH_CONF" |cut -d= -f2)"
+  INSTALL_DIR="$(echo "$INSTALL_DIR" |sed 's/^\s*\|\s*$//g')"
+else
+  INSTALL_DIR=$(mktemp -t -d libyamlpp.XXXXXXXXXX)
+  cat <<EOF >>"$BUILD_SH_CONF"
+# WARNING:  The installation directory MUST be a dedicated directory!  It may
+#           be WIPED OUT at the end of this script!
+EOF
+  echo "install_dir=$INSTALL_DIR" >>"$BUILD_SH_CONF"
+fi
+succ $INSTALL_DIR
 
 trap cleanup_mess 1 2 3 4 5 6 14 15
 
@@ -27,18 +58,6 @@ cleanup_mess() {
   succ
 }
 
-fail() {
-  echo -e "\033[0;31mFAIL\033[0m"
-  echo -e "FAIL" >>$LOG
-  cleanup_mess
-  exit 1;
-}
-
-succ() {
-  echo -e "\033[0;32mOK\033[0m"
-  echo -e "OK" >>$LOG
-}
-
 # running "./build.sh wipeclean", with no other arguments, will wipe clean the
 # distribution and mess this script might have done in the past.
 if [ "$#" -eq 1 -a "$1" = "wipeclean" ]; then
@@ -46,6 +65,7 @@ if [ "$#" -eq 1 -a "$1" = "wipeclean" ]; then
   echo -e -n "Wiping clean ...  "
   rm -rf /tmp/boost-build-2.0-m12.tar.bz2
   rm -rf /tmp/gtest-1.1.0.tar.bz2
+  rm -rf "$BUILD_SH_CONF"
   cd $LIBYAMLPP_DIR
   find . -name bin -type d |xargs rm -rf
   cd $ORIGINAL_DIR
