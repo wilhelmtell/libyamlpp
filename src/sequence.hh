@@ -3,7 +3,7 @@
 
 #include "node.hh"
 #include <vector>
-#include <memory>
+#include <tr1/memory>
 
 namespace yaml {
 
