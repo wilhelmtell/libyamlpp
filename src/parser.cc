@@ -27,7 +27,10 @@ void parser::parse()
 
 void parser::parse_document()
 {
-    if( peek == token::EOS ) parse_eos();
+    if( peek == token::EOS ) {
+        parse_eos();
+        return;
+    }
     if( peek == token::DOCUMENT_BEGIN ) sip();
     if( peek == token::FLOW_SEQUENCE_BEGIN ) parse_sequence();
     else if( peek == token::FLOW_MAPPING_BEGIN ) parse_mapping();
