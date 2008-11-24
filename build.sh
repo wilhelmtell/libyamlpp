@@ -112,7 +112,7 @@ if [ -z "$BJAM" ]; then
   export BJAM=$(find $INSTALL_DIR/boost-build -name bjam)
   export BOOST_BUILD_PATH="$INSTALL_DIR/boost-build"
 fi
-[ -n "$BJAM" ] && succ || fail
+[ -n "$BJAM" ] && succ $BJAM || fail
 
 # gtest
 if [ \! -r $INSTALL_DIR/include/gtest/gtest.h ]; then
