@@ -120,8 +120,8 @@ shared_ptr<sequence_node> parser::parse_sequence()
         if( peek != token::FLOW_SEQUENCE_END )
             throw runtime_error("Syntax error:  expected sequence-end.");
         sip(); // token::FLOW_SEQUENCE_END
-        if( ! sequence || sequence->elements.empty() ) { // none of the branches above filled sequence
-            sequence.reset(new sequence_node());
+        assert(sequence);
+        if( sequence->elements.empty() ) { // none of the branches above filled sequence
             assert(sequence);
             sequence_node::value_type& elements = sequence->elements;
             shared_ptr<null_node> null(new null_node());
