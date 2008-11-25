@@ -33,8 +33,8 @@ private:
     std::tr1::shared_ptr<pair_node> parse_pair();
     void parse_eos();
 
-    scanner s;
-    token peek;
+    lex::scanner s;
+    lex::token peek;
     std::tr1::shared_ptr<node> tree;
 };
 

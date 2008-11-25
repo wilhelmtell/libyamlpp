@@ -16,6 +16,7 @@
 
 using namespace std;
 using namespace std::tr1;
+using namespace yaml::lex;
 
 namespace yaml {
 namespace syn {

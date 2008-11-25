@@ -7,6 +7,9 @@
 
 using namespace std;
 
+using namespace yaml;
+using namespace yaml::lex;
+
 struct test_scanner : public testing::Test {
     test_scanner(const string& input);
     istringstream ss;
