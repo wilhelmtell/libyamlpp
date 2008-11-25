@@ -4,9 +4,6 @@
 namespace yaml {
 
 class node {
-public:
-
-private:
 };
 
 } // namespace yaml

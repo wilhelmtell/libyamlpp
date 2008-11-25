@@ -1,21 +1,55 @@
 #include <gtest/gtest.h>
 #include <sstream>
+#include <stdexcept>
 #include "parser.hh"
 
 using namespace std;
 
-TEST(test_parser, test_parser)
+TEST(test_parser, parse_document_begin)
 {
     istringstream is("--- ");
-    parser p(is);
-
-    p.parse();
+    yaml::parser p(is);
+    EXPECT_NO_THROW(p.parse());
 }
 
-TEST(test_parser, test_parser2)
+TEST(test_parser, parse_string)
+{
+    istringstream is("abc");
+    yaml::parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
+TEST(test_parser, parse_sequence_begin)
+{
+    istringstream is("[");
+    yaml::parser p(is);
+    EXPECT_THROW(p.parse(), runtime_error);
+}
+
+TEST(test_parser, parse_empty_sequence)
+{
+    istringstream is("[]");
+    yaml::parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
+TEST(test_parser, parse_mapping_begin)
+{
+    istringstream is("{");
+    yaml::parser p(is);
+    EXPECT_THROW(p.parse(), runtime_error);
+}
+
+TEST(test_parser, parse_empty_mapping)
+{
+    istringstream is("{}");
+    yaml::parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
+TEST(test_parser, parse_sequence)
 {
     istringstream is("[a, b, c]");
-    parser p(is);
-
-    p.parse();
+    yaml::parser p(is);
+    EXPECT_NO_THROW(p.parse());
 }
