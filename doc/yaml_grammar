@@ -21,7 +21,7 @@ version_specification ::= integer version_component_separator integer
 integer ::= digit
           | digit integer
 
-digit ::= "0" | "1" | ... | "9"
+digit ::= [0-9]
 
 version_component_separator ::= "."
 
@@ -189,23 +189,13 @@ escape_sequence_value ::= escape_sequence_special_value
                         | escape_sequence_octal_number
                         | escape_sequence_hex_number
 
-escape_sequence_special_value ::= '"'
-                                | "'"
-                                | '?'
-                                | '\'
-                                | 'a'
-                                | 'b'
-                                | 'f'
-                                | 'n'
-                                | 'r'
-                                | 't'
-                                | 'v'
+escape_sequence_special_value ::= ["'?\\abfnrtv]
 
 escape_sequence_octal_number ::= octal_digit
                                | octal_digit octal_digit
                                | octal_digit octal_digit octal_digit
 
-octal_digit ::= '0' | '1' | ... | '7'
+octal_digit ::= [0-7]
 
 escape_sequence_hex_number ::= escape_sequence_hex_symbol hex_number
 
@@ -214,6 +204,4 @@ escape_sequence_hex_symbol ::= 'x'
 hex_number ::= hex_digit
              | hex_digit hex_number
 
-hex_digit ::= '0' | '1' | ... | '9'
-            | 'a' | 'b' | ... | 'f'
-            | 'A' | 'B' | ... | 'F'
+hex_digit ::= [0-9a-zA-Z]
