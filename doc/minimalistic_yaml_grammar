@@ -1,0 +1,84 @@
+stream ::= documents stream_end
+
+# TODO:  how does a stream end?
+stream_end ::= lambda
+
+# documents may be delimited, but don't always have to be.  for example, the
+# first document may start immediately with nodes rather than with a leading
+# start-of-document mark.
+documents ::= footerless_document
+            | nodes
+
+delimited_documents ::= delimited_document delimited_documents
+                      | lambda
+
+footerless_document ::= document_begin nodes
+
+document_begin ::= "---" whitespace
+
+nodes ::= lambda
+        | node nodes
+
+node ::= scalar
+       | sequence
+       | mapping
+
+scalar ::= string
+
+sequence ::= flow_sequence
+
+flow_sequence ::= flow_sequence_begin node flow_sequence_elements flow_sequence_end
+                | flow_sequence_begin flow_sequence_end
+
+flow_sequence_begin ::= "["
+
+flow_sequence_end ::= "]"
+
+flow_sequence_elements ::= "," whitespace node flow_sequence_elements
+                      | lambda
+
+mapping ::= flow_mapping
+
+flow_mapping ::= flow_mapping_begin key pair_separator node flow_mapping_elements flow_mapping_end
+               | flow_mapping_begin flow_mapping_end
+
+flow_mapping_begin ::= "{"
+
+flow_mapping_end ::= "}"
+
+flow_mapping_elements ::= "," whitespace key pair_separator node flow_mapping_elements
+                      | lambda
+
+key ::= scalar
+
+pair_separator ::= ":" whitespace
+
+# Reference:  The C++ standard, as described by IBM's C++ Standard Library
+# Reference document, page 18, "Escape Sequences"
+#
+# TODO:  I'm just being lazy, and reuse C++'s escape sequences.  Check if YAML
+#        indeed uses the same escape sequences as C++.
+escape_sequence ::= escape_sequence_symbol escape_sequence_value
+
+escape_sequence_symbol ::= '\'
+
+escape_sequence_value ::= escape_sequence_special_value
+                        | escape_sequence_octal_number
+                        | escape_sequence_hex_number
+
+escape_sequence_special_value ::= ["'?\\abfnrtv]
+
+escape_sequence_octal_number ::= octal_digit
+                               | octal_digit octal_digit
+                               | octal_digit octal_digit octal_digit
+
+octal_digit ::= [0-7]
+
+escape_sequence_hex_number ::= escape_sequence_hex_symbol hex_number
+
+escape_sequence_hex_symbol ::= 'x'
+
+hex_number ::= hex_digit
+             | hex_digit hex_number
+
+hex_digit ::= [0-9a-fA-F]
