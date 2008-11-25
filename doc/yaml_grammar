@@ -14,7 +14,7 @@ directive ::= version_directive
 
 version_directive ::= version_directive_symbol version_specification
 
-version_directive_symbol ::= aws "%YAML" ws
+version_directive_symbol ::= "%YAML"
 
 version_specification ::= integer version_component_separator integer
 
@@ -27,7 +27,7 @@ version_component_separator ::= "."
 
 tag_directive ::= tag_directive_symbol handle uri
 
-tag_directive_symbol ::= aws "%TAG" ws
+tag_directive_symbol ::= "%TAG"
 
 # documents may be delimited, but don't always have to be.  for example, the
 # first document may start immediately with nodes rather than with a leading
@@ -46,9 +46,9 @@ headerless_document ::= nodes newline document_end
 
 footerless_document ::= document_begin newline nodes
 
-document_begin ::= "---" aws newline
+document_begin ::= "---" whitespace
 
-document_end ::= "..." aws newline
+document_end ::= "..." whitespace
 
 nodes ::= lambda
         | node nodes
@@ -73,7 +73,7 @@ text ::= any_character_newline_included_until_end_of_scope_as_determined_by_inde
 
 literal_style ::= literal_style_symbol literal_style_text
 
-literal_style_symbol ::= "|" aws
+literal_style_symbol ::= "|" whitespace
 
 literal_style_text ::= string
                      | string literal_style_text
@@ -81,19 +81,19 @@ literal_style_text ::= string
 # TODO:  folded style.  see section 2.3 in the standard
 folded_style ::= lambda
 
-null ::= ws "null" ws
-       | ws "Null" ws
-       | ws "NULL" ws
-       | ws "~" ws
+null ::= "null"
+       | "Null"
+       | "NULL"
+       | "~"
 
-tag ::= aws "!" local_tag
-      | aws "!!" standard_tag
-      | aws "!" handle "!" ws local_tag
-      | aws "tag:" uri ":" local_tag
+tag ::= "!" local_tag
+      | "!!" standard_tag
+      | "!" handle "!" whitespace local_tag
+      | "tag:" uri ":" local_tag
 
 local_tag ::= [a-zA-Z_]+
 
-standard_tag ::= "str" ws
+standard_tag ::= "str"
 
 handle ::= [a-zA-Z_]+
 
@@ -106,34 +106,20 @@ sequence ::= flow_sequence
 flow_sequence ::= flow_sequence_begin node suffix_listed_nodes flow_sequence_end
                 | flow_sequence_begin flow_sequence_end
 
-flow_sequence_begin ::= aws "[" aws
+flow_sequence_begin ::= "["
 
-flow_sequence_end ::= aws "]" aws_with_at_least_one_newline
+flow_sequence_end ::= "]"
 
-suffix_listed_nodes ::= aws "," aws node suffix_listed_nodes
-                      | aws
-
-# a single whitespace character.  wsc stands for whitespace_character;  i
-# chose this short name so i can easily use this production frequently.
-wsc ::= space
-      | tab
-      | newline
-
-# whitespace of arbitrary length (or no whitespace at all). i chose this short
-# name so i can easily use this production frequently.
-aws ::= ws
-     | lambda
-
-# one or more whitespace characters
-ws ::= wsc aws
+suffix_listed_nodes ::= "," whitespace node suffix_listed_nodes
+                      | lambda
 
 # block sequence defines a sequence of elements of some kind, each in a line
-block_sequence ::= block_sequence_element aws
-                 | block_sequence_element aws block_sequence
+block_sequence ::= block_sequence_element
+                 | block_sequence_element block_sequence
 
 block_sequence_element ::= block_sequence_element_begin node newline
 
-block_sequence_element_begin ::= "-" aws
+block_sequence_element_begin ::= "-" whitespace
 
 mapping ::= flow_mapping
           | block_mapping
@@ -141,29 +127,29 @@ mapping ::= flow_mapping
 flow_mapping ::= flow_mapping_begin key pair_separator node suffix_listed_pairs flow_mapping_end newline
                | flow_mapping_begin flow_mapping_end newline
 
-flow_mapping_begin ::= aws "{" aws
+flow_mapping_begin ::= "{"
 
-flow_mapping_end ::= aws "}" aws_with_at_least_one_newline
+flow_mapping_end ::= "}"
 
-suffix_listed_pairs ::= aws "," aws key aws pair_separator suffix_listed_pairs
-                      | aws
+suffix_listed_pairs ::= "," key pair_separator suffix_listed_pairs
+                      | lambda
 
 key ::= scalar
       | complex_mapping_key
 
 # block mapping defines a mapping of elements of some kind, each in a line
-block_mapping ::= block_mapping_element aws
-                | block_mapping_element aws block_mapping
+block_mapping ::= block_mapping_element
+                | block_mapping_element block_mapping
 
 block_mapping_element ::= key pair_separator node newline
 
-pair_separator ::= aws ":" ws
+pair_separator ::= ":" whitespace
 
 # a complex mapping key is a key of arbitrary type.  this as opposed to regular
 # keys, which must be scalars.
 complex_mapping_key ::= complex_mapping_key_symbol node
 
-complex_mapping_key_symbol ::= aws "?" ws
+complex_mapping_key_symbol ::= "?" whitespace
 
 # anchors name a node so that it can later be referenced by its name (see
 # alias)
@@ -183,12 +169,12 @@ identifier_suffix_character ::= "_"
                               | uppercase_letter
                               | digit
 
-anchor_symbol ::= ws "&"
+anchor_symbol ::= "&"
 
 # aliases are the names given to a node earlier by an anchor (see anchor)
 alias ::= alias_symbol string
 
-alias_symbol ::= ws "*"
+alias_symbol ::= "*"
 
 # Reference:  The C++ standard, as described by IBM's C++ Standard Library
 # Reference document, page 18, "Escape Sequences"
