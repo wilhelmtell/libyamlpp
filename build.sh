@@ -143,7 +143,7 @@ if [ \! -r $INSTALL_DIR/include/gtest/gtest.h ]; then
 fi
 
 # libyaml++
-echo -n "Building libyaml++ targets $@ ...  " |tee -a $LOG
+echo -n "Building libyaml++$(if [ "$#" -gt 0 ]; then echo " targets $@"; fi) ...  " |tee -a $LOG
 "$BJAM" $@ >>$LOG 2>&1 && succ || fail
 echo -e "\n\033[0;32mDone.\033[0m"
 echo -e "\nDone." >>$LOG
