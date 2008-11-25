@@ -39,7 +39,7 @@ else
   INSTALL_DIR=$(mktemp -t -d libyamlpp.XXXXXXXXXX)
   cat <<EOF >>"$BUILD_SH_CONF"
 # WARNING:  The installation directory MUST be a dedicated directory!  It may
-#           be WIPED OUT at the end of this script!
+#           be WIPED OUT by the build.sh script when it's done!
 EOF
   echo "install_dir=$INSTALL_DIR" >>"$BUILD_SH_CONF"
 fi
