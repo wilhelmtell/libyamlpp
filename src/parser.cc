@@ -105,6 +105,7 @@ shared_ptr<sequence_node> parser::parse_sequence()
             if( peek == token::SEQUENCE_SEPARATOR )
                 sip();
         }
+        sip(); // token::FLOW_SEQUENCE_END
         assert(the_sequence);
         return the_sequence;
     }
@@ -116,43 +117,22 @@ shared_ptr<mapping_node> parser::parse_mapping()
 {
     if( peek == token::FLOW_MAPPING_BEGIN ) {
         sip();
-        shared_ptr<mapping_node> mapping(new mapping_node());
-
-        // we only support simple keys at the moment, no complex mappings
-        if( peek == token::STRING ) {
-            shared_ptr<sequence_node> remaining(parse_mapping_nodes());
-            assert(mapping);
-            mapping_node::value_type& elements = mapping->elements;
-            assert(remaining);
-            elements.splice(elements.end(), remaining->elements);
+        shared_ptr<mapping_node> the_mapping(new mapping_node());
+        while( peek != token::FLOW_MAPPING_END ) {
+            shared_ptr<pair_node> pair(parse_pair());
+            the_mapping->elements.push_back(pair);
+            if( peek == token::SEQUENCE_SEPARATOR )
+                sip();
+            else if( peek != token::FLOW_MAPPING_END )
+                throw runtime_error("Syntax error:  expected sequence-"
+                                    "separator or mapping-end.");
         }
-        else if( peek == token::FLOW_MAPPING_END ) sip();
-        else
-            throw runtime_error("Syntax error:  expected key or mapping-end.");
-        assert(mapping);
-        return mapping;
+        sip(); // token::FLOW_MAPPING_END
+        assert(the_mapping);
+        return the_mapping;
     }
-    else throw runtime_error("Syntax error:  expected '{'.");
-}
-
-shared_ptr<sequence_node> parser::parse_mapping_nodes()
-{
-    if( peek == token::STRING ) {
-        shared_ptr<sequence_node> sequence(new sequence_node());
-        assert(sequence);
-        sequence_node::value_type& elements = sequence->elements;
-        shared_ptr<pair_node> pair = parse_pair();
-        elements.push_back(pair);
-        if( peek == token::SEQUENCE_SEPARATOR ) {
-            sip();
-            shared_ptr<sequence_node> remaining(parse_mapping_nodes());
-            assert(remaining);
-            elements.splice(elements.end(), remaining->elements);
-        }
-        assert(sequence);
-        return sequence;
-    }
-    else throw runtime_error("Syntax error:  expected a key-value pair.");
+    else
+        throw runtime_error("Syntax error:  expected mapping-begin.");
 }
 
 shared_ptr<pair_node> parser::parse_pair()
@@ -163,17 +143,24 @@ shared_ptr<pair_node> parser::parse_pair()
         sip();
         if( peek == token::PAIR_SEPARATOR ) sip();
         else throw runtime_error("Syntax error:  expected a pair-separator.");
+        shared_ptr<pair_node> pair;
         if( peek == token::STRING ) {
             string value(peek.value);
-            shared_ptr<string_node> value_node(new string_node(key));
+            shared_ptr<string_node> value_node(new string_node(value));
             sip();
-            shared_ptr<pair_node> pair(new pair_node(key_node, value_node));
-            assert(pair);
-            return pair;
+            pair.reset(new pair_node(key_node, value_node));
         }
-        else throw runtime_error("Syntax error:  expected a scalar.");
+        else if( peek == token::FLOW_SEQUENCE_BEGIN )
+            pair.reset(new pair_node(key_node, parse_sequence()));
+        else if( peek == token::FLOW_MAPPING_BEGIN )
+            pair.reset(new pair_node(key_node, parse_mapping()));
+        else throw runtime_error("Syntax error:  expected a scalar, a "
+                                 "sequence-begin or a mapping-begin in pair "
+                                 "value");
+        assert(pair);
+        return pair;
     }
-    else throw runtime_error("Syntax error:  expected a scalar.");
+    else throw runtime_error("Syntax error:  expected a scalar for key.");
 }
 
 shared_ptr<string_node> parser::parse_string()

@@ -69,3 +69,24 @@ TEST(test_parser, parse_nested_sequence2)
     parser p(is);
     p.parse();
 }
+
+TEST(test_parser, parse_mapping)
+{
+    istringstream is("{a: b, c: d}");
+    parser p(is);
+    p.parse();
+}
+
+TEST(test_parser, parse_mapping2)
+{
+    istringstream is("{a: b, c: [a, b, c]}");
+    parser p(is);
+    p.parse();
+}
+
+TEST(test_parser, parse_mapping3)
+{
+    istringstream is("{a: b, c: [A, [B], {a: z}, X]}");
+    parser p(is);
+    p.parse();
+}

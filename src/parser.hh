@@ -28,8 +28,6 @@ private:
     std::tr1::shared_ptr<sequence_node> parse_sequence();
     std::tr1::shared_ptr<mapping_node> parse_mapping();
     std::tr1::shared_ptr<string_node> parse_string();
-    std::tr1::shared_ptr<sequence_node> parse_sequence_nodes();
-    std::tr1::shared_ptr<sequence_node> parse_mapping_nodes(); // serialization
     std::tr1::shared_ptr<pair_node> parse_pair();
     void parse_eos();
 
