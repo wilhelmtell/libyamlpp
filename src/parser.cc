@@ -92,12 +92,22 @@ shared_ptr<sequence_node> parser::parse_sequence()
             assert(sequence);
             sequence_node::value_type& elements = sequence->elements;
             elements.push_back(nested_sequence);
+            if( peek == token::SEQUENCE_SEPARATOR )
+                sip();
+            else if( peek != token::FLOW_SEQUENCE_END )
+                throw runtime_error("Syntax error:  expected sequence-end or "
+                                    "sequence-separator.");
         }
         if( peek == token::FLOW_MAPPING_BEGIN ) {
             shared_ptr<mapping_node> nested_mapping(parse_mapping());
             assert(sequence);
             sequence_node::value_type& elements = sequence->elements;
             elements.push_back(nested_mapping);
+            if( peek == token::SEQUENCE_SEPARATOR )
+                sip();
+            else if( peek != token::FLOW_SEQUENCE_END )
+                throw runtime_error("Syntax error:  expected sequence-end or "
+                                    "sequence-separator.");
         }
         if( peek == token::STRING ) {
             assert(sequence);
