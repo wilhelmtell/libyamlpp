@@ -7,12 +7,14 @@
 
 using namespace std;
 
-scanner::scanner() : is(cin), line_number(1), peek(' ')
+scanner::scanner() :
+    is(cin), line_number(1), peek(' '), sequence_depth(0), mapping_depth(0)
 {
     sip();
 }
 
-scanner::scanner(istream& is) : is(is), line_number(1), peek(' ')
+scanner::scanner(istream& is) :
+    is(is), line_number(1), peek(' '), sequence_depth(0), mapping_depth(0)
 {
     sip();
 }
@@ -26,7 +28,7 @@ void scanner::sip()
         for( input_buffer::size_type i = 0; i < BUFFER_SIZE; ++i ) {
             char ch = is.get();
             if( ! is ) {
-                buf.push_back(' ');
+                buf.push_back(-1);
                 break;
             }
             buf.push_back(ch);
@@ -34,6 +36,12 @@ void scanner::sip()
     peek = buf.front();
     buf.pop_front();
     assert(buf.size() <= BUFFER_SIZE - 1);
+}
+
+void scanner::putback(char new_peek)
+{
+    buf.push_front(peek);
+    peek = new_peek;
 }
 
 // TODO:  can we apply some design patter to break this huge function into
@@ -48,32 +56,55 @@ token scanner::scan()
         else if( ! isspace(peek) )
             break;
         sip();
-        if( buf.empty() && is.eof() ) return previous = token(token::EOS);
     }
 
+    if( peek == '-' ) { // DOCUMENT_BEGIN
+        string document_begin;
+        const int LENGTH_OF_DOCUMENT_BEGIN = 3; // "---"
+        for( int i = 0; i < LENGTH_OF_DOCUMENT_BEGIN; ++i ) {
+            document_begin += peek;
+            sip();
+        }
+        if( document_begin == "---" && isspace(peek) )
+            return previous = token::DOCUMENT_BEGIN;
+        else for( int i = LENGTH_OF_DOCUMENT_BEGIN; i > 0; --i )
+            putback(document_begin[i - 1]);
+    }
     if( peek == '[' ) {
         sip();
-        return previous = token(token::FLOW_SEQUENCE_BEGIN);
+        ++sequence_depth;
+        return previous = token::FLOW_SEQUENCE_BEGIN;
     }
     if( peek == ']' ) {
         sip();
-        return previous = token(token::FLOW_SEQUENCE_END);
+        if( sequence_depth > 0 ) --sequence_depth;
+        return previous = token::FLOW_SEQUENCE_END;
     }
     if( peek == '{' ) {
         sip();
-        return previous = token(token::FLOW_MAPPING_BEGIN);
+        ++mapping_depth;
+        return previous = token::FLOW_MAPPING_BEGIN;
     }
     if( peek == '}' ) {
         sip();
-        return previous = token(token::FLOW_MAPPING_END);
+        if( mapping_depth > 0 ) --mapping_depth;
+        return previous = token::FLOW_MAPPING_END;
     }
     if( peek == ':' ) {
         sip();
-        return previous = token(token::PAIR_SEPARATOR);
+        if( isspace(peek) ) {
+            sip();
+            return previous = token::PAIR_SEPARATOR;
+        }
+        else putback(':');
     }
-    if( peek == ',' ) {
+    if( peek == ',' ) { // ", " is a sequence element separator
         sip();
-        return previous = token(token::SEQUENCE_SEPARATOR);
+        if( isspace(peek) ) {
+            sip();
+            return previous = token::SEQUENCE_SEPARATOR;
+        }
+        else putback(',');
     }
     if( isdigit(peek) ) { // a natural number
         string number;
@@ -81,7 +112,7 @@ token scanner::scan()
             number += peek; // mm.  do you smell that?
             sip();
         } while( isdigit(peek) );
-        return previous = token(token::INTEGER);
+        return previous = token::INTEGER;
     }
     if( peek == '\'' ) { // quoted string
         string the_string;
@@ -91,10 +122,74 @@ token scanner::scan()
             sip();
         }
         sip(); // closing quote
-        return previous = token(token::STRING);
+        previous.tag = token::STRING;
+        previous.value = the_string;
+        return previous;
+    }
+    if( isprint(peek) && peek != '\n' ) { // strings come unquoted as well
+        string the_string;
+        do {
+            the_string += peek;
+            sip();
+            if( peek == ':' ) { // pair separator ahead?  must match /:(?=\s)/
+                sip();
+                if( isspace(peek) ) { // pair separator ahead
+                    putback(':');
+                    previous.tag = token::STRING;
+                    previous.value = the_string;
+                    return previous;
+                }
+                else putback(':'); // false alarm, still lexing a string
+            }
+            // FIXME:  in YAML, this: "hello, world" is in fact a string
+            //         the following would consider the comma as a sequence sep
+            if( peek == ',' ) { // seq separator ahead?  must match /,(?=\s)/
+                sip();
+                if( isspace(peek) &&
+                    (sequence_depth > 0 || mapping_depth > 0) ) {
+                    putback(',');
+                    previous.tag = token::STRING;
+                    previous.value = the_string;
+                    return previous;
+                }
+                else putback(','); // false alarm, still lexing a string
+            }
+            if( peek == '[' &&
+                (sequence_depth > 0 || mapping_depth > 0) &&
+                (previous.tag == token::SEQUENCE_SEPARATOR ||
+                previous.tag == token::PAIR_SEPARATOR) ) {
+                previous.tag = token::STRING;
+                previous.value = the_string;
+                return previous;
+            }
+            if( peek == ']' && sequence_depth > 0 ) {
+                previous.tag = token::STRING;
+                previous.value = the_string;
+                return previous;
+            }
+            if( peek == '{' &&
+                (sequence_depth > 0 || mapping_depth > 0) &&
+                (previous.tag == token::SEQUENCE_SEPARATOR ||
+                previous.tag == token::PAIR_SEPARATOR) ) {
+                previous.tag = token::STRING;
+                previous.value = the_string;
+                return previous;
+            }
+            if( peek == '}' && mapping_depth > 0 ) {
+                previous.tag = token::STRING;
+                previous.value = the_string;
+                return previous;
+            }
+        } while( isprint(peek) && peek != '\n' );
+        if( the_string.empty() ) putback('\n');
+        else {
+            previous.tag = token::STRING;
+            previous.value = the_string;
+            return previous;
+        }
     }
     if( !is )
-        return previous = token(token::EOS);
+        return previous = token::EOS;
 
     throw runtime_error(string("not a valid token: ") + peek);  // TODO:  there must be a better way
 }

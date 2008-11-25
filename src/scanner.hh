@@ -12,6 +12,7 @@ public:
     scanner(std::istream& is);
     token scan();
     void sip();
+    void putback(char new_peek);
 
 private:
     typedef std::deque<char> input_buffer;
@@ -22,6 +23,8 @@ private:
     input_buffer buf;
     token previous;
     std::stack<int> indentation_level;
+    int sequence_depth;
+    int mapping_depth;
 };
 
 #endif // SRC_SCANNER_HH_

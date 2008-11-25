@@ -4,7 +4,7 @@
 #include "node.hh"
 #include <string>
 #include <map>
-#include <memory>
+#include <tr1/memory>
 
 namespace yaml {
 
