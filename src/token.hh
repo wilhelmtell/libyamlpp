@@ -3,6 +3,9 @@
 
 #include <string>
 
+namespace yaml {
+namespace lex {
+
 // TODO:  maybe parameterize token, so that some tokens have values?  for
 // example, token<token::INTEGER> will hold the integer value.
 class token {
@@ -49,5 +52,8 @@ public:
 
 bool operator==(const token& t1, const token& t2);
 bool operator!=(const token& t1, const token& t2);
+
+} // namespace lex
+} // namespace yaml
 
 #endif // SRC_TOKEN_HH_

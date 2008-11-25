@@ -7,6 +7,9 @@
 
 using namespace std;
 
+namespace yaml {
+namespace lex {
+
 scanner::scanner() :
     is(cin), line_number(1), peek(' '), sequence_depth(0), mapping_depth(0)
 {
@@ -193,3 +196,6 @@ token scanner::scan()
 
     throw runtime_error(string("not a valid token: ") + peek);  // TODO:  there must be a better way
 }
+
+} // namespace lex
+} // namespace yaml

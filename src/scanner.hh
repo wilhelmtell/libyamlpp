@@ -6,6 +6,9 @@
 #include <stack>
 #include <iosfwd>
 
+namespace yaml {
+namespace lex {
+
 class scanner {
 public:
     scanner();
@@ -26,5 +29,8 @@ private:
     int sequence_depth;
     int mapping_depth;
 };
+
+} // namespace lex
+} // namespace yaml
 
 #endif // SRC_SCANNER_HH_
