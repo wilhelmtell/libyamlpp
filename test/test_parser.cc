@@ -60,5 +60,12 @@ TEST(test_parser, parse_nested_sequence)
 {
     istringstream is("[[b], c]");
     parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
+TEST(test_parser, parse_nested_sequence2)
+{
+    istringstream is("[a, [b], c]");
+    parser p(is);
     p.parse();
 }

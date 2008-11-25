@@ -86,82 +86,30 @@ shared_ptr<sequence_node> parser::parse_sequence()
 {
     if( peek == token::FLOW_SEQUENCE_BEGIN ) {
         sip();
-        shared_ptr<sequence_node> sequence(new sequence_node());
-        if( peek == token::FLOW_SEQUENCE_BEGIN ) {
-            shared_ptr<sequence_node> nested_sequence(parse_sequence());
-            assert(sequence);
-            sequence_node::value_type& elements = sequence->elements;
-            elements.push_back(nested_sequence);
+        shared_ptr<sequence_node> the_sequence(new sequence_node());
+        while( peek != token::FLOW_SEQUENCE_END ) {
+            assert(the_sequence);
+            if( peek == token::FLOW_SEQUENCE_BEGIN )
+                the_sequence->elements.push_back(parse_sequence());
+            else if( peek == token::FLOW_MAPPING_BEGIN )
+                the_sequence->elements.push_back(parse_mapping());
+            else if( peek == token::STRING ) {
+                shared_ptr<string_node> a_string(new string_node(peek.value));
+                the_sequence->elements.push_back(a_string);
+                sip();
+            }
+            else if( peek != token::SEQUENCE_SEPARATOR &&
+                     peek != token::FLOW_SEQUENCE_END )
+                throw runtime_error("Syntax error:  expected sequence-"
+                                    "separator or sequence-end.");
             if( peek == token::SEQUENCE_SEPARATOR )
                 sip();
-            else if( peek != token::FLOW_SEQUENCE_END )
-                throw runtime_error("Syntax error:  expected sequence-end or "
-                                    "sequence-separator.");
         }
-        if( peek == token::FLOW_MAPPING_BEGIN ) {
-            shared_ptr<mapping_node> nested_mapping(parse_mapping());
-            assert(sequence);
-            sequence_node::value_type& elements = sequence->elements;
-            elements.push_back(nested_mapping);
-            if( peek == token::SEQUENCE_SEPARATOR )
-                sip();
-            else if( peek != token::FLOW_SEQUENCE_END )
-                throw runtime_error("Syntax error:  expected sequence-end or "
-                                    "sequence-separator.");
-        }
-        if( peek == token::STRING ) {
-            assert(sequence);
-            sequence_node::value_type& target_elements = sequence->elements;
-            shared_ptr<sequence_node> sequence_contents(parse_sequence_nodes());
-            assert(sequence);
-            target_elements.splice(target_elements.end(),
-                                   sequence_contents->elements);
-        }
-        if( peek != token::FLOW_SEQUENCE_END )
-            throw runtime_error("Syntax error:  expected sequence-end.");
-        sip(); // token::FLOW_SEQUENCE_END
-        assert(sequence);
-        if( sequence->elements.empty() ) { // none of the branches above filled sequence
-            assert(sequence);
-            sequence_node::value_type& elements = sequence->elements;
-            shared_ptr<null_node> null(new null_node());
-            elements.push_back(null);
-        }
-        assert(sequence);
-        return sequence;
+        assert(the_sequence);
+        return the_sequence;
     }
-    else throw runtime_error("Syntax error:  expected sequence-begin.");
-}
-
-shared_ptr<sequence_node> parser::parse_sequence_nodes()
-{
-    shared_ptr<sequence_node> sequence(new sequence_node());
-    assert(sequence);
-    sequence_node::value_type& elements = sequence->elements;
-    if( peek == token::STRING ) {
-        string element_value = peek.value;
-        shared_ptr<string_node> new_element(new string_node(element_value));
-        assert(sequence);
-        sequence->elements.push_back(new_element);
-        sip();
-        if( peek == token::SEQUENCE_SEPARATOR ) {
-            sip();
-            shared_ptr<sequence_node> remaining(parse_sequence_nodes());
-            assert(remaining);
-            elements.splice(elements.end(), remaining->elements);
-        }
-    }
-    else if( peek == token::FLOW_SEQUENCE_BEGIN ) {
-        shared_ptr<sequence_node> sequence_element(parse_sequence());
-        elements.push_back(sequence_element);
-    }
-    else if( peek == token::FLOW_MAPPING_BEGIN ) {
-        shared_ptr<mapping_node> map_element(parse_mapping());
-        elements.push_back(map_element);
-    }
-    else throw runtime_error("Syntax error:  expected a scalar.");
-    assert(sequence);
-    return sequence;
+    else
+        throw runtime_error("Syntax error:  expected sequence-begin.");
 }
 
 shared_ptr<mapping_node> parser::parse_mapping()
