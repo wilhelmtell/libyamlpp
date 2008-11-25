@@ -5,6 +5,7 @@
 #include <tr1/memory>
 
 namespace yaml {
+namespace syn {
 
 struct document_node : public node {
     document_node() { }
@@ -13,6 +14,7 @@ struct document_node : public node {
     std::tr1::shared_ptr<node> contents;
 };
 
+} // namespace syn
 } // namespace yaml
 
 #endif /* SRC_DOCUMENT_NODE_HH_ */

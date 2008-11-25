@@ -8,11 +8,17 @@
 #include <list>
 #include <map>
 #include "document_node.hh"
+#include "null_node.hh"
+#include "string_node.hh"
+#include "sequence_node.hh"
+#include "mapping_node.hh"
+#include "pair_node.hh"
 
 using namespace std;
 using namespace std::tr1;
 
 namespace yaml {
+namespace syn {
 
 parser::parser(istream& is) : s(is), peek(token::UNDEFINED)
 {
@@ -228,4 +234,5 @@ void parser::parse_eos()
     return;
 }
 
+} // namespace syn
 } // namespace yaml

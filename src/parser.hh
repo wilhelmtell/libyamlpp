@@ -6,6 +6,7 @@
 #include <tr1/memory>
 
 namespace yaml {
+namespace syn {
 
 class node;
 class document_node;
@@ -37,6 +38,7 @@ private:
     std::tr1::shared_ptr<node> tree;
 };
 
+} // namespace syn
 } // namespace yaml
 
 #endif // SRC_PARSER_HH_

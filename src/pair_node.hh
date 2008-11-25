@@ -6,6 +6,7 @@
 #include <tr1/memory>
 
 namespace yaml {
+namespace syn {
 
 struct pair_node : public node {
     pair_node(std::tr1::shared_ptr<string_node> key_node,
@@ -16,6 +17,7 @@ struct pair_node : public node {
     std::tr1::shared_ptr<node> second;
 };
 
+} // namespace syn
 } // namespace yaml
 
 #endif /* SRC_PAIR_NODE_HH_ */
