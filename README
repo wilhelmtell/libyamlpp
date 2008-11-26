@@ -207,13 +207,22 @@ and linker's search paths.
 
  int main(int argc, char* argv)
  {
+     // to read yaml and do something with it:
      ifstream the_file("/home/me/teh_file.yaml");
-     shard_ptr<yml::node> data = yml::load(the_file); // loads an istream
+
+     // NOTE:  The following are hypothetical ideas, as none of this is not
+     //        implemented yet.  We have two solutions in mind.  The first:
+     for_each(istream_iterator<yaml::node>(the_file),
+              istream_iterator<yaml::node>(),
+              play_with_node);
+
+     // the second hypothetical solution is:
+     shard_ptr<yaml::node> data = yaml::load(the_file); // loads an istream
      for_each(data.begin(), data.end(), play_with_node);
 
      // do stuff with data
 
      shared_ptr<node> my_data;
      generate_n(back_inserter(my_data), 42, return_some_node);
-     cout << yml::dump(more_data);  // dumps a string
+     cout << yaml::dump(my_data);  // dumps a string
  }
