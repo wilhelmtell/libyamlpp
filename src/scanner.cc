@@ -115,7 +115,9 @@ token scanner::scan()
             number += peek; // mm.  do you smell that?
             sip();
         } while( isdigit(peek) );
-        return previous = token::INTEGER;
+        previous.tag = token::INTEGER;
+        previous.value = number;
+        return previous;
     }
     if( peek == '\'' ) { // quoted string
         string the_string;
