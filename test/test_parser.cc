@@ -14,6 +14,13 @@ TEST(test_parser, parse_document_begin)
     EXPECT_NO_THROW(p.parse());
 }
 
+TEST(test_parser, parse_document1)
+{
+    istringstream is("---\n[a, b, and c]");
+    parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
 TEST(test_parser, parse_string)
 {
     istringstream is("abc");
@@ -87,6 +94,13 @@ TEST(test_parser, parse_mapping2)
 TEST(test_parser, parse_mapping3)
 {
     istringstream is("{a: b, c: [A, [B], {a: z}, X]}");
+    parser p(is);
+    p.parse();
+}
+
+TEST(test_parser, parse_mapping4)
+{
+    istringstream is("{nice: {hello: world, goodbye: world}, a: b, c: [A, [B], {a: z}, X]}");
     parser p(is);
     p.parse();
 }
