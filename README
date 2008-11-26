@@ -184,6 +184,11 @@ within the project's root directory, run:
 
 4  USING LIBYAML++
 
+[ NOTE:  as our library is not fully implemented yet, the following section
+describes what is being constantly changed.  Thus, when we describe how our
+yet-to-be-born library is used either the text is hypothetical or is outdated
+and needs to be revised. ]
+
 To use libyaml++, you need either a C++ compiler or to know how to write one.
 We recommed the former.  Put the binaries somewhere reachable by your compiler
 and linker's search paths.
