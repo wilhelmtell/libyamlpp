@@ -28,6 +28,13 @@ TEST(test_parser, parse_string)
     EXPECT_NO_THROW(p.parse());
 }
 
+TEST(test_parser, parse_integer)
+{
+    istringstream is("44");
+    parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
 TEST(test_parser, parse_sequence_begin)
 {
     istringstream is("[");
@@ -74,33 +81,61 @@ TEST(test_parser, parse_nested_sequence2)
 {
     istringstream is("[a, [b], c]");
     parser p(is);
-    p.parse();
+    EXPECT_NO_THROW(p.parse());
 }
 
 TEST(test_parser, parse_mapping)
 {
     istringstream is("{a: b, c: d}");
     parser p(is);
-    p.parse();
+    EXPECT_NO_THROW(p.parse());
 }
 
 TEST(test_parser, parse_mapping2)
 {
     istringstream is("{a: b, c: [a, b, c]}");
     parser p(is);
-    p.parse();
+    EXPECT_NO_THROW(p.parse());
 }
 
 TEST(test_parser, parse_mapping3)
 {
     istringstream is("{a: b, c: [A, [B], {a: z}, X]}");
     parser p(is);
-    p.parse();
+    EXPECT_NO_THROW(p.parse());
 }
 
 TEST(test_parser, parse_mapping4)
 {
     istringstream is("{nice: {hello: world, goodbye: world}, a: b, c: [A, [B], {a: z}, X]}");
+    parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
+TEST(test_parser, parse_mapping_with_number_values)
+{
+    istringstream is("{a: 0, b: 1}");
+    parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
+TEST(test_parser, parse_mapping_with_number_keys)
+{
+    istringstream is("{0: a, 1: b}");
+    parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
+TEST(test_parser, parse_mapping_with_number_keys_values)
+{
+    istringstream is("{0: 1, 1: 2}");
+    parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
+TEST(test_parser, parse_numbers_sequence)
+{
+    istringstream is("[0, 1, 2, 3]");
     parser p(is);
     p.parse();
 }

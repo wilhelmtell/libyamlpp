@@ -67,7 +67,7 @@ shared_ptr<document_node> parser::parse_document()
         shared_ptr<node> mapping(parse_mapping());
         document.reset(new document_node(mapping));
     }
-    else if( peek == token::STRING ) {
+    else if( peek == token::STRING || peek == token::INTEGER ) {
         shared_ptr<node> the_string(parse_string());
         document.reset(new document_node(the_string));
     }
@@ -93,7 +93,7 @@ shared_ptr<sequence_node> parser::parse_sequence()
                 the_sequence->elements.push_back(parse_sequence());
             else if( peek == token::FLOW_MAPPING_BEGIN )
                 the_sequence->elements.push_back(parse_mapping());
-            else if( peek == token::STRING ) {
+            else if( peek == token::STRING || peek == token::INTEGER ) {
                 shared_ptr<string_node> a_string(new string_node(peek.value));
                 the_sequence->elements.push_back(a_string);
                 sip();
@@ -137,14 +137,14 @@ shared_ptr<mapping_node> parser::parse_mapping()
 
 shared_ptr<pair_node> parser::parse_pair()
 {
-    if( peek == token::STRING ) {
+    if( peek == token::STRING || peek == token::INTEGER ) {
         string key(peek.value);
         shared_ptr<string_node> key_node(new string_node(key));
         sip();
         if( peek == token::PAIR_SEPARATOR ) sip();
         else throw runtime_error("Syntax error:  expected a pair-separator.");
         shared_ptr<pair_node> pair;
-        if( peek == token::STRING ) {
+        if( peek == token::STRING || peek == token::INTEGER ) {
             string value(peek.value);
             shared_ptr<string_node> value_node(new string_node(value));
             sip();
@@ -165,7 +165,7 @@ shared_ptr<pair_node> parser::parse_pair()
 
 shared_ptr<string_node> parser::parse_string()
 {
-    if( peek == token::STRING ) {
+    if( peek == token::STRING || peek == token::INTEGER ) {
         string value(peek.value);
         shared_ptr<string_node> the_string(new string_node(value));
         sip();
