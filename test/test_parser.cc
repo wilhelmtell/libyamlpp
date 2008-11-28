@@ -112,6 +112,13 @@ TEST(test_parser, parse_mapping4)
     EXPECT_NO_THROW(p.parse());
 }
 
+TEST(test_parser, parse_mapping5)
+{
+    istringstream is("{a: b, c: [A, [1, 2, B], {a: z}, X, 012, {0: a, 1: 2, a: 12, le: gt}]}");
+    parser p(is);
+    EXPECT_NO_THROW(p.parse());
+}
+
 TEST(test_parser, parse_mapping_with_number_values)
 {
     istringstream is("{a: 0, b: 1}");
