@@ -19,6 +19,12 @@ using namespace yaml::lex;
 namespace yaml {
 namespace syn {
 
+parser::parser(istream& is, shared_ptr<event_handler> handler) :
+    s(is), peek(token::UNDEFINED), handler(handler)
+{
+    sip();
+}
+
 parser::parser(istream& is, event_handler* handler) :
     s(is), peek(token::UNDEFINED), handler(handler)
 {
