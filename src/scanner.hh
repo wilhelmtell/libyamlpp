@@ -9,6 +9,9 @@
 namespace yaml {
 namespace lex {
 
+/// The scanner class provides the lexical-analysis component of libyaml++.
+/// The user should not be dealing with the scanner at all;  instead, the user
+/// should only read YAML streams with the load() function.
 class scanner {
 public:
     scanner();

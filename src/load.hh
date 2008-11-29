@@ -9,6 +9,15 @@ namespace yaml {
 
 class event_handler;
 
+/// Load a stream of YAML data using a handler to handle YAML events.
+///
+/// The load() function is a convenience function that wraps calls to the
+/// libyaml++ parser.
+///
+/// \param is Input stream of YAML data.
+/// \param handler Event handler to handle YAML events.
+///
+/// \see event_handler
 void load(std::istream& is, std::tr1::shared_ptr<event_handler> handler);
 
 } // namespace yaml
