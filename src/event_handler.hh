@@ -5,6 +5,7 @@
 
 namespace yaml {
 
+// NOTE:  would it make sense for a handler to handle syntax errors too?
 class event_handler {
 public:
     virtual ~event_handler() { }
