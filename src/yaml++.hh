@@ -1,6 +1,6 @@
-#ifndef SRC_YAML___HH_
-#define SRC_YAML___HH_
+#ifndef SRC_YAMLPP_HH_
+#define SRC_YAMLPP_HH_
 
+#include "iyaml++.hh"
 
-
-#endif // SRC_YAML___HH_
+#endif // SRC_YAMLPP_HH_
