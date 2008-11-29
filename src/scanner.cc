@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <cassert>
+#include <algorithm>
 
 using namespace std;
 
@@ -45,6 +46,19 @@ void scanner::putback(char new_peek)
 {
     buf.push_front(peek);
     peek = new_peek;
+}
+
+/// Get the token representation of a scalar.
+///
+/// \return token::INTEGER if the string resembles a number.  Otherwise,
+/// returns token::STRING.
+token scalar_type(const string& scalar)
+{
+    int (*isdigit_ref)(int) = &std::isdigit; // resolve function type
+    pointer_to_unary_function<int,int> isdigit = ptr_fun(isdigit_ref);
+    if( find_if(scalar.begin(), scalar.end(), not1(isdigit)) == scalar.end() )
+        return token::INTEGER;
+    return token::STRING;
 }
 
 // TODO:  can we apply some design patter to break this huge function into
@@ -109,16 +123,6 @@ token scanner::scan()
         }
         else putback(',');
     }
-    if( isdigit(peek) ) { // a natural number
-        string number;
-        do {
-            number += peek; // mm.  do you smell that?
-            sip();
-        } while( isdigit(peek) );
-        previous.tag = token::INTEGER;
-        previous.value = number;
-        return previous;
-    }
     if( peek == '\'' ) { // quoted string
         string the_string;
         sip();
@@ -140,7 +144,7 @@ token scanner::scan()
                 sip();
                 if( isspace(peek) ) { // pair separator ahead
                     putback(':');
-                    previous.tag = token::STRING;
+                    previous = scalar_type(the_string);
                     previous.value = the_string;
                     return previous;
                 }
@@ -153,7 +157,7 @@ token scanner::scan()
                 if( isspace(peek) &&
                     (sequence_depth > 0 || mapping_depth > 0) ) {
                     putback(',');
-                    previous.tag = token::STRING;
+                    previous = scalar_type(the_string);
                     previous.value = the_string;
                     return previous;
                 }
@@ -163,12 +167,12 @@ token scanner::scan()
                 (sequence_depth > 0 || mapping_depth > 0) &&
                 (previous.tag == token::SEQUENCE_SEPARATOR ||
                 previous.tag == token::PAIR_SEPARATOR) ) {
-                previous.tag = token::STRING;
+                previous = scalar_type(the_string);
                 previous.value = the_string;
                 return previous;
             }
             if( peek == ']' && sequence_depth > 0 ) {
-                previous.tag = token::STRING;
+                previous = scalar_type(the_string);
                 previous.value = the_string;
                 return previous;
             }
@@ -176,19 +180,19 @@ token scanner::scan()
                 (sequence_depth > 0 || mapping_depth > 0) &&
                 (previous.tag == token::SEQUENCE_SEPARATOR ||
                 previous.tag == token::PAIR_SEPARATOR) ) {
-                previous.tag = token::STRING;
+                previous = scalar_type(the_string);
                 previous.value = the_string;
                 return previous;
             }
             if( peek == '}' && mapping_depth > 0 ) {
-                previous.tag = token::STRING;
+                previous = scalar_type(the_string);
                 previous.value = the_string;
                 return previous;
             }
         } while( isprint(peek) && peek != '\n' );
         if( the_string.empty() ) putback('\n');
         else {
-            previous.tag = token::STRING;
+            previous = scalar_type(the_string);
             previous.value = the_string;
             return previous;
         }

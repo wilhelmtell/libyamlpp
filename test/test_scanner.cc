@@ -471,3 +471,51 @@ TEST_F(test_scan_three_dashes_string, scan_three_dashes_string_value)
 {
     EXPECT_EQ("---", scanned_tokens[0].value);
 }
+
+struct test_scan_number_string : public test_basic_input {
+    test_scan_number_string() : test_basic_input("42 meters") { }
+};
+
+TEST_F(test_scan_number_string, test_size)
+{
+    EXPECT_EQ(2, scanned_tokens.size());
+}
+
+TEST_F(test_scan_number_string, scan_string)
+{
+    EXPECT_EQ(token::STRING, scanned_tokens[0].tag);
+}
+
+TEST_F(test_scan_number_string, scan_eos)
+{
+    EXPECT_EQ(token::EOS, scanned_tokens[1].tag);
+}
+
+struct test_scan_sequence_number_string : public test_basic_input {
+    test_scan_sequence_number_string() : test_basic_input("[42 meters]") { }
+};
+
+TEST_F(test_scan_sequence_number_string, test_size)
+{
+    EXPECT_EQ(4, scanned_tokens.size());
+}
+
+TEST_F(test_scan_sequence_number_string, scan_sequence_begin)
+{
+    EXPECT_EQ(token::FLOW_SEQUENCE_BEGIN, scanned_tokens[0].tag);
+}
+
+TEST_F(test_scan_sequence_number_string, scan_string)
+{
+    EXPECT_EQ(token::STRING, scanned_tokens[1].tag);
+}
+
+TEST_F(test_scan_sequence_number_string, scan_sequence_end)
+{
+    EXPECT_EQ(token::FLOW_SEQUENCE_END, scanned_tokens[2].tag);
+}
+
+TEST_F(test_scan_sequence_number_string, scan_eos)
+{
+    EXPECT_EQ(token::EOS, scanned_tokens[3].tag);
+}
