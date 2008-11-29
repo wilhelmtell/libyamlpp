@@ -25,13 +25,13 @@ class my_handler : public yaml::event_handler {
 // give me a stream to parse!
 int main(int argc, char* argv[])
 {
-    tr1::shared_ptr<my_handler> h(new my_handler());
-    cout << "SIGINT to quit.  EOS to feed." << endl;
+    tr1::shared_ptr<my_handler> handler(new my_handler());
     while( cin ) {
-        cout << endl << "YAML:  ";
-        try { yaml::load(cin, h); } // throws on syntax error
-        catch( const runtime_error& e ) { cerr << e.what() << endl; }
-        cin.clear();
+        try { yaml::load(cin, handler); } // throws on syntax error
+
+        catch( const runtime_error& e ) {
+            cerr << e.what() << endl;
+        }
     }
     return 0;
 }
