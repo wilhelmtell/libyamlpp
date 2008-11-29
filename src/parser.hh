@@ -2,11 +2,13 @@
 #define SRC_PARSER_HH_
 
 #include "scanner.hh"
-#include "event_handler.hh"
 #include <iosfwd>
 #include <tr1/memory>
 
 namespace yaml {
+
+class event_handler;
+
 namespace syn {
 
 class node;

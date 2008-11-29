@@ -4,10 +4,7 @@
 #include <cassert>
 #include <string>
 #include <stdexcept>
-#include <iostream>
 #include <tr1/memory>
-#include <list>
-#include <map>
 #include "document_node.hh"
 #include "null_node.hh"
 #include "string_node.hh"
