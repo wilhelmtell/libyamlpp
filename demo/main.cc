@@ -1,45 +1,30 @@
 #include <yaml++.hh>
+#include <parser.hh>
+#include <event_handler.hh>
 #include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
+#include <sstream>
 
 using namespace std;
 
-template<typename T>
-string dump(T t)
-{
-    cerr << "FATAL:Don't call the generic template." << endl;
-    exit(-1);
-}
-
-template<>
-string dump<string>(string str)
-{
-    return str;
-}
-
-template<>
-string dump<vector<string> >(vector<string> vec)
-{
-    string result;
-    for( vector<string>::const_iterator iter(vec.begin());
-        iter != vec.end();
-        ++iter ) {
-        result += "- ";
-        result += dump(*iter);
-        result += "\n";
-    }
-    return result;
-}
+class my_handler : public yaml::event_handler {
+    void on_string(const std::string&) { cout << "parsed string." << endl; }
+    void on_integer(const std::string&) { cout << "parsed integer." << endl; }
+    void on_sequence_begin() { cout << "parsed sequence_begin." << endl; }
+    void on_mapping_begin() { cout << "parsed mapping_begin." << endl; }
+    void on_sequence_end() { cout << "parsed sequence_end." << endl; }
+    void on_mapping_end() { cout << "parsed mapping_end." << endl; }
+    void on_document() { cout << "parsed document." << endl; }
+    void on_pair() { cout << "parsed pair." << endl; }
+    void on_eos() { cout << "parsed eos." << endl; }
+};
 
 int main(int argc, char* argv[])
 {
-    vector<string> v;
-    v.push_back("a");
-    v.push_back("b");
-    v.push_back("c");
-    cout << dump(v) << endl;
-
+    string yaml_input("---  [a, b, c]");
+    cout << "input:  " << yaml_input << endl;
+    stringstream s(yaml_input);
+    my_handler* h = new my_handler();
+    yaml::syn::parser p(s, h);
+    p.parse();
     return 0;
 }
