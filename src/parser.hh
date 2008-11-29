@@ -2,6 +2,7 @@
 #define SRC_PARSER_HH_
 
 #include "scanner.hh"
+#include "event_handler.hh"
 #include <iosfwd>
 #include <tr1/memory>
 
@@ -18,7 +19,7 @@ class pair_node;
 class parser {
 public:
     parser();
-    parser(std::istream& is);
+    parser(std::istream& is, event_handler* handler);
 
     void parse();
 
@@ -34,6 +35,7 @@ private:
     lex::scanner s;
     lex::token peek;
     std::tr1::shared_ptr<node> tree;
+    std::tr1::shared_ptr<event_handler> handler;
 };
 
 } // namespace syn
