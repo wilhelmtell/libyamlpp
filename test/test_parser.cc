@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <sstream>
 #include <stdexcept>
-#include "parser.hh"
+#include "../src/parser.hh"
 
 using namespace std;
 using namespace yaml;
