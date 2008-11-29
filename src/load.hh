@@ -10,7 +10,6 @@ namespace yaml {
 class event_handler;
 
 void load(std::istream& is, std::tr1::shared_ptr<event_handler> handler);
-void load(std::istream& is, event_handler* handler);
 
 } // namespace yaml
 

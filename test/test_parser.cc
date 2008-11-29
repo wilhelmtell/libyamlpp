@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <tr1/memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -7,6 +8,7 @@
 #include "../src/event_handler.hh"
 
 using namespace std;
+using namespace std::tr1;
 using namespace yaml;
 using namespace yaml::syn;
 
@@ -74,7 +76,7 @@ void test_handler::on_eos()
 TEST(test_parser, parse_document_begin)
 {
     istringstream is("--- ");
-    test_handler* handler = new test_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     p.parse();
     EXPECT_EQ("---\n\nEND", handler->str);
@@ -83,7 +85,7 @@ TEST(test_parser, parse_document_begin)
 TEST(test_parser, parse_document1)
 {
     istringstream is("---\n[a, b, and c]");
-    test_handler* handler = new test_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     p.parse();
     EXPECT_EQ("---\n[ a b and c ] \nEND", handler->str);
@@ -92,7 +94,7 @@ TEST(test_parser, parse_document1)
 TEST(test_parser, parse_string)
 {
     istringstream is("abc");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -100,7 +102,7 @@ TEST(test_parser, parse_string)
 TEST(test_parser, parse_integer)
 {
     istringstream is("44");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -108,7 +110,7 @@ TEST(test_parser, parse_integer)
 TEST(test_parser, parse_sequence_begin)
 {
     istringstream is("[");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_THROW(p.parse(), runtime_error);
 }
@@ -116,7 +118,7 @@ TEST(test_parser, parse_sequence_begin)
 TEST(test_parser, parse_empty_sequence)
 {
     istringstream is("[]");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -124,7 +126,7 @@ TEST(test_parser, parse_empty_sequence)
 TEST(test_parser, parse_mapping_begin)
 {
     istringstream is("{");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_THROW(p.parse(), runtime_error);
 }
@@ -132,7 +134,7 @@ TEST(test_parser, parse_mapping_begin)
 TEST(test_parser, parse_empty_mapping)
 {
     istringstream is("{}");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -140,7 +142,7 @@ TEST(test_parser, parse_empty_mapping)
 TEST(test_parser, parse_sequence)
 {
     istringstream is("[a, b, c]");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -148,7 +150,7 @@ TEST(test_parser, parse_sequence)
 TEST(test_parser, parse_nested_sequence)
 {
     istringstream is("[[b], c]");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -156,7 +158,7 @@ TEST(test_parser, parse_nested_sequence)
 TEST(test_parser, parse_nested_sequence2)
 {
     istringstream is("[a, [b], c]");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -164,7 +166,7 @@ TEST(test_parser, parse_nested_sequence2)
 TEST(test_parser, parse_mapping)
 {
     istringstream is("{a: b, c: d}");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -172,7 +174,7 @@ TEST(test_parser, parse_mapping)
 TEST(test_parser, parse_mapping2)
 {
     istringstream is("{a: b, c: [a, b, c]}");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -180,7 +182,7 @@ TEST(test_parser, parse_mapping2)
 TEST(test_parser, parse_mapping3)
 {
     istringstream is("{a: b, c: [A, [B], {a: z}, X]}");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -188,7 +190,7 @@ TEST(test_parser, parse_mapping3)
 TEST(test_parser, parse_mapping4)
 {
     istringstream is("{nice: {hello: world, goodbye: world}, a: b, c: [A, [B], {a: z}, X]}");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -196,7 +198,7 @@ TEST(test_parser, parse_mapping4)
 TEST(test_parser, parse_mapping5)
 {
     istringstream is("{a: b, c: [A, [1, 2, B], {a: z}, X, 012, {0: a, 1: 2, a: 12, le: gt}]}");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -204,7 +206,7 @@ TEST(test_parser, parse_mapping5)
 TEST(test_parser, parse_mapping_with_number_values)
 {
     istringstream is("{a: 0, b: 1}");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -212,7 +214,7 @@ TEST(test_parser, parse_mapping_with_number_values)
 TEST(test_parser, parse_mapping_with_number_keys)
 {
     istringstream is("{0: a, 1: b}");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -220,7 +222,7 @@ TEST(test_parser, parse_mapping_with_number_keys)
 TEST(test_parser, parse_mapping_with_number_keys_values)
 {
     istringstream is("{0: 1, 1: 2}");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     EXPECT_NO_THROW(p.parse());
 }
@@ -228,7 +230,7 @@ TEST(test_parser, parse_mapping_with_number_keys_values)
 TEST(test_parser, parse_numbers_sequence)
 {
     istringstream is("[0, 1, 2, 3]");
-    event_handler* handler = new event_handler();
+    shared_ptr<test_handler> handler(new test_handler());
     parser p(is, handler);
     p.parse();
 }

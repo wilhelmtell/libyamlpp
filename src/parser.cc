@@ -25,12 +25,6 @@ parser::parser(istream& is, shared_ptr<event_handler> handler) :
     sip();
 }
 
-parser::parser(istream& is, event_handler* handler) :
-    s(is), peek(token::UNDEFINED), handler(handler)
-{
-    sip();
-}
-
 parser::parser() : peek(token::UNDEFINED)
 {
     sip();

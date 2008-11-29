@@ -22,7 +22,6 @@ class parser {
 public:
     parser();
     parser(std::istream& is, std::tr1::shared_ptr<event_handler> handler);
-    parser(std::istream& is, event_handler* handler);
 
     void parse();
 
