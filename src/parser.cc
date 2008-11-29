@@ -179,8 +179,10 @@ shared_ptr<string_node> parser::parse_string()
 
 void parser::parse_eos()
 {
-    handler->on_eos();
-    return;
+    if( peek == token::EOS ) {
+        handler->on_eos();
+        return;
+    } else throw runtime_error("Syntax error:  expected end-of-stream.");
 }
 
 } // namespace syn
