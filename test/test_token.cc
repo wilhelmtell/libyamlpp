@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 #include "../src/token.hh"
 
+using namespace yaml;
+using namespace yaml::lex;
+
 TEST(Token, TokenDefaultConstructor)
 {
     token t;

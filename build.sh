@@ -144,6 +144,11 @@ fi
 
 # libyaml++
 echo -n "Building libyaml++$(if [ "$#" -gt 0 ]; then echo " targets $@"; fi) ...  " |tee -a $LOG
-"$BJAM" $@ >>$LOG 2>&1 && succ || fail
+if echo "$@" |grep -i -v 'release\|debug' >/dev/null 2>&1; then
+  BJAM_ARGS="$(echo "release $@" |sed 's/^\s*\|\s*$//g')"
+else
+  BJAM_ARGS="$@"
+fi
+"$BJAM" $BJAM_ARGS >>$LOG 2>&1 && succ || fail
 echo -e "\n\033[0;32mDone.\033[0m"
 echo -e "\nDone." >>$LOG

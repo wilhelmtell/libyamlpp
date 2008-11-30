@@ -3,11 +3,21 @@
 
 #include <string>
 
+namespace yaml {
+namespace lex {
+
 // TODO:  maybe parameterize token, so that some tokens have values?  for
 // example, token<token::INTEGER> will hold the integer value.
+
+/// The token class holds token identification data for the scanner.  The
+/// parser later uses tokens to do the parsing task.  The user should not be
+/// exposed to this internal detail;  instead, the user should only read YAML
+/// streams using the load() function.
 class token {
 public:
-    enum lexical_tag {
+    // all tokens i plan on implementing are listed below.  those already
+    // implemented are uncommented.
+    enum lexical_tag { ///< holds the token identification data
         UNDEFINED = -1,
         // ALIAS,
         // ANCHOR,
@@ -44,10 +54,19 @@ public:
     token(lexical_tag tag, const std::string& value);
 
     lexical_tag tag;
+
+    /// Some tokens have a value (STRING, INTEGER, ...).  Tokens for which the
+    /// value makes no sense (DOCUMENT_BEGIN, PAIR_SEPARATOR, ...) merely
+    /// ignore the value.
     std::string value;
 };
 
+/// Convenience comparison operators.  Allow for comparing tokens, token tags
+/// and mixtures thereof.
 bool operator==(const token& t1, const token& t2);
 bool operator!=(const token& t1, const token& t2);
+
+} // namespace lex
+} // namespace yaml
 
 #endif // SRC_TOKEN_HH_

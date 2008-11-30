@@ -2,6 +2,9 @@
 
 using namespace std;
 
+namespace yaml {
+namespace lex {
+
 token::token() : tag(token::EOS)
 {
 }
@@ -23,3 +26,6 @@ bool operator!=(const token& t1, const token& t2)
 {
     return ! (t1 == t2);
 }
+
+} // namespace lex
+} // namespace yaml
