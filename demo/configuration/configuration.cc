@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
         cout << "Usage:  " << argv[0] << " <conf-file>" << endl;
         cout << endl;
         cout << "Try passing in configuration.yaml, supplied in the" << endl;
-        cout << "the directory of the source files of this binary." << endl;
+        cout << "directory of the source files of this binary." << endl;
         return 1;
     }
 
