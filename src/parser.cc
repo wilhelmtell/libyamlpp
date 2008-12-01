@@ -83,8 +83,7 @@ shared_ptr<document_node> parser::parse_document()
         throw runtime_error("Syntax error:  expected a document-begin, "
                             "sequence, mapping or scalar."); // TODO:  be more descriptive.  (line number etc.)
     if( peek == token::DOCUMENT_BEGIN ) parse_document();
-
-    parse_eos();
+    else parse_eos();
 
     // document should hold something, although it may be a "null node"
     assert(document);
