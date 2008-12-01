@@ -1,0 +1,1 @@
+exe demo-configuration : [ glob *.cc ] /lib//libyaml++ ;
