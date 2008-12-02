@@ -234,3 +234,27 @@ TEST(test_parser, parse_numbers_sequence)
     parser p(is, handler);
     p.parse();
 }
+
+TEST(test_parser, parse_nested_document)
+{
+    istringstream is("---\nhi\n---\nbye");
+    shared_ptr<test_handler> handler(new test_handler());
+    parser p(is, handler);
+    EXPECT_NO_THROW(p.parse());
+}
+
+TEST(test_parser, parse_nested_document_empty)
+{
+    istringstream is("---\n---\nbye");
+    shared_ptr<test_handler> handler(new test_handler());
+    parser p(is, handler);
+    EXPECT_NO_THROW(p.parse());
+}
+
+TEST(test_parser, parse_nested_document_no_first_document_begin)
+{
+    istringstream is("hi\n---\nbye");
+    shared_ptr<test_handler> handler(new test_handler());
+    parser p(is, handler);
+    EXPECT_NO_THROW(p.parse());
+}

@@ -1,0 +1,7 @@
+---
+{
+  auto indent:  yes,
+  auto format:  no,
+  indent shift: 2,
+  tab width:    4
+}

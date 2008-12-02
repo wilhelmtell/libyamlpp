@@ -2,7 +2,6 @@
 use-project /lib : src ;
 use-project /demo : demo ;
 
-alias demo : /demo//demo-libyaml++ ; # convenience alias
 explicit demo ; # demo is an extra.  only build if explicitly asked to.
 
 alias libyaml++ : /lib//libyaml++ ; # pretty for users to type "bjam libyaml++"

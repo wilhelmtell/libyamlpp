@@ -59,7 +59,11 @@ shared_ptr<document_node> parser::parse_document()
     shared_ptr<null_node> null_node_document(new null_node());
     shared_ptr<document_node> document(new document_node(null_node_document));
 
+    // a stream may start with document-begin
     if( peek == token::DOCUMENT_BEGIN ) sip();
+
+    // a document must contain nothing at all or exactly one of either a
+    // sequence, a mapping or a scalar
     if( peek == token::FLOW_SEQUENCE_BEGIN ) {
         shared_ptr<node> sequence(parse_sequence());
         document.reset(new document_node(sequence));
@@ -72,11 +76,14 @@ shared_ptr<document_node> parser::parse_document()
         shared_ptr<node> the_string(parse_string());
         document.reset(new document_node(the_string));
     }
-    else if( peek != token::EOS )
+
+    // if the document has nothing of the above, it must have nothing at all;
+    // meaning eos is ahead or another document is ahead.
+    else if( peek != token::EOS && peek != token::DOCUMENT_BEGIN )
         throw runtime_error("Syntax error:  expected a document-begin, "
                             "sequence, mapping or scalar."); // TODO:  be more descriptive.  (line number etc.)
-
-    parse_eos();
+    if( peek == token::DOCUMENT_BEGIN ) parse_document();
+    else parse_eos();
 
     // document should hold something, although it may be a "null node"
     assert(document);
