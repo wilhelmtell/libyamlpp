@@ -1,6 +1,11 @@
 \documentclass{article}
 
+\usepackage{setspace}
+\doublespacing
+
 \usepackage{pxfonts}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[colorlinks=true,linkcolor=black,filecolor=black,citecolor=black,urlcolor=black]{hyperref}
 
 \author{Alex Vall\'ee \and Matan Nassau}
 \title{COMP 446 Team Project Report:  libyaml++}
@@ -8,41 +13,24 @@
 \begin{document}
 \maketitle
 
-\section{Outline}
-The report (5--20 pages) should include some or all of the following:
+\tableofcontents
+\pagebreak
 
-\begin{enumerate}
-  \item An overview of your project
-  \item Your motivation for doing this project
-  \item Problems encountered and how they were solved (or not solved)
-  \item Instructions for users (if necessary)
-\end{enumerate}
-
-\section{Evaluation}
-\frame{\textbf{TODO:}  wipe off this section}
-\vspace{2em}
-
-\begin{tabular}{rp{40ex}r}
-  \hline
-  \textbf{Deliverable} & \textbf{Details} & \textbf{Points} \\
-  \hline
-  \textbf{Source Code} & Algorithms (standard, STL, or your own) & 5 \\
-  & Data Structures (standard, STL, or your own) & 5 \\
-  & Genericity (inheritance or templates & 5 \\
-  & Performance (program works as claimed, does not fail) & 5 \\
-  & Libraries (use of STL and/or others) & 10 \\
-  & Structure (indentation, spacing, file organization, comments) & 10 \\
-  \textbf{Documentation} & User Manual (clear, concise instructions about using the program) & 5 \\
-  & Implementation Manual (design, architecture, modue descriptions; can use Doxygen) & 5 \\
-  & Individual Experience Report (what you did; what you learned; problems found and solved) & 10 \\
-  \hline
-\end{tabular}
 \section{Overview}
-Libyaml++ is a YAML parsing library for C++. It aims to create a simple way to
-read and write yaml document streams. Users of the library should have to
-remember few functions from the library in order to make effective use of it.
+libyaml++ is a C++ library for reading and writing YAML streams.  YAML stands
+for \emph{YAML Ain't a Markup Language}.  It is a portable data-serialization
+protocol, designed primarily for readability by humans.  YAML plays well as a
+protocol for message-based distributed processing systems.
 
 \section{Motivation}
+For this project we wanted to write something different than what we have 
+written in classes before:  we wanted to write a library.  We also wanted this 
+library to involve parsing or some aspect of compiler design.  YAML came up as 
+an idea while discussing web development with Rails.  We ran a fast lookup and 
+originally\footnote{We later found 
+\href{http://code.google.com/p/yaml-cpp/}{yaml-cpp} } found no C++ library 
+for YAML;  thus we made a decision.
+
 With experience from classes such as SOEN229 and COMP335 from the software
 engineering program, we decided we wanted to practice our parsing skills.
 
@@ -50,14 +38,392 @@ YAML is becoming popular in applications such as log and configuration files.
 With this knowledge, we searched for other implementations, but none
 specifically for C++.
 
+\section{Issues Encountered}
+During our work on the project we encountered a few problems and design alternatives.
+
+\subsection{Code Problems}
+Code problems are those that lie low in the code design of the library.  These 
+are solved often by design patterns, miscellanous coding techniques or choices 
+of third-party tools and libraries.
+
+\subsubsection{Parsing}
+Our experience in parsing was limited.  We have previously written a 
+mini-compiler in Perl using mostly regular expressions for the lexical 
+analysis.  Because writing a lexical analyzer in C++ is a significantly more 
+difficult task there was not much experience we could draw from.  We have also 
+gained significant amount of theoretical knowledge from COMP 335, but bringing 
+theory to practice still is a challenge.  Thus, we had to do a lot of readings 
+on topics relating to compiler design in general and C++ implementations in 
+particular.  The \emph{Dragon Book}\footnote{\emph{Compilers :  Principles, 
+Techniques, \& Tools}, 2e, by Alfred V. Aho, Monica S. Lam, Ravi Sethi and 
+Jeffrey D. Ullman.} in particular was of great use for us.  We have also looked 
+at other YAML implementations as listed on the \href{http://yaml.org/}{YAML 
+website}.
+
+The end result is a system composed of 4 components:
+
+\begin{description}
+  \item[The Scanner] represents the lexical analyzer, translating a stream of 
+    characters into a stream of tokens.
+  \item[The Parser] represents the syntactic analyzer, translating a stream of 
+    tokens into an internal representation of the YAML data.
+  \item[The Representation] encodes the YAML data in an internal structure 
+    iterable through the library API.
+  \item[The Native Representation] brings the internal representation closer to 
+    the user by serving it in a manner familiar to the user.
+\end{description}
+
+To implement the scanner we considered two approaches.  We discuss them in 
+\S{} \ref{scan_function}.  To implement the parser we used a top-down recursive 
+descent parsing.
+
+\subsubsection{Representation}
+One fundamental issue we had was specifically with the fourth component advised 
+by the YAML standard, called the Native component.  The YAML standard advises 
+on serving the user with a further translation of the internal representation 
+into a data structure that is native to the programming language.  The user 
+will thus work with the familiar primitives and data structures of the 
+programming language he or she is accustomed to.  This works very well with 
+dynamically typed languages such as Ruby and Python, where, for instance, a 
+sequence may hold any mix of arbitrary types.  In C++, however, we must specify 
+a single type for all elements of the container, and the common approach to 
+hold various types in a single container is through polymorphism.  Following 
+this approach we end up with the same data as in the internal representation, 
+only wrapped in a native data structure rather than a custom internal object 
+structure.
+
+The choice between the two data structures is thus more subtle than in dynamic 
+languages.  Even more so is the case if we provide an iteration mechanism for 
+the internal representation that feels native to the STL;  in this case, 
+although the representation is not native it does feel so for the user.  To 
+implement the internal representation we considered two alternatives.  The 
+first is node-based hierarchy, and the second is an event-driven handler.
+
+\begin{description}
+  \item[Node-Based Hierarchy] involves a composite object structure that allows 
+    storing the YAML data in an abstract iterable tree structure.  This implies 
+    the user must learn a few API types:  a \emph{node} base class, a 
+    \emph{sequence} composite type, a \emph{string} leaf type and so on.  But 
+    it also means that the user can flexibly iterate over the entire structure, 
+    and perhaps even manipulate it.
+  \item[Event-Driven Handler] presents a simpler mechanism in which the user 
+    need only be familiar with a single base \emph{handler} class.  The parser 
+    notifies the user through calls to this base class about events that took 
+    place while parsing.  For example, if an integer is encountered during a 
+    parse, the parser emits the \texttt{handler::on\_integer(int)} event.  The 
+    user can listen for this event by subclassing the handler class, overriding 
+    the \texttt{on\_integer(int)} function, and passing an object of the new 
+    type to the parser.
+\end{description}
+
+The choice between these two approaches is mostly a tradeoff between 
+flexibility and simplicity.  On the one hand a node-based hierarchy delivers a 
+fine-grained flexibility to the user.  The user can iterate over a pre-parsed 
+YAML data structure, while remaining aware of scope and context.  On the other 
+hand the event-handling mechanism offers a simple interface consisting of a 
+single base class, rendering the API much simpler and more elegant.  The 
+node-based hierarchy also supports multi-pass traversal:  the user may traverse 
+repeatedly the same structure, whereas in the case of the event-driven 
+mechanism receiving the events again implies parsing again.
+
+\subsubsection{The \texttt{lex::scanner::scan()} Function}
+\label{scan_function}
+The classic way to write a lexical analyzer is through a single scan() 
+function, branching into the various states through a switch statement.  The 
+advantage of following this approach is that it is widely acceptable and 
+idiomatic, it is very well documented and is thus easy to implement correctly.  
+The disadvantage of this approach that might show if the grammar is complex 
+enough is that the function tends to grow fast and the get harder to understand 
+and maintain.  As undergraduate students we are vastly humbled by the giants 
+before us who have proven this approach correct, and thus we implemented it as 
+described in the texts.  Nevertheless, we took in parallel the adventerous path 
+of implementing the scanning procedure in an alternative manner.
+
+By breaking the different rules each token presents into classes and objects, 
+we ended up with a much simpler scan() function.  What we implemented is a 
+variation of the Chain of Responsibility pattern of the GoF.  The scan() 
+function holds a list of tokens, where each token points to the next.  The list 
+is ordered in the same order the cases are ordered in the original switch 
+statement of the classic approach.  The token classes all derive from a common 
+ancestor, which declares a virtual \texttt{scan()} function and holds a reference to the 
+input stream.  Each token knows how to scan itself out of a stream.  The 
+scanner therefore asks the first token in the list to scan itself;  if it can't 
+it restores the stream to its original states and forwards the request to the 
+next scanner in the list.
+
+% \subsubsection{portability:  stl (boost is less standard but de-facto standard nonetheless!)}
+
+\subsubsection{The Face of the API}
+In the spirit of making things as simple as possible, we were looking for ideas 
+on simplifying the API of our library as much as possible.  This agrees with 
+the STL philosophy of minimizing the number of entities (functions, classes) by 
+abstracting as much as possible.  We settled on revealing two free functions to 
+the user:  \texttt{yaml::load()} and \emph{yaml::dump()}.  The first loads a 
+stream of characters and translates it into an internal representation, while 
+the latter dumps an internal representation into a stream of YAML characters.
+
+\subsection{Peripheral Problems}
+
+% \subsubsection{switch from waf to boost.build}
+
+\subsubsection{working on multiple machines without administrative access: one-command build}
+Because our project utilizes a number of external tools for the development 
+process, a couple of additional steps are required in order set up a 
+development environment for working on libyaml++.  The two tools are 
+Boost.Build and GoogleTest.  The former is required for easily building the 
+library and for easing other build tasks.  The latter is required for running 
+unit tests.  We should stress that these are not required for developing 
+\emph{with} the library, but for for developing \emph{the library itself}.  
+Along the development of our project we were working on multiple machines:  
+school labs, school servers, home, etc.  In most cases we had no administrative 
+privileges on the machines.  We thus felt the need to automate the process of 
+obtaining the tools and building the library.
+
+The result of this is the \textit{build.sh} script, a Bash script suitable for 
+Unix-flavoured workstations.  The script downloads the development tools and 
+installs them in a directory most systems offer for this sort of tasks --- 
+typically the temporary directory.  The script also makes sense to be used as 
+the build script for end-users, as it does make building libyaml++ much easier.
+
+% \subsubsection{revision control}
+
+% \subsubsection{code quality: testing}
+
 
 %
 % Problems encountered go here.
 %
 
-%
-% Instructions here.
-%
+\section{Instructions}
 
+\subsection{Quickstart}
+
+libyaml++ is a C++ library for reading and writing YAML streams.  To build,
+run from your Linux command shell:
+
+\begin{verbatim}
+~$ tar xzf libyamlpp.tar.gz
+~$ cd libyamlpp
+libyamlpp$ ./build.sh
+\end{verbatim}
+
+Next, see \S{} \ref{using_libyamlpp} for sample code.
+
+\subsection{Directory Tree Structure}
+
+This distribution consists of three components.  The first and most important
+component is the library's source code, and it is placed under the src/
+subdirectory.  The second component is the demo application, which demonstrates
+the library's capabilities and use and is located, obviously enough, in the
+demo/ subdirectory.  The last component is the testing code, which tests the
+source code of the library and is located in the test/ subdirectory.
+
+\subsection{Building}
+
+The The easiest way to build libyaml++ is using the \textit{build.sh} script in the
+distribution's root directory.  It will set up your system for building
+libyaml++ as well as its unit-tests.  The \textit{build.sh} script assumes you are using
+Linux tough.  An alternative way is to build the library manually.  If you
+intened to hack on the code we recommend you set yourself up properly:  install
+Boost.BuildV2 and GoogleTest in a convenient directory in your system and use
+bjam for the build.
+
+We will cover in this section all approaches mentioned above.
+
+\subsubsection{Building Using \textit{build.sh}}
+
+From the command prompt of your Linux box run:
+
+\begin{verbatim}
+~$ cd libyamlpp
+libyamlpp$ ./build.sh
+\end{verbatim}
+
+The \textit{build.sh} script can take any target as a command-line parameter, so you may
+for example run
+
+\begin{verbatim}
+libyamlpp$ ./build.sh demo check
+\end{verbatim}
+
+to build the demo and check targets, for the demonstration application and
+unit-tests, repectively.  The \textit{build.sh} script can also take a special
+command-line argument, wipeclean, which will wipe clean any files and
+directories it may have created:
+
+\begin{verbatim}
+libyamlpp$ ./build.sh wipeclean
+\end{verbatim}
+
+The above command will leave nothing but the original libyaml++ distribution
+has.  Make sure you pass no other command-line argument when running the above
+command.
+
+\subsubsection{Using Boost.Build}
+
+Boost.Build doesn't usually come by default in an operating-system's install.
+So first, make sure you have Boost.BuildV2, and Boost.Jam on which Boost.Build
+depends, installed.  Once that is set up, running the build is a matter of a
+single command.
+
+
+\paragraph{Setting-Up Boost.Build}
+
+If you run a Debian-based Linux distribution, this may simply be a matter of
+
+\begin{verbatim}
+#$ sudo apt-get install boost-build
+\end{verbatim}
+
+Other Linux distributions have their own package management system, so read the
+appropriate manual pages.  If that fails or if you don't have a package
+management system, get Boost.Build from
+\url{http://www.boost.org/doc/tools/build/index.html} and following the instructions
+at \url{http://www.boost.org/doc/tools/build/doc/html/bbv2/installation.html}.
+Installing Boost.Build is a fairly straightforward procedure that consists
+mainly of four steps:
+
+\begin{enumerate}
+  \item Copy the extracted Boost.Build distribution into a directory reachable by
+    your operating-system's \texttt{PATH}.
+  \item Configure Boost.Build by choosing your compiler of choice in the
+    site-config.jam file in Boost.Build's root directory.  It should be a
+    matter of uncommenting a line such as
+
+   \begin{verbatim}using gcc ;\end{verbatim}
+
+  \item Copy the bjam binary into a directory reachable by your operating-system's
+    \texttt{PATH}.
+  \item \texttt{export BOOST\_BUILD\_PATH=/path/to/boost-build}
+\end{enumerate}
+
+Further details are given in the link above.
+
+\paragraph{Building Using Boost.Build}
+
+To build libyaml++, from the libyaml++ distribution's root directory run the
+command:
+
+\begin{verbatim}
+libyamlpp$ bjam release
+\end{verbatim}
+
+This will build libyaml++ and place the resultant binary in a directory
+structure under src/bin/release/.  The exact heirarchy structure will depend on
+your system.  Our system, for example, will place the resultant binary in
+src/bin/release/gcc/libyaml++.so.  Your environment may be, for example, in
+src/bin/release/msvc/libyaml++.so.
+
+To build the demo application, run the following command from the project
+distribution's root directory:
+
+\begin{verbatim}
+libyamlpp$ bjam demo release
+\end{verbatim}
+
+Again, the exact location of the resultant binary will depend on your system
+but will be somewhere under demo/bin/release/.  In our case it is in
+demo/bin/release/gcc/libyaml++-demo.
+
+To build the test suites, run
+
+\begin{verbatim}
+libyamlpp$ bjam check
+\end{verbatim}
+
+This will also run the tests once they are built.
+
+\subsection{Testing}
+
+The source code comes with a set of tests that attempt to find bugs or issues
+with the library.  These tests rely on the Google Test framework, so you must
+have that set up to run them.
+
+\subsubsection{Setting-up GoogleTest}
+
+Get GoogleTest from \url{http://code.google.com/p/googletest/}.  We used GoogleTest
+v1.1.0 successfully.  Extract the distribution package in a directory of your
+choice, and build it.  To install GoogleTest in your home directory on a Unix
+machine the following commands will do:
+
+\begin{verbatim}
+~$ tar jxf gtest-1.1.0.tar.bz2
+~$ cd gtest-1.1.0
+gtest-1.1.0$ ./configure --prefix=$HOME/usr
+gtest-1.1.0$ make
+gtest-1.1.0$ make install
+\end{verbatim}
+
+Next, you must make sure that
+
+\begin{enumerate}
+\item the C++ preprocessor can find the gtest headers
+\item the linker can find the gtest library when linking the libyaml++ tests
+\item the runtime evironment can find the shared library when the tests are run
+\end{enumerate}
+
+To accomodate for this on a Unix platform using gcc for the build and assuming
+the above commands were used for installing GoogleTest, add the following three
+environment variables to your shell's startup file, such as \$HOME/.bashrc:
+
+\begin{verbatim}
+export CPLUS_INCLUDE_PATH=$HOME/usr/include:$CPLUS_INCLUDE_PATH
+export LIBRARY_PATH=$HOME/usr/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=$HOME/usr/lib:$LD_LIBRARY_PATH
+\end{verbatim}
+
+\subsubsection{Running The Tests}
+
+Once GoogleTest is set up you may run the tests.  From the commandline and from
+within the project's root directory, run:
+
+\begin{verbatim}
+libyamlpp$ bjam check
+\end{verbatim}
+
+\subsection{Using libyaml++}
+\label{using_libyamlpp}
+
+To use libyaml++, you need a C++ compiler and either \texttt{tr1::shared\_ptr} or \texttt{boost::shared\_ptr}.  Put the binaries somewhere 
+reachable by your compiler and linker's search paths.
+
+\begin{figure}
+  \caption{Sample code using libyaml++}
+  \begin{verbatim}
+#include <iyaml++.hh>
+#include <tr1/memory>
+#include <iostream>
+#include <stdexcept>
+
+using namespace std;
+
+class my_handler : public yaml::event_handler {
+    void on_string(const string& s);
+    void on_sequence_begin();
+};
+
+void my_handler::on_string(const string& s) {
+    cout << "parsed  " << s << endl;
+}
+
+void my_handler::on_sequence_begin() {
+    cout << "sequence about to begin." << endl;
+}
+
+int main(int argc, char* argv[])
+{
+    tr1::shared_ptr<my_handler> handler(new my_handler());
+    while( cin ) {
+        try { yaml::load(cin, handler); }
+
+        // catch syntax error
+        catch( const runtime_error& e ) {
+            cerr << e.what() << endl;
+        }
+    }
+    return 0;
+}
+\end{verbatim}
+\end{figure}
 
 \end{document}
