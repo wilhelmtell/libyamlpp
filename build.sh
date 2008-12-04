@@ -63,8 +63,8 @@ cleanup_mess() {
 if [ "$#" -eq 1 -a "$1" = "wipeclean" ]; then
   cleanup_mess
   echo -e -n "Wiping clean ...  "
-  rm -rf /tmp/boost-build-2.0-m12.tar.bz2
-  rm -rf /tmp/gtest-1.1.0.tar.bz2
+  rm -rf $INSTALL_DIR/boost-build-2.0-m12.tar.bz2
+  rm -rf $INSTALL_DIR/gtest-1.1.0.tar.bz2
   rm -rf "$BUILD_SH_CONF"
   cd $LIBYAMLPP_DIR
   find . -name bin -type d |xargs rm -rf
@@ -80,18 +80,18 @@ mkdir -p "$INSTALL_DIR"
 # boost.build
 which bjam >/dev/null 2>&1
 if [ $? -ne 0 -a \! -d $INSTALL_DIR/boost-build ]; then
-  if [ \! -r /tmp/boost-build-2.0-m12.tar.bz2 ]; then
-    echo -n "Downloading Boost.Build into /tmp ...  " |tee -a $LOG
-    cd /tmp
+  if [ \! -r $INSTALL_DIR/boost-build-2.0-m12.tar.bz2 ]; then
+    echo -n "Downloading Boost.Build into $INSTALL_DIR ...  " |tee -a $LOG
+    cd "$INSTALL_DIR"
     wget -q http://prdownloads.sourceforge.net/boost/boost-build-2.0-m12.tar.bz2 >>$LOG 2>&1 && succ || fail
     cd - >/dev/null 2>&1
   fi
   echo -n "Verifying Boost.Build tarball integrity ...  " |tee -a $LOG
-  [ "$(md5sum /tmp/boost-build-2.0-m12.tar.bz2 |cut -d' ' -f1)"=38a40f1c0c2d6eb4f14aa4cf52e9236a ] && succ || fail
-  echo -n "Extracting Boost.Build ...  " |tee -a $LOG
-  tar jxf /tmp/boost-build-2.0-m12.tar.bz2 && succ || fail
+  [ "$(md5sum $INSTALL_DIR/boost-build-2.0-m12.tar.bz2 |cut -d' ' -f1)"=38a40f1c0c2d6eb4f14aa4cf52e9236a ] && succ || fail
   echo -n "Installing Boost.Build in $INSTALL_DIR ...  " |tee -a $LOG
-  mv boost-build $INSTALL_DIR/ && succ || fail
+  cd "$INSTALL_DIR"
+  tar jxf boost-build-2.0-m12.tar.bz2 && succ || fail
+  cd - >/dev/null 2>&1
   cd $INSTALL_DIR/boost-build/jam_src
   echo -n "Building Boost.Jam ...  " |tee -a $LOG
   ./build.sh >>$LOG 2>&1 && succ || fail
@@ -116,17 +116,19 @@ fi
 
 # gtest
 if [ \! -r $INSTALL_DIR/include/gtest/gtest.h ]; then
-  if [ \! -r /tmp/gtest-1.1.0.tar.bz2 ]; then
-    echo -n "Downloading GoogleTest into /tmp ...  " |tee -a $LOG
-    cd /tmp
+  if [ \! -r $INSTALL_DIR/gtest-1.1.0.tar.bz2 ]; then
+    echo -n "Downloading GoogleTest into $INSTALL_DIR ...  " |tee -a $LOG
+    cd "$INSTALL_DIR"
     wget -q http://googletest.googlecode.com/files/gtest-1.1.0.tar.bz2 && succ || fail
     cd - >/dev/null 2>&1
   fi
   echo -n "Verifying GoogleTest tarball integrity ...  " |tee -a $LOG
-  [ "$(md5sum /tmp/gtest-1.1.0.tar.bz2 |cut -d' ' -f1)"=aaec092aa4ac969ee16a1baddd0fa9ae ] && succ || fail
+  [ "$(md5sum $INSTALL_DIR/gtest-1.1.0.tar.bz2 |cut -d' ' -f1)"=aaec092aa4ac969ee16a1baddd0fa9ae ] && succ || fail
   echo -n "Extracting GoogleTest ...  " |tee -a $LOG
-  tar jxf /tmp/gtest-1.1.0.tar.bz2 && succ || fail
-  cd gtest-1.1.0
+  cd "$INSTALL_DIR"
+  tar jxf $INSTALL_DIR/gtest-1.1.0.tar.bz2 && succ || fail
+  cd - >/dev/null 2>&1
+  cd $INSTALL_DIR/gtest-1.1.0
   echo -n "Patching GoogleTest to fix PATH_MAX compiler error ...  " |tee -a $LOG
   sed -i '44 i #include <limits.h>' src/gtest-filepath.cc && succ || fail
   echo -n "Configuring GoogleTest build ...  " |tee -a $LOG
