@@ -21,7 +21,7 @@ fail() {
 
 succ() {
   if [ "$#" -gt 0 ]; then
-    echo -e "\033[0;32m$1\033[0m"
+    echo -e "\033[0;32m$@\033[0m"
     echo -e "$1" >>$LOG
   else
     echo -e "\033[0;32mOK\033[0m"
@@ -60,7 +60,7 @@ cleanup_mess() {
 
 # running "./build.sh wipeclean", with no other arguments, will wipe clean the
 # distribution and mess this script might have done in the past.
-if [ "$#" -eq 1 -a "$1" = "wipeclean" ]; then
+if [ "$1" = "wipeclean" ]; then
   cleanup_mess
   echo -e -n "Wiping clean ...  "
   rm -rf $INSTALL_DIR/boost-build-2.0-m12.tar.bz2
@@ -68,10 +68,28 @@ if [ "$#" -eq 1 -a "$1" = "wipeclean" ]; then
   rm -rf "$BUILD_SH_CONF"
   cd $LIBYAMLPP_DIR
   find . -name bin -type d |xargs rm -rf
+  rm -rf $LIBYAMLPP_DIR/doc/{proposal,report}.{aux,log,out,toc,pdf,dvi,ps}
+  rm -rf $LIBYAMLPP_DIR/doc/texput.log
   cd $ORIGINAL_DIR
   succ
   rm -f $LOG
   echo -e "\n\033[0;32mDone.\033[0m"
+  exit 0
+elif echo "$1" |grep -E '^doc(ument(ation$)?)?s?$' >/dev/null 2>&1; then
+  echo -n "Looking for LaTeX ...  ";
+  for TOOL in latex pslatex pdflatex; do
+    which $TOOL >/dev/null 2>&1 && LATEX_FOUND="$LATEX_FOUND $TOOL"
+  done
+  [ -n "$LATEX_FOUND" ] && succ $LATEX_FOUND || fail
+
+  pushd $LIBYAMLPP_DIR/doc >/dev/null 2>&1
+  for TeX in *.tex; do
+    echo -n "Typesetting $(echo $TeX |sed 's/\(.*\)\.[^.]*$/\1/') ...  "
+    for TOOL in $LATEX_FOUND; do # fail if any of the tools fails
+      $TOOL $TeX >/dev/null && $TOOL $TeX >/dev/null || fail
+    done
+    succ # success if none of the latex tools failed
+  done
   exit 0
 fi
 
