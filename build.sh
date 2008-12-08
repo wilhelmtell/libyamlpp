@@ -102,6 +102,7 @@ elif echo "$1" |grep -E '^doc(ument(ation$)?)?s?$' >/dev/null 2>&1; then
     done
     succ # success if none of the latex tools failed
   done
+  restore_wd
   exit 0
 fi
 
