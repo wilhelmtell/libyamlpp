@@ -16,17 +16,29 @@ fail() {
   echo -e "\033[0;31mFAIL\033[0m"
   echo -e "FAIL" >>$LOG
   cleanup_mess
+  restore_wd
   exit 1;
 }
 
 succ() {
   if [ "$#" -gt 0 ]; then
-    echo -e "\033[0;32m$1\033[0m"
+    echo -e "\033[0;32m$@\033[0m"
     echo -e "$1" >>$LOG
   else
     echo -e "\033[0;32mOK\033[0m"
     echo -e "OK" >>$LOG
   fi
+}
+
+# Recover working directory to that when the script started.
+# NOTE:  we assume the script never uses cd, but pushd instead.
+restore_wd() {
+  while [ $(dirs -v |wc -l) -gt 1 ]; do
+    # pop dirs off to reach original directory.
+    # at any pop popd might try and cd into a removed directory;  we check for
+    # this, and if this is the case we merely pop without cd'ing.
+    popd >/dev/null 2>&1 || popd -n >/dev/null 2>&1;
+  done
 }
 
 # installation directory may be wiped out later, so it must be a dedicated
@@ -48,8 +60,8 @@ succ $INSTALL_DIR
 trap cleanup_mess 1 2 3 4 5 6 14 15
 
 cleanup_mess() {
-  echo -e -n "Cleaning up ...  " | tee -a $LOG
-  cd $ORIGINAL_DIR
+  echo -e -n "Cleaning up ...  " |tee -a $LOG
+  restore_wd
   rm -rf $INSTALL_DIR
 
   # in case tarballs were not moved successfully
@@ -60,18 +72,37 @@ cleanup_mess() {
 
 # running "./build.sh wipeclean", with no other arguments, will wipe clean the
 # distribution and mess this script might have done in the past.
-if [ "$#" -eq 1 -a "$1" = "wipeclean" ]; then
+if [ "$1" = "wipeclean" ]; then
   cleanup_mess
   echo -e -n "Wiping clean ...  "
-  rm -rf /tmp/boost-build-2.0-m12.tar.bz2
-  rm -rf /tmp/gtest-1.1.0.tar.bz2
+  rm -rf $INSTALL_DIR/boost-build-2.0-m12.tar.bz2
+  rm -rf $INSTALL_DIR/gtest-1.1.0.tar.bz2
   rm -rf "$BUILD_SH_CONF"
-  cd $LIBYAMLPP_DIR
+  pushd $LIBYAMLPP_DIR >/dev/null 2>&1
   find . -name bin -type d |xargs rm -rf
-  cd $ORIGINAL_DIR
+  rm -rf $LIBYAMLPP_DIR/doc/{proposal,report}.{aux,log,out,toc,pdf,dvi,ps}
+  rm -rf $LIBYAMLPP_DIR/doc/texput.log
   succ
   rm -f $LOG
   echo -e "\n\033[0;32mDone.\033[0m"
+  restore_wd
+  exit 0
+elif echo "$1" |grep -E '^doc(ument(ation$)?)?s?$' >/dev/null 2>&1; then
+  echo -n "Looking for LaTeX ...  ";
+  for TOOL in latex pslatex pdflatex; do
+    which $TOOL >/dev/null 2>&1 && LATEX_FOUND="$LATEX_FOUND $TOOL"
+  done
+  [ -n "$LATEX_FOUND" ] && succ $LATEX_FOUND || fail
+
+  pushd $LIBYAMLPP_DIR/doc >/dev/null 2>&1
+  for TeX in *.tex; do
+    echo -n "Typesetting $(echo $TeX |sed 's/\(.*\)\.[^.]*$/\1/') ...  "
+    for TOOL in $LATEX_FOUND; do # fail if any of the tools fails
+      $TOOL $TeX >/dev/null && $TOOL $TeX >/dev/null || fail
+    done
+    succ # success if none of the latex tools failed
+  done
+  restore_wd
   exit 0
 fi
 
@@ -80,22 +111,19 @@ mkdir -p "$INSTALL_DIR"
 # boost.build
 which bjam >/dev/null 2>&1
 if [ $? -ne 0 -a \! -d $INSTALL_DIR/boost-build ]; then
-  if [ \! -r /tmp/boost-build-2.0-m12.tar.bz2 ]; then
-    echo -n "Downloading Boost.Build into /tmp ...  " |tee -a $LOG
-    cd /tmp
+  if [ \! -r $INSTALL_DIR/boost-build-2.0-m12.tar.bz2 ]; then
+    echo -n "Downloading Boost.Build into $INSTALL_DIR ...  " |tee -a $LOG
+    pushd "$INSTALL_DIR" >/dev/null 2>&1
     wget -q http://prdownloads.sourceforge.net/boost/boost-build-2.0-m12.tar.bz2 >>$LOG 2>&1 && succ || fail
-    cd - >/dev/null 2>&1
   fi
   echo -n "Verifying Boost.Build tarball integrity ...  " |tee -a $LOG
-  [ "$(md5sum /tmp/boost-build-2.0-m12.tar.bz2 |cut -d' ' -f1)"=38a40f1c0c2d6eb4f14aa4cf52e9236a ] && succ || fail
-  echo -n "Extracting Boost.Build ...  " |tee -a $LOG
-  tar jxf /tmp/boost-build-2.0-m12.tar.bz2 && succ || fail
+  [ "$(md5sum $INSTALL_DIR/boost-build-2.0-m12.tar.bz2 |cut -d' ' -f1)"=38a40f1c0c2d6eb4f14aa4cf52e9236a ] && succ || fail
   echo -n "Installing Boost.Build in $INSTALL_DIR ...  " |tee -a $LOG
-  mv boost-build $INSTALL_DIR/ && succ || fail
-  cd $INSTALL_DIR/boost-build/jam_src
+  pushd "$INSTALL_DIR" >/dev/null 2>&1
+  tar jxf boost-build-2.0-m12.tar.bz2 && succ || fail
+  pushd $INSTALL_DIR/boost-build/jam_src >/dev/null 2>&1
   echo -n "Building Boost.Jam ...  " |tee -a $LOG
   ./build.sh >>$LOG 2>&1 && succ || fail
-  cd - >/dev/null 2>&1
 
   for TOOL in gcc doxygen ; do
     grep -q "^using $TOOL ;" $INSTALL_DIR/boost-build/user-config.jam
@@ -116,17 +144,17 @@ fi
 
 # gtest
 if [ \! -r $INSTALL_DIR/include/gtest/gtest.h ]; then
-  if [ \! -r /tmp/gtest-1.1.0.tar.bz2 ]; then
-    echo -n "Downloading GoogleTest into /tmp ...  " |tee -a $LOG
-    cd /tmp
+  if [ \! -r $INSTALL_DIR/gtest-1.1.0.tar.bz2 ]; then
+    echo -n "Downloading GoogleTest into $INSTALL_DIR ...  " |tee -a $LOG
+    pushd "$INSTALL_DIR" >/dev/null 2>&1
     wget -q http://googletest.googlecode.com/files/gtest-1.1.0.tar.bz2 && succ || fail
-    cd - >/dev/null 2>&1
   fi
   echo -n "Verifying GoogleTest tarball integrity ...  " |tee -a $LOG
-  [ "$(md5sum /tmp/gtest-1.1.0.tar.bz2 |cut -d' ' -f1)"=aaec092aa4ac969ee16a1baddd0fa9ae ] && succ || fail
+  [ "$(md5sum $INSTALL_DIR/gtest-1.1.0.tar.bz2 |cut -d' ' -f1)"=aaec092aa4ac969ee16a1baddd0fa9ae ] && succ || fail
   echo -n "Extracting GoogleTest ...  " |tee -a $LOG
-  tar jxf /tmp/gtest-1.1.0.tar.bz2 && succ || fail
-  cd gtest-1.1.0
+  pushd "$INSTALL_DIR" >/dev/null 2>&1
+  tar jxf $INSTALL_DIR/gtest-1.1.0.tar.bz2 && succ || fail
+  pushd $INSTALL_DIR/gtest-1.1.0 >/dev/null 2>&1
   echo -n "Patching GoogleTest to fix PATH_MAX compiler error ...  " |tee -a $LOG
   sed -i '44 i #include <limits.h>' src/gtest-filepath.cc && succ || fail
   echo -n "Configuring GoogleTest build ...  " |tee -a $LOG
@@ -135,7 +163,7 @@ if [ \! -r $INSTALL_DIR/include/gtest/gtest.h ]; then
   make >>$LOG 2>&1 && succ || fail
   echo -n "Installing GoogleTest in $INSTALL_DIR ...  " |tee -a $LOG
   make install >>$LOG 2>&1 && succ || fail
-  cd - >/dev/null 2>&1
+  pushd .. >/dev/null 2>&1
   rm -rf gtest-1.1.0
   export LD_LIBRARY_PATH=$INSTALL_DIR/lib
   export LIBRARY_PATH=$INSTALL_DIR/lib
