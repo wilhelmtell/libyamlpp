@@ -6,6 +6,7 @@
 namespace yaml {
 namespace syn {
 
+/// Represent a null node in the syntax tree of YAML data.
 struct null_node : public node {
 };
 

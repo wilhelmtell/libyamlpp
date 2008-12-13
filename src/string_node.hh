@@ -7,6 +7,7 @@
 namespace yaml {
 namespace syn {
 
+/// Represent a string node in the syntax tree of YAML data.
 struct string_node : public node {
     string_node(const std::string& value) : value(value) { }
     std::string value;

@@ -7,6 +7,7 @@
 namespace yaml {
 namespace syn {
 
+/// Represent a document node in the syntax tree of YAML data.
 struct document_node : public node {
     document_node() { }
     document_node(std::tr1::shared_ptr<node> contents) : contents(contents) { }

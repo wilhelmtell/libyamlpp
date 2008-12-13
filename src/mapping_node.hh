@@ -8,6 +8,7 @@
 namespace yaml {
 namespace syn {
 
+/// Represent a mapping node in the syntax tree of YAML data.
 struct mapping_node : public node {
     // typedef map<shared_ptr<node>, shared_ptr<node> > value_type;
     typedef std::list<std::tr1::shared_ptr<node> > value_type; // serialization

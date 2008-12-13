@@ -8,6 +8,7 @@
 namespace yaml {
 namespace syn {
 
+/// Represent a pair node inside a mapping in the syntax tree of YAML data.
 struct pair_node : public node {
     pair_node(std::tr1::shared_ptr<string_node> key_node,
               std::tr1::shared_ptr<node> value_node) :

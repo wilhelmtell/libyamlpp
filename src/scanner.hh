@@ -15,8 +15,18 @@ namespace lex {
 class scanner {
 public:
     scanner();
+
+    /// Create a scanner object for scanning a YAML stream from the given input
+    /// stream.
+    ///
+    /// \param is The input stream from which to scan YAML data.
     scanner(std::istream& is);
+
+    /// Scan the YAML stream of this object.
+    ///
+    /// \return The next token scanned from the stream.
     token scan();
+
     void sip();
     void putback(char new_peek);
 

@@ -4,6 +4,7 @@
 namespace yaml {
 namespace syn {
 
+/// The base of the syntax tree hierarchy for YAML data.
 class node {
 };
 
