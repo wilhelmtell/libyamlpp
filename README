@@ -41,10 +41,13 @@ source code of the library and is located in the test/ subdirectory.
 The The easiest way to build libyaml++ is using the build.sh script in the
 distribution's root directory.  It will set up your system for building
 libyaml++ as well as its unit-tests.  The build.sh script assumes you are using
-Linux tough.  An alternative way is to build the library manually.  If you
-intened to hack on the code we recommend you set yourself up properly:  install
-Boost.BuildV2 and GoogleTest in a convenient directory in your system and use
-bjam for the build.
+Linux though, along with a number of specific tools installed, such as wget,
+GNU utilities, bash and others.  Internet connection is required as well if you
+do not have GoogleTest and Boost.Build installed, is the script will attempt to
+download and install these in a temporal directory in this case..  An
+alternative way is to build the library manually.  If you intened to hack on
+the code we recommend you set yourself up properly: install Boost.BuildV2 and
+GoogleTest in a convenient directory in your system and use bjam for the build.
 
 We will cover in this section all approaches mentioned above.
 
