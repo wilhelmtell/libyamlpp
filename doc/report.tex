@@ -136,7 +136,7 @@ The disadvantage of this approach that might show if the grammar is complex
 enough is that the function tends to grow fast and the get harder to understand 
 and maintain.  As undergraduate students we are vastly humbled by the giants 
 before us who have proven this approach correct, and thus we implemented it as 
-described in the texts.  Nevertheless, we took in parallel the adventerous path 
+described in the texts.  Nevertheless, we took in parallel the adventurous path 
 of implementing the scanning procedure in an alternative manner.
 
 By breaking the different rules each token presents into classes and objects, 
@@ -224,7 +224,7 @@ The The easiest way to build libyaml++ is using the \textit{build.sh} script in 
 distribution's root directory.  It will set up your system for building
 libyaml++ as well as its unit-tests.  The \textit{build.sh} script assumes you are using
 Linux tough.  An alternative way is to build the library manually.  If you
-intened to hack on the code we recommend you set yourself up properly:  install
+intend to hack on the code we recommend you set yourself up properly:  install
 Boost.BuildV2 and GoogleTest in a convenient directory in your system and use
 bjam for the build.
 
@@ -246,8 +246,8 @@ for example run
 libyamlpp$ ./build.sh demo check
 \end{verbatim}
 
-to build the demo and check targets, for the demonstration applications and
-unit-tests, repectively.  The \textit{build.sh} script can also take a special
+To build the demo and check targets, for the demonstration applications and
+unit-tests, respectively.  The \textit{build.sh} script can also take a special
 command-line argument, wipeclean, which will wipe clean any files and
 directories it may have created:
 
@@ -312,7 +312,7 @@ libyamlpp$ bjam release
 \end{verbatim}
 
 This will build libyaml++ and place the resultant binary in a directory
-structure under src/bin/release/.  The exact heirarchy structure will depend on
+structure under src/bin/release/.  The exact hierarchy structure will depend on
 your system.  Our system, for example, will place the resultant binary in
 src/bin/release/gcc/libyaml++.so.  Your environment may be, for example, in
 src/bin/release/msvc/libyaml++.so.
@@ -362,10 +362,10 @@ Next, you must make sure that
 \begin{enumerate}
 \item the C++ preprocessor can find the gtest headers
 \item the linker can find the gtest library when linking the libyaml++ tests
-\item the runtime evironment can find the shared library when the tests are run
+\item the runtime environment can find the shared library when the tests are run
 \end{enumerate}
 
-To accomodate for this on a Unix platform using gcc for the build and assuming
+To accommodate for this on a Unix platform using gcc for the build and assuming
 the above commands were used for installing GoogleTest, add the following three
 environment variables to your shell's startup file, such as \$HOME/.bashrc:
 
